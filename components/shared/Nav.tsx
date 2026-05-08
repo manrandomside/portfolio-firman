@@ -12,9 +12,8 @@ const getServerSnapshot = () => false;
 
 const NAV_LINKS = [
   { label: "Beranda", href: "#beranda" },
-  { label: "Perjalanan", href: "#perjalanan" },
+  { label: "Tentang", href: "#tentang" },
   { label: "Karya", href: "#karya" },
-  { label: "Kolaborasi", href: "#kolaborasi" },
 ];
 
 type Lang = "id" | "en";
@@ -35,12 +34,18 @@ export function Nav() {
       <div className="container-narrow flex h-20 items-center justify-between gap-6">
         <Link
           href="/"
-          className="text-foreground text-xl font-semibold tracking-tight"
+          className="text-foreground inline-flex items-center gap-2.5 text-xl font-semibold tracking-tight"
         >
+          <span
+            aria-hidden="true"
+            className="border-border text-foreground grid h-[22px] w-[22px] place-items-center border font-mono text-[11px] font-medium"
+          >
+            F
+          </span>
           Firman
         </Link>
 
-        <nav className="hidden items-center gap-10 md:flex">
+        <nav className="hidden items-center gap-12 md:flex">
           {NAV_LINKS.map((link) => (
             <a
               key={link.href}
