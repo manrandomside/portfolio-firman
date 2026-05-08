@@ -4,39 +4,48 @@ This document is the source of truth for AI assistants and contributors working 
 
 ## Project Overview
 
-Personal portfolio website for Firman Fadilah. The site showcases career journey, project work, and serves as a hub for collaboration inquiries.
+Personal portfolio website for Firman Fadilah. Showcases an editorial monochrome design with premium motion choreography. Built to feel both minimal and intentional, communicating technical craft through both content and interaction quality.
 
 **Owner**: Firman Fadilah (firmanfdlh1@gmail.com, github.com/manrandomside)
 **Live URL**: https://portfolio-firman.vercel.app (planned)
 **Repository**: https://github.com/manrandomside/portfolio-firman
 
+## Design Direction History
+
+This project went through a design pivot during early development:
+
+- **v1 direction (commits 1-7)**: Mareta-inspired with 4 nav links (Beranda, Perjalanan, Karya, Kolaborasi), Journey timeline section, single-page layout
+- **v2 direction (current)**: Refined to 3 nav links (Beranda, Tentang, Karya), narrative About section replacing timeline, dedicated detail pages for Karya, motion-first interaction philosophy
+
+The v1 implementation will be progressively refactored into v2 in subsequent commits. Both directions remain in git history as evidence of iteration journey.
+
 ## Visual North Star
 
-This project mirrors the visual quality and technical polish of Mareta Ayu's portfolio.
+This project draws inspiration from multiple sources but explores its own voice. References are guides, not strict blueprints. Implementation has freedom to refine, elaborate, and elevate beyond reference constraints — particularly in motion and interaction design.
 
-**Primary visual reference**: https://portfolio-maretacodes.vercel.app/
-**Loading screen reference**: https://ifalf.com
-**Local layout reference**: `claude-design-reference.html` at project root
-**Local visual references** (in `references/` folder):
+**Inspiration sources**:
 
-- `mareta-01-light.png` — full page light mode reference (primary benchmark)
-- `mareta-02-dark.png` — full page dark mode reference
-- `mareta-03-light-karya-frontend.png` — karya section detail reference
+- Mareta Ayu's portfolio (https://portfolio-maretacodes.vercel.app/) — for editorial monochrome quality
+- Ifal Fahri's portfolio (https://ifalf.com) — for loading screen and motion sophistication
 
-The light mode reference is the primary visual benchmark for the entire site. The dark mode reference shows how the design adapts. The karya detail reference shows project card layout and typography in context.
+**Local references** (in `references/` folder):
 
-When implementation decisions arise that are not covered by the local references, defer to Mareta's actual production website. The aesthetic and feel must match that benchmark.
+- `mareta-01-light.png` — Mareta homepage light mode (visual quality benchmark)
+- `mareta-02-dark.png` — Mareta homepage dark mode
+- `mareta-03-light-karya-frontend.png` — Mareta karya detail reference
 
-The content is original to Firman (career chapters, projects, copy) but the design language, animation quality, and technical execution should match the reference.
+**Local layout reference**: `claude-design-reference.html` at project root (homepage v2 from Claude Design iteration)
+
+References are inspiration. Implementation explores freely with motion as primary differentiator.
 
 ## Tech Stack
 
 | Layer           | Technology                   |
 | --------------- | ---------------------------- |
-| Framework       | Next.js 15 (App Router)      |
+| Framework       | Next.js 15+ (App Router)     |
 | Language        | TypeScript (strict mode)     |
 | Styling         | Tailwind CSS v4              |
-| Animation       | Framer Motion                |
+| Animation       | Framer Motion + Lenis        |
 | Icons           | Lucide React                 |
 | Theme           | next-themes                  |
 | i18n            | Custom React Context (EN/ID) |
@@ -45,100 +54,133 @@ The content is original to Firman (career chapters, projects, copy) but the desi
 
 ## Visual Design Principles
 
-The design follows a strict editorial monochrome aesthetic. The reference design is preserved in `claude-design-reference.html` at the project root.
+The design follows a strict editorial monochrome aesthetic with warm undertones. The aesthetic communicates technical seriousness without sterility.
 
 ### Color System
 
-Important: This palette intentionally avoids pure white (`#FFFFFF`) and pure black (`#000000`). Pure tones create harsh contrast that strains the eyes, especially during extended reading. The portfolio uses warm off-white and warm near-black for an editorial, literary feel that matches the visual benchmark.
+Important: This palette intentionally avoids pure white (`#FFFFFF`) and pure black (`#000000`). Pure tones create harsh contrast. The portfolio uses warm off-white and warm near-black for an editorial, literary feel.
 
 Light mode:
 
-- Background: `#FAFAF7` (warm off-white, subtle cream tone)
-- Foreground: `#0F0F0F` (warm near-black, slight depth)
-- Muted: `#6B6B68` (warm medium gray for secondary text)
-- Border: `#E8E6E1` (warm light gray divider)
+- Background: `#FAFAF7` (warm off-white)
+- Foreground: `#111111` (warm near-black)
+- Muted: `#6B6B6B` (warm medium gray)
+- Border: `#E6E4DD` (warm light gray)
+- Soft: `#F2F0E9` (warm panel background, optional)
 
 Dark mode:
 
-- Background: `#111111` (warm near-black, slightly lifted from pure)
-- Foreground: `#F5F5F2` (warm off-white for readable contrast)
-- Muted: `#A1A19E` (warm light gray for secondary text)
-- Border: `#2A2A28` (subtle warm dark divider)
+- Background: `#111111` (warm near-black)
+- Foreground: `#FAFAF7` (warm off-white)
+- Muted: `#8A8A85` (warm light gray)
+- Border: `#222220` (subtle warm dark divider)
+- Soft: `#1A1A18` (warm panel background, optional)
 
-The palette is intentionally minimal: no accent colors, no gradients, no decorative shadows. The design relies entirely on typography hierarchy and whitespace. The warm undertone is consistent across both modes, creating a cohesive editorial feel. If a future feature requires a hint of color (such as a status indicator), it should be discussed and added to this section first.
+The palette is intentionally minimal: no accent colors, no gradients, no decorative shadows. Design relies on typography hierarchy, whitespace, and motion.
 
 ### Typography
 
-- Display and body: Inter or Geist Sans
-- Mono accents (numbers, eyebrow labels, code): JetBrains Mono or Geist Mono
-- Hero name size: `clamp(80px, 12vw, 180px)` with `line-height: 0.9`
-- Section heading: `64px`, weight `500`
-- Body: `16-18px`, line-height `1.6-1.7`
+- Display and body: Inter (or Geist Sans fallback)
+- Mono accents (numbers, eyebrow labels, code, terminal): JetBrains Mono (or Geist Mono fallback)
+- Hero name size: `clamp(80px, 12vw, 180px)` with `line-height: 0.9` and tight letter-spacing
+- Section heading h2: `clamp(40px, 5vw, 64px)`, weight 500
+- Body: 16-18px, line-height 1.6-1.7
+- Eyebrow labels: 11px mono, uppercase, letter-spacing 0.28em
 
 ### Spacing
 
-- Container max-width: `1200px`
-- Section vertical padding: `120px` desktop, `80px` mobile
+- Container max-width: 1200px (narrow variant: 960px)
+- Section vertical padding: 120px desktop, 80px mobile
 - Whitespace is intentional. Never crowd elements.
+
+## Site Architecture
+
+### Routes
+
+```
+/                              Homepage
+/karya/software-engineering    Detail page: SE projects (Kelola SDM, Layanan Pengaduan)
+/karya/ai-exploration          Detail page: AI projects (Kobun, Kioku) — placeholder content
+/karya/infographic-design      Detail page: poster grid showcase
+```
+
+### Homepage Sections (in order)
+
+1. **Loading screen overlay** — counter 0-100 with corner brackets, meta labels, slide-up reveal exit
+2. **Sticky navigation** — brand mark "F" + name "Firman", 3 links (Beranda, Tentang, Karya), language pill (ID/EN), theme toggle
+3. **Hero** — eyebrow, display name "Firman", subtitle, role tags (Software Engineer · AI Explorer · Infographic Designer), terminal block with typewriter
+4. **Tentang** — narrative paragraphs with sticky aside (pills + meta-list)
+5. **Karya** — section number indicator, 3 cards (Software Engineering, AI Exploration, Infographic Design) with Explore links to detail pages
+6. **Footer** — copyright, social links, scroll-to-top arrow, build credit caption
+
+### Detail Page Layout (consistent across 3 routes)
+
+1. **Same Nav** with current "Karya" link highlighted
+2. **Detail hero** — eyebrow with breadcrumb (e.g., "KARYA / SOFTWARE ENGINEERING"), back link, area title, intro
+3. **Project list** — vertical list of project rows with number, title, tech pills, role/timeline, description, image gallery, action links
+4. **Same Footer**
+
+### Detail Page Content
+
+**/karya/software-engineering**: Kelola SDM Gapura Angkasa (OJT, Jul-Des 2025), Layanan Pengaduan Akademisi (Internship Citra Konsultama, 2025)
+
+**/karya/ai-exploration**: Kobun (Personal Deep Learning project), Kioku (Personal AI project, terdaftar HKI). Both with placeholder "case study coming soon" status.
+
+**/karya/infographic-design**: Poster grid showcase, masonry or 2-column layout, files loaded from `/public/posters/`.
 
 ## Project Structure
 
 ```
 portfolio-firman/
-├── app/                      # Next.js App Router
-│   ├── layout.tsx            # Root layout
-│   └── page.tsx              # Landing page
+├── app/
+│   ├── layout.tsx                    Root layout (Nav, Footer global)
+│   ├── page.tsx                      Homepage composition
+│   ├── globals.css                   Design tokens via Tailwind v4 @theme
+│   └── karya/
+│       ├── software-engineering/
+│       │   └── page.tsx
+│       ├── ai-exploration/
+│       │   └── page.tsx
+│       └── infographic-design/
+│           └── page.tsx
 ├── components/
-│   ├── sections/             # Page sections (Hero, Journey, etc.)
-│   ├── ui/                   # Reusable UI primitives
-│   └── shared/               # Shared components (Nav, Footer, Loader)
-├── contexts/                 # React contexts (i18n, theme)
-├── lib/                      # Utilities and helpers
-│   └── utils.ts              # Helper functions
-├── content/                  # Static content (translations, chapters)
-│   ├── en.ts
-│   └── id.ts
+│   ├── sections/                     Page-level sections (Hero, About, Karya)
+│   ├── ui/                           Reusable primitives (Card, Pill, etc.)
+│   └── shared/                       Cross-cutting (Loader, Nav, Footer, ThemeProvider, Cursor)
+├── contexts/                         React contexts (i18n)
+├── lib/                              Utilities and helpers
+│   └── utils.ts                      cn() helper
+├── content/                          Static content
+│   ├── projects/                     Project data per category
+│   │   ├── software-engineering.ts
+│   │   ├── ai-exploration.ts
+│   │   └── infographic-design.ts
+│   └── translations/                 i18n strings (en.ts, id.ts) — added in i18n commit
 ├── public/
-│   ├── videos/               # Hero animation MP4
-│   └── images/               # Static images
-├── styles/                   # Global CSS
-├── types/                    # TypeScript type definitions
-├── CLAUDE.md                 # This file
-├── claude-design-reference.html  # Visual reference from Claude Design
-└── references/               # Visual references from Mareta's portfolio
-    └── mareta-*.png          # Screenshots for design quality benchmark
+│   ├── posters/                      Infographic poster files
+│   ├── projects/                     Project screenshots
+│   └── videos/                       Hero animation MP4 (when ready)
+├── styles/                           Additional CSS if needed
+├── types/                            TypeScript types
+├── CLAUDE.md                         This file
+├── claude-design-reference.html      Visual reference (homepage v2)
+└── references/                       Visual benchmark images
 ```
 
 ## Code Conventions
 
 ### Strict Rules
 
-1. **No emojis anywhere in source code, comments, commit messages, or documentation.** This includes README, code comments, console outputs, and Git history. UI text may use Unicode typography characters like `·`, `→`, `—` which are not emojis.
-
-2. **Use TypeScript strictly.** No `any` types unless absolutely necessary and documented with a comment explaining why.
-
-3. **No inline styles.** Use Tailwind classes only. If a one-off style is needed, use CSS modules or extend the Tailwind config.
-
-4. **Server Components by default.** Use `'use client'` directive only when interactivity (state, effects, event handlers) is required.
-
-5. **Naming conventions:**
-   - Components: PascalCase (`HeroSection.tsx`)
-   - Utilities and hooks: camelCase (`useScrollPosition.ts`)
-   - Constants: UPPER_SNAKE_CASE
-   - File names match component names
-
-6. **Imports order:**
-   - React/Next imports first
-   - Third-party libraries
-   - Internal absolute imports (`@/components/...`)
-   - Relative imports
-   - Type imports last (with `import type`)
+1. **No emojis anywhere in source code, comments, commit messages, or documentation.** UI text may use Unicode typography characters like `·`, `→`, `—`, `§` which are not emojis.
+2. **TypeScript strict mode.** No `any` types unless documented with reason.
+3. **No inline styles.** Tailwind classes only. Extend Tailwind config if needed.
+4. **Server Components by default.** Use `'use client'` only for interactivity.
+5. **Naming**: Components PascalCase, hooks/utils camelCase, constants UPPER_SNAKE_CASE.
+6. **Imports order**: React/Next, third-party, internal absolute (`@/*`), relative, type imports last.
 
 ### Component Patterns
 
-Each section is a self-contained component in `components/sections/`. Sections compose smaller UI primitives from `components/ui/`. Pages in `app/` only orchestrate sections, never contain layout logic directly.
-
-Pattern example:
+Pages compose sections. Sections compose UI primitives. Pages never contain layout logic directly.
 
 ```tsx
 // app/page.tsx
@@ -147,120 +189,125 @@ export default function HomePage() {
 }
 ```
 
-### Animation Guidelines
+## Animation Philosophy
 
-- Use Framer Motion for component animations.
-- Loading screen counter uses `useMotionValue` and `animate` for the 0 to 100 sequence.
-- Scroll-triggered reveals use `whileInView` with `viewport={{ once: true }}`.
-- Animations must respect `prefers-reduced-motion`.
+Motion is a primary differentiator. Every animation must serve a purpose: emphasize hierarchy, reveal content meaningfully, or showcase craft. Never decorative for its own sake.
+
+### Animation Tier A (foundational)
+
+- **Loading screen**: counter 0-100 with cubic ease-out, slide-up reveal mask exit
+- **Hero name reveal**: letter-by-letter stagger after loader exits (80ms per letter)
+- **Hero terminal**: typewriter effect with cursor blink, looped 4s cycle
+- **Section reveals**: stagger eyebrow → heading → body, 120ms each, triggered by scroll into view
+- **Theme toggle**: smooth color transition with cubic bezier, icon morph
+
+### Animation Tier B (premium)
+
+- **Smooth scroll**: integrate Lenis library for buttery scroll feel
+- **Custom cursor**: dot + outline circle, lag follow effect, expand on hoverable elements
+- **Magnetic hover**: cards subtly track cursor when nearby (transform translate)
+
+### Constraints
+
+- All animations respect `prefers-reduced-motion` — disable or shorten when preference is set
+- No animation should impede scroll performance
+- Avoid animations longer than 800ms (feels sluggish)
+- Use Framer Motion `whileInView` with `viewport={{ once: true }}` for scroll reveals
+- Hardware-accelerated transforms only (`transform`, `opacity`)
 
 ## Internationalization (i18n)
 
-The site supports English (EN) and Indonesian (ID). Indonesian is the default language.
+The site supports English (EN) and Indonesian (ID). Indonesian is the default.
 
-Content lives in `content/en.ts` and `content/id.ts` with matching key structures. The `LanguageContext` provides current locale and a translation function `t(key)`. Persistence is handled via `localStorage`.
+Content lives in `content/translations/en.ts` and `content/translations/id.ts` with matching key structure. The `LanguageContext` provides current locale and a `t(key)` function. Persistence via `localStorage`.
 
-When adding new copy, always add both EN and ID versions in their respective files. Never hardcode user-facing strings in components.
+Add both EN and ID versions when introducing new copy. Never hardcode user-facing strings.
 
 ## Theme System
 
-Dark and light modes are toggled via `next-themes`. The default is system preference. Theme preference persists across sessions. All components must work in both modes without breaking.
+Light and dark modes via `next-themes` with class-based strategy. Default is system preference. All components must work in both modes. Theme toggle has smooth color transition.
 
 ## Git Workflow
 
 ### Branch Strategy
 
-Single `main` branch. Direct commits to main with disciplined commit messages. No feature branches for this project.
+Single `main` branch. Direct commits with disciplined messages. No feature branches for this project.
 
 ### Commit Message Format
 
-Follow Conventional Commits strictly:
+Conventional Commits strict:
 
 ```
-<type>: <subject in lowercase>
+<type>(<scope>): <subject in lowercase>
 
-<optional body explaining what and why>
+<optional body with bullet points>
 ```
 
-Allowed types:
+Types: `feat`, `fix`, `chore`, `style`, `perf`, `docs`, `refactor`
+Scopes (project-specific): `setup`, `theme`, `nav`, `hero`, `about`, `karya`, `footer`, `loader`, `motion`, `i18n`, `responsive`, `reference`
 
-- `feat`: new feature
-- `fix`: bug fix
-- `chore`: tooling, config, dependencies
-- `style`: formatting, no logic change
-- `perf`: performance improvement
-- `docs`: documentation only
-- `refactor`: code restructure without behavior change
-
-Subject line under 72 characters. No period at the end. No emojis. Lowercase after the colon.
-
-Good examples:
-
-```
-feat: implement loading screen with counter animation
-chore: configure tailwind theme tokens for monochrome palette
-fix: prevent layout shift in hero section on mobile
-```
-
-Bad examples:
-
-```
-Updated stuff
-WIP
-feat: Added new feature.
-```
+Subject under 72 characters. No period. No emoji. Lowercase after colon.
 
 ### Commit Granularity
 
-Each commit represents one logical unit of work. Tests pass and build succeeds before every commit.
+Each commit is one logical unit. Lint, type-check, and build pass before commit.
 
 ## Build and Test Commands
 
 ```bash
-npm run dev          # Start development server on port 3000
+npm run dev          # Dev server on localhost:3000
 npm run build        # Production build
-npm run start        # Start production server
-npm run lint         # Run ESLint
-npm run type-check   # Run TypeScript compiler check
+npm run start        # Production server
+npm run lint         # ESLint
+npm run type-check   # TypeScript compiler check
 ```
 
-Before any commit, both `npm run lint` and `npm run type-check` must pass without errors.
+Both `npm run lint` and `npm run type-check` must pass before any commit.
 
 ## Deployment
 
-Production deploys automatically from `main` branch via Vercel integration. Preview deployments are generated for any push.
+Auto-deploy from `main` via Vercel. Preview deployments per push. Environment variables managed via Vercel dashboard. Never commit `.env.local`.
 
-Environment variables are managed via Vercel dashboard. Never commit `.env.local` to the repository.
+## v2 Roadmap (Future, not in v1 launch)
 
-## v2 Roadmap
-
-The following features are planned for v2 and intentionally not implemented in v1:
-
-- Stories blog system at `/cerita` with full CRUD
-- Admin panel at `/admin` for content management
-- Database integration via Supabase (PostgreSQL)
-- Authentication via Supabase Auth
+- Stories/Cerita blog system at `/cerita` with Supabase
+- Admin panel at `/admin` with Supabase Auth
 - Markdown content rendering for blog posts
-- Tag filtering and post categorization
+- Hero AI engineer animation video (MP4 swap)
 
-When v2 work begins, this document will be updated to include the database schema, RLS policies, and admin auth flow. New folders will appear under `app/cerita/`, `app/admin/`, and `lib/supabase/`.
+When v2 begins, this document will expand with database schema, RLS policies, and admin auth flow.
 
 ## Out of Scope (Do Not Modify)
 
-- `claude-design-reference.html` is read-only reference. Do not edit.
+- `claude-design-reference.html` is read-only inspiration. Do not edit.
 - `references/` folder contains visual benchmarks. Do not edit or remove.
-- `CLAUDE.md` (this file) should only be updated when project conventions genuinely change. Discuss before modifying.
+- `CLAUDE.md` (this file) updated only when conventions genuinely change.
 
 ## Working Style for AI Assistants
 
-When implementing features:
+When implementing:
 
 1. Read this file first.
-2. Reference `claude-design-reference.html` for layout structure.
-3. Reference `references/mareta-*.png` for visual quality benchmark and design details.
-4. When in doubt, prioritize matching the visual feel of the Mareta references over the Claude Design output.
-5. Implement one section or feature per session.
-6. Run `npm run lint` and `npm run type-check` before declaring work complete.
-7. Stage commits as atomic, meaningful units.
-8. Commit messages follow the format defined above.
-9. Never introduce dependencies without justification.
+2. Reference `claude-design-reference.html` for layout intent (not strict copy).
+3. Reference `references/*.png` for visual quality benchmark.
+4. **Implementation explores freely beyond reference constraints — especially in motion and interaction quality.**
+5. One section or feature per session.
+6. Run `npm run lint` and `npm run type-check` before declaring done.
+7. Commit messages follow the format above.
+8. Never introduce dependencies without justification.
+9. Animation is primary differentiator. Bake motion into section commits where natural.
+   Save (Ctrl+S).
+   Step 2.3: Commit & Push Pivot
+   powershellgit add . ; git commit -m "docs(reference): pivot to design v2 with motion-first direction
+
+- Replace homepage HTML reference with v2 from Claude Design iteration
+- Update CLAUDE.md to reflect design v2 direction and decisions
+- Document design direction history v1 to v2 for iteration transparency
+- Simplify nav plan to 3 links: Beranda, Tentang, Karya
+- Plan to refactor Journey timeline into Tentang narrative section
+- Add detail page architecture for /karya/[slug] routes
+- Define color system v2 with warm tones and soft panel token
+- Document animation philosophy with Tier A foundational and Tier B premium
+- Add Lenis to tech stack for smooth scroll integration
+- Mark references as inspiration only, implementation explores freely
+- Note: animation is primary differentiator, baked into section commits" ; git push
