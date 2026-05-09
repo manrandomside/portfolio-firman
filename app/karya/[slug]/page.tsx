@@ -1,9 +1,22 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ProjectRow } from "@/components/sections/karya/ProjectRow";
 import { impactAreas } from "@/content/karya";
+import { softwareEngineeringProjects } from "@/content/projects/software-engineering";
+import type { Project } from "@/content/projects/types";
 
 type Params = Promise<{ slug: string }>;
+
+const projectsBySlug: Record<string, Project[]> = {
+  "software-engineering": softwareEngineeringProjects,
+};
+
+const sectionIndicator: Record<string, string> = {
+  "software-engineering": "§ 03.01",
+  "ai-exploration": "§ 03.02",
+  "infographic-design": "§ 03.03",
+};
 
 export function generateStaticParams() {
   return impactAreas.map((area) => ({ slug: area.slug }));
@@ -35,10 +48,14 @@ export default async function KaryaDetailPage({ params }: { params: Params }) {
     notFound();
   }
 
+  const indicator = sectionIndicator[slug];
+  const projects = projectsBySlug[slug];
+
   return (
     <div className="container-narrow section-padding scroll-mt-24">
-      <div className="mb-12">
+      <header className="mb-16">
         <p className="text-muted mb-4 font-mono text-xs tracking-widest uppercase">
+          {indicator ? `${indicator} · ` : ""}
           Karya / {area.title}
         </p>
 
@@ -56,13 +73,30 @@ export default async function KaryaDetailPage({ params }: { params: Params }) {
         <p className="text-muted mt-6 max-w-2xl text-lg leading-relaxed">
           {area.description}
         </p>
-      </div>
+      </header>
 
-      <div className="border-border bg-soft rounded-lg border p-12 text-center">
-        <p className="text-muted font-mono text-xs tracking-widest uppercase">
-          Detail content coming soon
-        </p>
-      </div>
+      {projects && projects.length > 0 ? (
+        <section
+          aria-label="Selected projects"
+          className="mt-20 md:mt-24"
+        >
+          <p className="text-muted mx-auto mb-16 w-full max-w-[960px] font-mono text-xs tracking-widest uppercase">
+            Selected Work
+          </p>
+
+          <div className="flex flex-col gap-24 md:gap-32">
+            {projects.map((project) => (
+              <ProjectRow key={project.number} project={project} />
+            ))}
+          </div>
+        </section>
+      ) : (
+        <div className="border-border bg-soft mt-20 rounded-lg border p-12 text-center md:mt-24">
+          <p className="text-muted font-mono text-xs tracking-widest uppercase">
+            Detail content coming soon
+          </p>
+        </div>
+      )}
     </div>
   );
 }
