@@ -20,7 +20,9 @@
       "Bash(taskkill //PID 38300 //F)",
       "Bash(taskkill //PID 41484 //F)",
       "Bash(disown)",
-      "Bash(taskkill //PID 12576 //F)"
+      "Bash(taskkill //PID 12576 //F)",
+      "Bash(awk '/hero-art/,/term/' claude-design-reference.html)",
+      "Bash(grep -oE '\\\\.hero-art[^\\\\\\\\]*?\\\\}' claude-design-reference.html)"
     ]
   }
 }

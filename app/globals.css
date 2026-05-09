@@ -43,6 +43,23 @@
   }
 }
 
+@utility hero-grid-bg {
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@utility animate-blink {
+  animation: blink 1s steps(2) infinite;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
