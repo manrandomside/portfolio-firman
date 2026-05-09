@@ -2,6 +2,7 @@
 
 import { useState, useSyncExternalStore } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Menu, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { cn } from "@/lib/utils";
@@ -10,10 +11,16 @@ const subscribe = () => () => {};
 const getSnapshot = () => true;
 const getServerSnapshot = () => false;
 
-const NAV_LINKS = [
-  { label: "Beranda", href: "#beranda" },
-  { label: "Tentang", href: "#tentang" },
-  { label: "Karya", href: "#karya" },
+type NavLink = {
+  label: string;
+  href: string;
+  match: "exact" | "karya";
+};
+
+const NAV_LINKS: NavLink[] = [
+  { label: "Beranda", href: "/#beranda", match: "exact" },
+  { label: "Tentang", href: "/#tentang", match: "exact" },
+  { label: "Karya", href: "/#karya", match: "karya" },
 ];
 
 type Lang = "id" | "en";
@@ -21,6 +28,7 @@ type Lang = "id" | "en";
 export function Nav() {
   const [lang, setLang] = useState<Lang>("id");
   const { resolvedTheme, setTheme } = useTheme();
+  const pathname = usePathname();
   const mounted = useSyncExternalStore(
     subscribe,
     getSnapshot,
@@ -46,15 +54,25 @@ export function Nav() {
         </Link>
 
         <nav className="hidden items-center gap-12 md:flex">
-          {NAV_LINKS.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className="text-muted hover:text-foreground text-sm transition-colors"
-            >
-              {link.label}
-            </a>
-          ))}
+          {NAV_LINKS.map((link) => {
+            const isActive =
+              link.match === "karya" && pathname.startsWith("/karya");
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                aria-current={isActive ? "page" : undefined}
+                className={cn(
+                  "text-sm transition-colors",
+                  isActive
+                    ? "text-foreground decoration-foreground underline decoration-1 underline-offset-[6px]"
+                    : "text-muted hover:text-foreground"
+                )}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
         </nav>
 
         <div className="flex items-center gap-3">
