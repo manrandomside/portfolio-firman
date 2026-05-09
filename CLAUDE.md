@@ -251,6 +251,32 @@ lib/supabase/
 └── middleware.ts      Helper for session refresh
 ```
 
+### Schema Overview
+
+The database has 6 tables organized in two domains:
+
+**Project domain** (for software-engineering and ai-exploration pages):
+- `impact_areas` — top-level categories (3 cards on homepage)
+- `projects` — projects within each area
+- `project_tech` — tech stack pills per project
+- `project_images` — image gallery per project
+- `project_links` — action links per project (GitHub, Live Demo)
+
+**Poster domain** (for infographic-design page):
+- `posters` — standalone poster records with tools as jsonb
+
+All tables have RLS enabled with public read and authenticated write policies. Single-admin model — `authenticated` role check is sufficient.
+
+Migrations live in `supabase/migrations/` and are executed manually via Supabase Dashboard SQL Editor. See `supabase/migrations/README.md` for execution instructions.
+
+### Storage
+
+The `karya-images` bucket holds all project screenshots and poster files. Public read access. Upload restricted to authenticated users (admin only).
+
+Folder convention within bucket:
+- `karya-images/projects/{project-id}/{image-id}.{ext}` for project images
+- `karya-images/posters/{poster-id}.{ext}` for posters
+
 ### Environment Variables
 
 Required in `.env.local` (gitignored) and Vercel dashboard:
