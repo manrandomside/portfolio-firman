@@ -269,6 +269,10 @@ All tables have RLS enabled with public read and authenticated write policies. S
 
 Migrations live in `supabase/migrations/` and are executed manually via Supabase Dashboard SQL Editor. See `supabase/migrations/README.md` for execution instructions.
 
+### Initial Data
+
+Initial data matching the static content files was seeded via `supabase/seeds/initial_data.sql`. After commit 22 migrates public pages to Supabase fetch, the static files become reference-only. Future content updates happen via admin panel.
+
 ### Storage
 
 The `karya-images` bucket holds all project screenshots and poster files. Public read access. Upload restricted to authenticated users (admin only).

@@ -43,3 +43,15 @@ impact_areas (3 cards on homepage)
 
 posters (standalone, for infographic-design page)
 ```
+
+## Seed Data
+
+After running migrations, populate initial data from `supabase/seeds/initial_data.sql`.
+
+Run via SQL Editor (same as migrations) once after migrations complete. Re-running will create duplicate rows unless tables are truncated first.
+
+To re-seed (development only):
+1. Truncate tables: `truncate table public.posters cascade; truncate table public.impact_areas cascade;`
+2. Re-run seed file
+
+The seed mirrors the static content in `content/` directory exactly. Future content changes will be made via admin panel directly, not via re-seeding.
