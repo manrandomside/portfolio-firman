@@ -49,6 +49,10 @@ References are inspiration. Implementation explores freely with motion as primar
 | Icons           | Lucide React                 |
 | Theme           | next-themes                  |
 | i18n            | Custom React Context (EN/ID) |
+| Database        | Supabase (PostgreSQL)        |
+| Auth            | Supabase Auth                |
+| Storage         | Supabase Storage             |
+| SSR             | @supabase/ssr                |
 | Deployment      | Vercel                       |
 | Version Control | Git + GitHub                 |
 
@@ -227,6 +231,36 @@ Add both EN and ID versions when introducing new copy. Never hardcode user-facin
 
 Light and dark modes via `next-themes` with class-based strategy. Default is system preference. All components must work in both modes. Theme toggle has smooth color transition.
 
+## Database & Auth
+
+The portfolio uses Supabase for content management (admin panel) and dynamic data loading (public site).
+
+### Architecture
+
+- **Public site**: server components fetch data via `lib/supabase/server.ts`
+- **Admin panel**: client components for forms, server actions for mutations
+- **Session**: managed via cookies, refreshed by `proxy.ts` on every request
+- **RLS**: Row Level Security enabled on all tables, public read for published content, authenticated write for admin
+
+### Folder Structure
+
+```
+lib/supabase/
+├── client.ts          Browser client for client components
+├── server.ts          Server client for server components and actions
+└── middleware.ts      Helper for session refresh
+```
+
+### Environment Variables
+
+Required in `.env.local` (gitignored) and Vercel dashboard:
+
+- `NEXT_PUBLIC_SUPABASE_URL` — public, safe to expose
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY` — public, safe to expose, RLS enforces security
+- `SUPABASE_SERVICE_ROLE_KEY` — secret, server-side only, bypasses RLS
+
+Template available in `.env.example` (committed).
+
 ## Git Workflow
 
 ### Branch Strategy
@@ -267,15 +301,6 @@ Both `npm run lint` and `npm run type-check` must pass before any commit.
 ## Deployment
 
 Auto-deploy from `main` via Vercel. Preview deployments per push. Environment variables managed via Vercel dashboard. Never commit `.env.local`.
-
-## v2 Roadmap (Future, not in v1 launch)
-
-- Stories/Cerita blog system at `/cerita` with Supabase
-- Admin panel at `/admin` with Supabase Auth
-- Markdown content rendering for blog posts
-- Hero AI engineer animation video (MP4 swap)
-
-When v2 begins, this document will expand with database schema, RLS policies, and admin auth flow.
 
 ## Out of Scope (Do Not Modify)
 
