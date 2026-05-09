@@ -4,12 +4,14 @@ import { notFound } from "next/navigation";
 import { ProjectRow } from "@/components/sections/karya/ProjectRow";
 import { impactAreas } from "@/content/karya";
 import { softwareEngineeringProjects } from "@/content/projects/software-engineering";
+import { aiExplorationProjects } from "@/content/projects/ai-exploration";
 import type { Project } from "@/content/projects/types";
 
 type Params = Promise<{ slug: string }>;
 
 const projectsBySlug: Record<string, Project[]> = {
   "software-engineering": softwareEngineeringProjects,
+  "ai-exploration": aiExplorationProjects,
 };
 
 const sectionIndicator: Record<string, string> = {
