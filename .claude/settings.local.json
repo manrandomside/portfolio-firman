@@ -22,7 +22,9 @@
       "Bash(disown)",
       "Bash(taskkill //PID 12576 //F)",
       "Bash(awk '/hero-art/,/term/' claude-design-reference.html)",
-      "Bash(grep -oE '\\\\.hero-art[^\\\\\\\\]*?\\\\}' claude-design-reference.html)"
+      "Bash(grep -oE '\\\\.hero-art[^\\\\\\\\]*?\\\\}' claude-design-reference.html)",
+      "Bash(grep -oE '\\\\.impact[^\\\\\\\\]*?\\\\}' claude-design-reference.html)",
+      "Bash(grep -oE '\\\\.karya[^\\\\\\\\]*?\\\\}|\\\\.section-num[^\\\\\\\\]*?\\\\}|\\\\.lede[^\\\\\\\\]*?\\\\}' claude-design-reference.html)"
     ]
   }
 }
