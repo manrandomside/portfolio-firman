@@ -1,5 +1,5 @@
+import { AboutSection } from "@/components/sections/AboutSection";
 import { HeroSection } from "@/components/sections/HeroSection";
-import { JourneySection } from "@/components/sections/JourneySection";
 import { Loader } from "@/components/shared/Loader";
 
 export default function HomePage() {
@@ -8,7 +8,7 @@ export default function HomePage() {
       <Loader />
       <main>
         <HeroSection />
-        <JourneySection />
+        <AboutSection />
       </main>
     </>
   );
