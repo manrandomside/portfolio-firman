@@ -1,5 +1,7 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Fab } from "@/components/shared/Fab";
+import { Footer } from "@/components/shared/Footer";
 import { Nav } from "@/components/shared/Nav";
 import { ThemeProvider } from "@/components/shared/ThemeProvider";
 import "./globals.css";
@@ -20,6 +22,12 @@ export const metadata: Metadata = {
     "Personal portfolio of Firman Fadilah, Fullstack Developer, AI Engineer, and Vibe Coder",
 };
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -35,6 +43,8 @@ export default function RootLayout({
         <ThemeProvider>
           <Nav />
           {children}
+          <Footer />
+          <Fab />
         </ThemeProvider>
       </body>
     </html>
