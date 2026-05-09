@@ -2,16 +2,24 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ProjectRow } from "@/components/sections/karya/ProjectRow";
+import { PosterGrid } from "@/components/sections/karya/PosterGrid";
 import { impactAreas } from "@/content/karya";
 import { softwareEngineeringProjects } from "@/content/projects/software-engineering";
 import { aiExplorationProjects } from "@/content/projects/ai-exploration";
+import { infographicDesignPosters } from "@/content/projects/infographic-design";
 import type { Project } from "@/content/projects/types";
+import type { Poster } from "@/content/projects/infographic-design";
 
 type Params = Promise<{ slug: string }>;
 
-const projectsBySlug: Record<string, Project[]> = {
-  "software-engineering": softwareEngineeringProjects,
-  "ai-exploration": aiExplorationProjects,
+type SlugContent =
+  | { type: "projects"; data: Project[] }
+  | { type: "posters"; data: Poster[] };
+
+const contentBySlug: Record<string, SlugContent> = {
+  "software-engineering": { type: "projects", data: softwareEngineeringProjects },
+  "ai-exploration": { type: "projects", data: aiExplorationProjects },
+  "infographic-design": { type: "posters", data: infographicDesignPosters },
 };
 
 const sectionIndicator: Record<string, string> = {
@@ -51,7 +59,7 @@ export default async function KaryaDetailPage({ params }: { params: Params }) {
   }
 
   const indicator = sectionIndicator[slug];
-  const projects = projectsBySlug[slug];
+  const content = contentBySlug[slug];
 
   return (
     <div className="container-narrow section-padding scroll-mt-24">
@@ -77,7 +85,7 @@ export default async function KaryaDetailPage({ params }: { params: Params }) {
         </p>
       </header>
 
-      {projects && projects.length > 0 ? (
+      {content?.type === "projects" && content.data.length > 0 && (
         <section
           aria-label="Selected projects"
           className="mt-20 md:mt-24"
@@ -87,12 +95,27 @@ export default async function KaryaDetailPage({ params }: { params: Params }) {
           </p>
 
           <div className="flex flex-col gap-24 md:gap-32">
-            {projects.map((project) => (
+            {content.data.map((project) => (
               <ProjectRow key={project.number} project={project} />
             ))}
           </div>
         </section>
-      ) : (
+      )}
+
+      {content?.type === "posters" && content.data.length > 0 && (
+        <section
+          aria-label="Selected posters"
+          className="mt-20 md:mt-24"
+        >
+          <p className="text-muted mx-auto mb-16 w-full max-w-[1200px] font-mono text-xs tracking-widest uppercase">
+            Selected Posters
+          </p>
+
+          <PosterGrid posters={content.data} />
+        </section>
+      )}
+
+      {(!content || content.data.length === 0) && (
         <div className="border-border bg-soft mt-20 rounded-lg border p-12 text-center md:mt-24">
           <p className="text-muted font-mono text-xs tracking-widest uppercase">
             Detail content coming soon
