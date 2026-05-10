@@ -1,8 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { Fab } from "@/components/shared/Fab";
-import { Footer } from "@/components/shared/Footer";
-import { Nav } from "@/components/shared/Nav";
+import { AppShell } from "@/components/shared/AppShell";
 import { ThemeProvider } from "@/components/shared/ThemeProvider";
 import "./globals.css";
 
@@ -41,10 +39,7 @@ export default function RootLayout({
     >
       <body className="font-sans antialiased">
         <ThemeProvider>
-          <Nav />
-          {children}
-          <Footer />
-          <Fab />
+          <AppShell>{children}</AppShell>
         </ThemeProvider>
       </body>
     </html>

@@ -293,6 +293,30 @@ Folder convention within bucket:
 - `karya-images/projects/{project-id}/{image-id}.{ext}` for project images
 - `karya-images/posters/{poster-id}.{ext}` for posters
 
+### Authentication Flow
+
+The portfolio uses Supabase Auth with email + password for single-admin access (Firman only).
+
+- Login page: `/admin/login`
+- Auth helpers: `lib/supabase/auth.ts` exports `getCurrentUser()`, `requireAuth()`, `signOut()`
+- Protected routes: `proxy.ts` redirects unauthenticated users to login when accessing `/admin/*` (except `/admin/login`)
+- Session management: handled by `@supabase/ssr` cookie helpers, refreshed on every request via proxy
+
+To enforce auth in server components:
+
+```ts
+import { requireAuth } from "@/lib/supabase/auth";
+
+export default async function AdminPage() {
+  const user = await requireAuth(); // redirects to /admin/login if not authenticated
+  return <div>Welcome {user.email}</div>;
+}
+```
+
+The admin user must be created manually via Supabase Dashboard (Authentication > Users > Add user with auto-confirm). No public signup is exposed.
+
+The global `Nav`, `Footer`, and `Fab` components are skipped on `/admin/*` routes — `components/shared/AppShell.tsx` reads the pathname and conditionally renders the public shell so admin pages get a clean takeover surface.
+
 ### Environment Variables
 
 Required in `.env.local` (gitignored) and Vercel dashboard:
