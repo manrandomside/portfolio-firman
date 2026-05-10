@@ -158,3 +158,39 @@ export async function updateArea(
 
   redirect("/admin/areas");
 }
+
+export async function deleteArea(id: string): Promise<ActionResult> {
+  const supabase = await createClient();
+
+  // Get the slug before deletion for revalidation path
+  const { data: area } = await supabase
+    .from("impact_areas")
+    .select("slug")
+    .eq("id", id)
+    .single();
+
+  if (!area) {
+    return { success: false, error: "Area tidak ditemukan." };
+  }
+
+  // Delete — cascade will auto-remove projects, project_tech, project_images, project_links
+  const { error } = await supabase
+    .from("impact_areas")
+    .delete()
+    .eq("id", id);
+
+  if (error) {
+    console.error("Failed to delete area:", error);
+    return {
+      success: false,
+      error: "Gagal menghapus area. Silakan coba lagi.",
+    };
+  }
+
+  // Revalidate affected paths
+  revalidatePath("/");
+  revalidatePath(`/karya/${area.slug}`);
+  revalidatePath("/admin/areas");
+
+  redirect("/admin/areas");
+}
