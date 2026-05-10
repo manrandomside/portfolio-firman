@@ -317,6 +317,29 @@ The admin user must be created manually via Supabase Dashboard (Authentication >
 
 The global `Nav`, `Footer`, and `Fab` components are skipped on `/admin/*` routes — `components/shared/AppShell.tsx` reads the pathname and conditionally renders the public shell so admin pages get a clean takeover surface.
 
+### Admin Panel Architecture
+
+The admin panel lives at `/admin/*` and is protected by:
+
+1. `proxy.ts` middleware (redirects unauthenticated users to /admin/login)
+2. `app/(admin-app)/admin/layout.tsx` server component (calls `getCurrentUser` and redirects to login on every render)
+
+Admin shell consists of:
+
+- `AdminTopBar` — sticky header with brand mark, user email, View Site link, logout button
+- `AdminSidebar` — vertical nav with Dashboard, Impact Areas, Projects, Posters links (desktop only)
+- Main content area — pages that compose admin functionality
+
+Admin pages use `bg-soft` panels for content distinction from public site. Same editorial monochrome aesthetic with sidebar `bg-soft` creating subtle visual separation.
+
+`AppShell` (from commit 23) automatically hides public Nav/Footer/FAB when path starts with `/admin`. Admin has its own shell.
+
+Admin pages should use `export const dynamic = "force-dynamic"` for content management views to ensure fresh data (no ISR caching).
+
+#### Route Group Layout
+
+The dashboard tree is intentionally placed under the `app/(admin-app)/admin/` route group so the admin layout does not wrap `/admin/login`. Without this split, the layout's auth gate would redirect logged-out visitors of `/admin/login` back to `/admin/login`, creating an infinite loop. The route group keeps URLs identical (`/admin`, `/admin/areas`, ...) while keeping login on its own untouched layout chain via `app/admin/login/page.tsx`.
+
 ### Environment Variables
 
 Required in `.env.local` (gitignored) and Vercel dashboard:
