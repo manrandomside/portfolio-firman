@@ -1,3 +1,12 @@
+/**
+ * @deprecated As of commit 22, the static `infographicDesignPosters` array is no longer
+ * imported by app code. Poster content is sourced from Supabase database via
+ * lib/supabase/queries.ts. This file is preserved as reference for the original seed data.
+ * Future content changes happen via admin panel (commits 23+).
+ *
+ * Note: the `Poster` type below is still actively imported by query helpers and
+ * components — only the data array is deprecated.
+ */
 // Note: Currently using placeholder posters with imageLabel only.
 // When admin panel is built (commits 19+), posters will migrate to Supabase Storage
 // with imagePath set to actual /public/posters/{filename} paths or Supabase URLs.

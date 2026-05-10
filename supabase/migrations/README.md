@@ -14,6 +14,7 @@ These migrations define the schema for the portfolio CMS.
 1. `0001_initial_schema.sql` — Creates all tables, indexes, triggers
 2. `0002_rls_policies.sql` — Enables Row Level Security
 3. `0003_storage_setup.sql` — Configures storage bucket and policies
+4. `0004_add_grants.sql` — Grants table privileges to anon and authenticated roles
 
 ## Verification
 
@@ -22,6 +23,16 @@ After running migrations, in Supabase Dashboard:
 - **Table Editor**: should see 6 tables (impact_areas, projects, project_tech, project_images, project_links, posters)
 - **Storage**: should see `karya-images` bucket
 - **Authentication > Policies**: should see policies on all 6 tables and storage.objects
+- **Test query**: in SQL Editor, run `select count(*) from public.impact_areas;` — should NOT return permission denied error
+
+## Troubleshooting
+
+### Permission denied for table errors
+
+If queries return "permission denied for table X" errors:
+- This means the table has RLS policies but lacks table-level GRANTS
+- Run migration 0004 (or its statements manually for the affected table)
+- This is required for Supabase since RLS alone is not sufficient
 
 ## Re-running Migrations
 

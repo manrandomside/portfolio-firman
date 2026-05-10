@@ -3,24 +3,16 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ProjectRow } from "@/components/sections/karya/ProjectRow";
 import { PosterGrid } from "@/components/sections/karya/PosterGrid";
-import { impactAreas } from "@/content/karya";
-import { softwareEngineeringProjects } from "@/content/projects/software-engineering";
-import { aiExplorationProjects } from "@/content/projects/ai-exploration";
-import { infographicDesignPosters } from "@/content/projects/infographic-design";
-import type { Project } from "@/content/projects/types";
-import type { Poster } from "@/content/projects/infographic-design";
+import {
+  getAllAreaSlugs,
+  getAreaBySlug,
+  getPosters,
+  getProjectsByAreaSlug,
+} from "@/lib/supabase/queries";
+
+export const revalidate = 60;
 
 type Params = Promise<{ slug: string }>;
-
-type SlugContent =
-  | { type: "projects"; data: Project[] }
-  | { type: "posters"; data: Poster[] };
-
-const contentBySlug: Record<string, SlugContent> = {
-  "software-engineering": { type: "projects", data: softwareEngineeringProjects },
-  "ai-exploration": { type: "projects", data: aiExplorationProjects },
-  "infographic-design": { type: "posters", data: infographicDesignPosters },
-};
 
 const sectionIndicator: Record<string, string> = {
   "software-engineering": "§ 03.01",
@@ -28,8 +20,9 @@ const sectionIndicator: Record<string, string> = {
   "infographic-design": "§ 03.03",
 };
 
-export function generateStaticParams() {
-  return impactAreas.map((area) => ({ slug: area.slug }));
+export async function generateStaticParams() {
+  const slugs = await getAllAreaSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({
@@ -38,7 +31,7 @@ export async function generateMetadata({
   params: Params;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const area = impactAreas.find((a) => a.slug === slug);
+  const area = await getAreaBySlug(slug);
 
   if (!area) {
     return { title: "Not Found" };
@@ -52,14 +45,16 @@ export async function generateMetadata({
 
 export default async function KaryaDetailPage({ params }: { params: Params }) {
   const { slug } = await params;
-  const area = impactAreas.find((a) => a.slug === slug);
+  const area = await getAreaBySlug(slug);
 
   if (!area) {
     notFound();
   }
 
   const indicator = sectionIndicator[slug];
-  const content = contentBySlug[slug];
+  const isPosterSlug = slug === "infographic-design";
+  const posters = isPosterSlug ? await getPosters() : [];
+  const projects = !isPosterSlug ? await getProjectsByAreaSlug(slug) : [];
 
   return (
     <div className="container-narrow section-padding scroll-mt-24">
@@ -85,37 +80,32 @@ export default async function KaryaDetailPage({ params }: { params: Params }) {
         </p>
       </header>
 
-      {content?.type === "projects" && content.data.length > 0 && (
-        <section
-          aria-label="Selected projects"
-          className="mt-20 md:mt-24"
-        >
+      {!isPosterSlug && projects.length > 0 && (
+        <section aria-label="Selected projects" className="mt-20 md:mt-24">
           <p className="text-muted mx-auto mb-16 w-full max-w-[960px] font-mono text-xs tracking-widest uppercase">
             Selected Work
           </p>
 
           <div className="flex flex-col gap-24 md:gap-32">
-            {content.data.map((project) => (
+            {projects.map((project) => (
               <ProjectRow key={project.number} project={project} />
             ))}
           </div>
         </section>
       )}
 
-      {content?.type === "posters" && content.data.length > 0 && (
-        <section
-          aria-label="Selected posters"
-          className="mt-20 md:mt-24"
-        >
+      {isPosterSlug && posters.length > 0 && (
+        <section aria-label="Selected posters" className="mt-20 md:mt-24">
           <p className="text-muted mx-auto mb-16 w-full max-w-[1200px] font-mono text-xs tracking-widest uppercase">
             Selected Posters
           </p>
 
-          <PosterGrid posters={content.data} />
+          <PosterGrid posters={posters} />
         </section>
       )}
 
-      {(!content || content.data.length === 0) && (
+      {((isPosterSlug && posters.length === 0) ||
+        (!isPosterSlug && projects.length === 0)) && (
         <div className="border-border bg-soft mt-20 rounded-lg border p-12 text-center md:mt-24">
           <p className="text-muted font-mono text-xs tracking-widest uppercase">
             Detail content coming soon

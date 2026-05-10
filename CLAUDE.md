@@ -271,7 +271,19 @@ Migrations live in `supabase/migrations/` and are executed manually via Supabase
 
 ### Initial Data
 
-Initial data matching the static content files was seeded via `supabase/seeds/initial_data.sql`. After commit 22 migrates public pages to Supabase fetch, the static files become reference-only. Future content updates happen via admin panel.
+Initial data was seeded via `supabase/seeds/initial_data.sql` (commit 21).
+
+**As of commit 22, public pages fetch from Supabase via `lib/supabase/queries.ts`.** Static content files in `content/` are deprecated reference material — they are NOT imported by app code anymore. Future content changes happen via admin panel (commits 23+).
+
+The `content/projects/types.ts` file is still active — it defines the shared Project type used by both query helpers and components.
+
+### Caching Strategy
+
+Public pages use SSG + ISR with 60-second revalidate. After admin actions (commits 23+), specific paths can be invalidated immediately via `revalidatePath()`.
+
+```ts
+export const revalidate = 60; // applied to /karya/[slug] and homepage
+```
 
 ### Storage
 

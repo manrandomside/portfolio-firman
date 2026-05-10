@@ -1,3 +1,9 @@
+/**
+ * @deprecated As of commit 22, this file is no longer imported by app code.
+ * Content is now sourced from Supabase database. See lib/supabase/queries.ts.
+ * This file is preserved as reference for the original seed data.
+ * Future content changes happen via admin panel (commits 23+).
+ */
 import type { Project } from "@/content/projects/types";
 
 export const softwareEngineeringProjects: Project[] = [

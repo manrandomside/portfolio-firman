@@ -1,7 +1,16 @@
 import Link from "next/link";
-import { impactAreas } from "@/content/karya";
+import { Code2, LayoutGrid, Target, type LucideIcon } from "lucide-react";
+import { getImpactAreas } from "@/lib/supabase/queries";
 
-export function KaryaSection() {
+const iconMap: Record<string, LucideIcon> = {
+  Code2,
+  Target,
+  LayoutGrid,
+};
+
+export async function KaryaSection() {
+  const impactAreas = await getImpactAreas();
+
   return (
     <section
       id="karya"
@@ -35,11 +44,11 @@ export function KaryaSection() {
 
       <ul className="grid grid-cols-1 gap-6 md:grid-cols-3">
         {impactAreas.map((area) => {
-          const Icon = area.icon;
+          const Icon = iconMap[area.iconName] ?? Code2;
           return (
             <li key={area.slug} className="flex">
               <Link
-                href={area.href}
+                href={`/karya/${area.slug}`}
                 aria-label={`Explore ${area.title}`}
                 className="group block w-full"
               >
