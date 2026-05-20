@@ -307,3 +307,318 @@ export async function createProject(
 
   redirect("/admin/projects");
 }
+
+export async function updateProject(
+  id: string,
+  formData: FormData
+): Promise<ActionResult> {
+  const validation = validateProjectInput(formData);
+
+  if ("error" in validation) {
+    return { success: false, error: validation.error };
+  }
+
+  const supabase = await createClient();
+
+  // Fetch original area_id to detect area change for revalidation
+  const { data: original } = await supabase
+    .from("projects")
+    .select("area_id")
+    .eq("id", id)
+    .single();
+
+  if (!original) {
+    return { success: false, error: "Project tidak ditemukan." };
+  }
+
+  const originalAreaId = original.area_id as string;
+
+  // Parse arrays from form data
+  const techLabels = parseArrayFromFormData<{ label: string }>(
+    formData,
+    "tech",
+    ["label"]
+  );
+  const linkInputs = parseArrayFromFormData<{
+    label: string;
+    href: string;
+    is_external: string;
+  }>(formData, "link", ["label", "href", "is_external"]);
+
+  // Parse existing image instructions (id + delete flag)
+  const existingImageOps: { id: string; delete: boolean }[] = [];
+  let existingIdx = 0;
+  while (true) {
+    const imgId = formData.get(`existing_image_${existingIdx}_id`);
+    const deleteFlag = formData.get(`existing_image_${existingIdx}_delete`);
+
+    if (imgId === null) break;
+
+    existingImageOps.push({
+      id: imgId as string,
+      delete: deleteFlag === "true",
+    });
+
+    existingIdx++;
+  }
+
+  // Parse new image files
+  const newImageFiles: { file: File; label: string; aspect: string }[] = [];
+  let imageIndex = 0;
+  while (true) {
+    const file = formData.get(`image_${imageIndex}_file`);
+    const label = formData.get(`image_${imageIndex}_label`);
+    const aspect = formData.get(`image_${imageIndex}_aspect`);
+
+    if (file === null && label === null && aspect === null) break;
+
+    if (!(file instanceof File) || file.size === 0) {
+      imageIndex++;
+      continue;
+    }
+
+    if (file.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
+      return {
+        success: false,
+        error: `File ${file.name} terlalu besar (max ${MAX_FILE_SIZE_MB}MB).`,
+      };
+    }
+
+    if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+      return {
+        success: false,
+        error: `File ${file.name} tipe tidak didukung. Gunakan JPG, PNG, WebP, atau GIF.`,
+      };
+    }
+
+    newImageFiles.push({
+      file,
+      label: (label as string) || "",
+      aspect: (aspect as string) || "video",
+    });
+
+    imageIndex++;
+  }
+
+  const keptExistingCount = existingImageOps.filter((op) => !op.delete).length;
+  const totalImageCount = keptExistingCount + newImageFiles.length;
+
+  if (totalImageCount > MAX_IMAGES_PER_PROJECT) {
+    return {
+      success: false,
+      error: `Total gambar (${totalImageCount}) melebihi maksimum ${MAX_IMAGES_PER_PROJECT}.`,
+    };
+  }
+
+  // ============ MUTATION PHASE ============
+
+  // Step 1: Update project base fields
+  const { error: updateError } = await supabase
+    .from("projects")
+    .update(validation.data)
+    .eq("id", id);
+
+  if (updateError) {
+    console.error("Failed to update project:", updateError);
+    return {
+      success: false,
+      error: "Gagal update project. Silakan coba lagi.",
+    };
+  }
+
+  // Step 2: Delete existing tech, re-insert from form
+  await supabase.from("project_tech").delete().eq("project_id", id);
+
+  if (techLabels.length > 0) {
+    const techRows = techLabels
+      .filter((t) => t.label && t.label.trim().length > 0)
+      .map((t, idx) => ({
+        project_id: id,
+        label: t.label.trim(),
+        display_order: idx,
+      }));
+
+    if (techRows.length > 0) {
+      const { error: techError } = await supabase
+        .from("project_tech")
+        .insert(techRows);
+
+      if (techError) {
+        console.error("Failed to insert tech:", techError);
+        return { success: false, error: "Gagal update tech tags." };
+      }
+    }
+  }
+
+  // Step 3: Delete existing links, re-insert from form
+  await supabase.from("project_links").delete().eq("project_id", id);
+
+  if (linkInputs.length > 0) {
+    const linkRows = linkInputs
+      .filter(
+        (l) =>
+          l.label &&
+          l.href &&
+          l.label.trim().length > 0 &&
+          l.href.trim().length > 0
+      )
+      .map((l, idx) => ({
+        project_id: id,
+        label: l.label.trim(),
+        href: l.href.trim(),
+        is_external: l.is_external === "true",
+        display_order: idx,
+      }));
+
+    if (linkRows.length > 0) {
+      const { error: linkError } = await supabase
+        .from("project_links")
+        .insert(linkRows);
+
+      if (linkError) {
+        console.error("Failed to insert links:", linkError);
+        return { success: false, error: "Gagal update links." };
+      }
+    }
+  }
+
+  // Step 4a: Delete marked-for-removal existing images (Storage + DB)
+  const imagesToDelete = existingImageOps.filter((op) => op.delete);
+
+  if (imagesToDelete.length > 0) {
+    const { data: imagesData } = await supabase
+      .from("project_images")
+      .select("id, storage_path")
+      .in(
+        "id",
+        imagesToDelete.map((op) => op.id)
+      );
+
+    if (imagesData && imagesData.length > 0) {
+      const pathsToRemove = imagesData
+        .map((img) => img.storage_path as string | null)
+        .filter((p): p is string => p !== null);
+
+      if (pathsToRemove.length > 0) {
+        await supabase.storage.from("karya-images").remove(pathsToRemove);
+      }
+
+      await supabase
+        .from("project_images")
+        .delete()
+        .in(
+          "id",
+          imagesData.map((img) => img.id as string)
+        );
+    }
+  }
+
+  // Step 4b: Upload new images and insert rows
+  if (newImageFiles.length > 0) {
+    const { data: existingMaxOrder } = await supabase
+      .from("project_images")
+      .select("display_order")
+      .eq("project_id", id)
+      .order("display_order", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    const maxOrder =
+      existingMaxOrder && typeof existingMaxOrder.display_order === "number"
+        ? existingMaxOrder.display_order
+        : -1;
+    let nextOrder = maxOrder + 1;
+
+    const uploadedRows: {
+      project_id: string;
+      storage_path: string;
+      label: string;
+      aspect: string;
+      display_order: number;
+    }[] = [];
+
+    for (const { file, label, aspect } of newImageFiles) {
+      const ext = file.name.split(".").pop() || "jpg";
+      const imageId = crypto.randomUUID();
+      const storagePath = `projects/${id}/${imageId}.${ext}`;
+
+      const arrayBuffer = await file.arrayBuffer();
+      const { error: uploadError } = await supabase.storage
+        .from("karya-images")
+        .upload(storagePath, arrayBuffer, {
+          contentType: file.type,
+          upsert: false,
+        });
+
+      if (uploadError) {
+        console.error("Failed to upload image:", uploadError);
+        for (const row of uploadedRows) {
+          await supabase.storage
+            .from("karya-images")
+            .remove([row.storage_path]);
+        }
+        return {
+          success: false,
+          error: `Gagal upload ${file.name}. Perubahan image batal, tapi update lainnya tetap tersimpan.`,
+        };
+      }
+
+      uploadedRows.push({
+        project_id: id,
+        storage_path: storagePath,
+        label: label.trim() || `Image ${nextOrder + 1}`,
+        aspect,
+        display_order: nextOrder,
+      });
+
+      nextOrder++;
+    }
+
+    if (uploadedRows.length > 0) {
+      const { error: imageError } = await supabase
+        .from("project_images")
+        .insert(uploadedRows);
+
+      if (imageError) {
+        console.error("Failed to insert image records:", imageError);
+        for (const row of uploadedRows) {
+          await supabase.storage
+            .from("karya-images")
+            .remove([row.storage_path]);
+        }
+        return {
+          success: false,
+          error:
+            "Gagal menyimpan image records. Perubahan image batal, tapi update lainnya tetap tersimpan.",
+        };
+      }
+    }
+  }
+
+  // Step 5: Revalidate paths
+  const { data: originalArea } = await supabase
+    .from("impact_areas")
+    .select("slug")
+    .eq("id", originalAreaId)
+    .single();
+
+  if (originalArea?.slug) {
+    revalidatePath(`/karya/${originalArea.slug}`);
+  }
+
+  if (originalAreaId !== validation.data.area_id) {
+    const { data: newArea } = await supabase
+      .from("impact_areas")
+      .select("slug")
+      .eq("id", validation.data.area_id)
+      .single();
+
+    if (newArea?.slug && newArea.slug !== originalArea?.slug) {
+      revalidatePath(`/karya/${newArea.slug}`);
+    }
+  }
+
+  revalidatePath("/admin/projects");
+
+  redirect("/admin/projects");
+}

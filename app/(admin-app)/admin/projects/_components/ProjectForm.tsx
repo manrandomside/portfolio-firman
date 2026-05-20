@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { createProject } from "../_actions";
+import { createProject, updateProject } from "../_actions";
 import { TechArrayInput } from "./TechArrayInput";
 import { ImageArrayInput } from "./ImageArrayInput";
 import { LinkArrayInput } from "./LinkArrayInput";
@@ -13,24 +13,53 @@ type Area = {
   slug: string;
 };
 
-type ProjectFormProps = {
-  mode: "create";
-  areas: Area[];
+type ProjectInitialData = {
+  id: string;
+  area_id: string;
+  number: string;
+  title: string;
+  role_timeline: string;
+  description: string;
+  display_order: number;
+  tech: Array<{ id: string; label: string }>;
+  links: Array<{
+    id: string;
+    label: string;
+    href: string;
+    is_external: boolean;
+  }>;
+  images: Array<{
+    id: string;
+    storagePath: string;
+    label: string;
+    aspect: "video" | "square" | "portrait";
+    url: string;
+  }>;
 };
+
+type ProjectFormProps =
+  | { mode: "create"; areas: Area[]; initialData?: never }
+  | { mode: "edit"; areas: Area[]; initialData: ProjectInitialData };
 
 const INPUT_CLASSES =
   "w-full px-4 py-2.5 bg-background border border-border rounded-md text-sm text-foreground placeholder:text-muted focus:outline-none focus:ring-1 focus:ring-foreground focus:border-foreground transition-colors disabled:opacity-60";
 
-export function ProjectForm({ areas }: ProjectFormProps) {
+export function ProjectForm(props: ProjectFormProps) {
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const isEdit = props.mode === "edit";
+  const initialData = isEdit ? props.initialData : null;
+  const areas = props.areas;
 
   async function handleSubmit(formData: FormData) {
     setError(null);
     setIsSubmitting(true);
 
     try {
-      const result = await createProject(formData);
+      const result = isEdit
+        ? await updateProject(initialData!.id, formData)
+        : await createProject(formData);
 
       if (result && !result.success) {
         setError(result.error);
@@ -66,7 +95,7 @@ export function ProjectForm({ areas }: ProjectFormProps) {
             id="area_id"
             name="area_id"
             required
-            defaultValue=""
+            defaultValue={initialData?.area_id ?? ""}
             disabled={isSubmitting}
             className={INPUT_CLASSES}
           >
@@ -91,6 +120,7 @@ export function ProjectForm({ areas }: ProjectFormProps) {
             name="number"
             type="text"
             required
+            defaultValue={initialData?.number ?? ""}
             disabled={isSubmitting}
             placeholder="01"
             className={`${INPUT_CLASSES} max-w-[120px]`}
@@ -103,6 +133,7 @@ export function ProjectForm({ areas }: ProjectFormProps) {
             name="title"
             type="text"
             required
+            defaultValue={initialData?.title ?? ""}
             disabled={isSubmitting}
             placeholder="Kelola SDM PT Gapura Angkasa"
             className={INPUT_CLASSES}
@@ -119,6 +150,7 @@ export function ProjectForm({ areas }: ProjectFormProps) {
             name="role_timeline"
             type="text"
             required
+            defaultValue={initialData?.role_timeline ?? ""}
             disabled={isSubmitting}
             placeholder="Fullstack Developer · Jul-Des 2025 · OJT"
             className={INPUT_CLASSES}
@@ -131,6 +163,7 @@ export function ProjectForm({ areas }: ProjectFormProps) {
             name="description"
             required
             rows={4}
+            defaultValue={initialData?.description ?? ""}
             disabled={isSubmitting}
             placeholder="Deskripsi project, konteks, dan key learnings..."
             className={`${INPUT_CLASSES} resize-y`}
@@ -148,7 +181,7 @@ export function ProjectForm({ areas }: ProjectFormProps) {
             type="number"
             min="0"
             required
-            defaultValue={0}
+            defaultValue={initialData?.display_order ?? 0}
             disabled={isSubmitting}
             className={`${INPUT_CLASSES} max-w-[120px]`}
           />
@@ -166,7 +199,10 @@ export function ProjectForm({ areas }: ProjectFormProps) {
           </p>
         </div>
 
-        <TechArrayInput disabled={isSubmitting} />
+        <TechArrayInput
+          initialItems={initialData?.tech ?? []}
+          disabled={isSubmitting}
+        />
       </section>
 
       {/* SECTION: Images */}
@@ -178,7 +214,10 @@ export function ProjectForm({ areas }: ProjectFormProps) {
           </p>
         </div>
 
-        <ImageArrayInput disabled={isSubmitting} />
+        <ImageArrayInput
+          existingImages={initialData?.images ?? []}
+          disabled={isSubmitting}
+        />
       </section>
 
       {/* SECTION: Links */}
@@ -190,7 +229,10 @@ export function ProjectForm({ areas }: ProjectFormProps) {
           </p>
         </div>
 
-        <LinkArrayInput disabled={isSubmitting} />
+        <LinkArrayInput
+          initialItems={initialData?.links ?? []}
+          disabled={isSubmitting}
+        />
       </section>
 
       {/* Error display */}
@@ -210,7 +252,11 @@ export function ProjectForm({ areas }: ProjectFormProps) {
           disabled={isSubmitting}
           className="px-5 py-2.5 bg-foreground text-background font-mono text-xs uppercase tracking-widest rounded-md hover:opacity-90 transition-opacity disabled:opacity-60 disabled:cursor-not-allowed"
         >
-          {isSubmitting ? "Menyimpan..." : "Tambah Project"}
+          {isSubmitting
+            ? "Menyimpan..."
+            : isEdit
+              ? "Simpan Perubahan"
+              : "Tambah Project"}
         </button>
 
         <Link
