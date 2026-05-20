@@ -622,3 +622,75 @@ export async function updateProject(
 
   redirect("/admin/projects");
 }
+
+type DeleteResult = { success: true } | { success: false; error: string };
+
+export async function deleteProject(id: string): Promise<DeleteResult> {
+  const supabase = await createClient();
+
+  // Step 1: Fetch project info for revalidation + image paths for Storage cleanup
+  const { data: project, error: fetchError } = await supabase
+    .from("projects")
+    .select(
+      `
+      id,
+      area_id,
+      impact_areas (slug),
+      project_images (storage_path)
+    `
+    )
+    .eq("id", id)
+    .single();
+
+  if (fetchError || !project) {
+    return { success: false, error: "Project tidak ditemukan." };
+  }
+
+  const projectRow = project as unknown as {
+    id: string;
+    area_id: string;
+    impact_areas: { slug: string } | null;
+    project_images: { storage_path: string | null }[] | null;
+  };
+
+  const area = projectRow.impact_areas;
+  const imagePaths: string[] = (projectRow.project_images ?? [])
+    .map((img) => img.storage_path)
+    .filter((p): p is string => p !== null);
+
+  // Step 2: Delete Storage files (if any)
+  // We do this BEFORE deleting DB rows so we have the paths from the DB query.
+  // If Storage delete fails, log it but proceed — orphaned files in Storage
+  // are less critical than failing the whole delete operation.
+  if (imagePaths.length > 0) {
+    const { error: storageError } = await supabase.storage
+      .from("karya-images")
+      .remove(imagePaths);
+
+    if (storageError) {
+      console.error("Failed to delete some Storage files:", storageError);
+    }
+  }
+
+  // Step 3: Delete project row (cascade FK auto-deletes tech, images, links DB rows)
+  const { error: deleteError } = await supabase
+    .from("projects")
+    .delete()
+    .eq("id", id);
+
+  if (deleteError) {
+    console.error("Failed to delete project:", deleteError);
+    return {
+      success: false,
+      error: "Gagal menghapus project. Silakan coba lagi.",
+    };
+  }
+
+  // Step 4: Revalidate paths
+  if (area?.slug) {
+    revalidatePath(`/karya/${area.slug}`);
+  }
+  revalidatePath("/admin/projects");
+
+  redirect("/admin/projects");
+}
