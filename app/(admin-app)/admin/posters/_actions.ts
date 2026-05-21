@@ -290,3 +290,53 @@ export async function updatePoster(
 
   redirect("/admin/posters");
 }
+
+type DeleteResult = { success: true } | { success: false; error: string };
+
+export async function deletePoster(id: string): Promise<DeleteResult> {
+  const supabase = await createClient();
+
+  // Step 1: Fetch poster to get storage_path for cleanup
+  const { data: poster, error: fetchError } = await supabase
+    .from("posters")
+    .select("id, storage_path")
+    .eq("id", id)
+    .single();
+
+  if (fetchError || !poster) {
+    return { success: false, error: "Poster tidak ditemukan." };
+  }
+
+  const storagePath = (poster.storage_path as string | null) ?? null;
+
+  // Step 2: Delete Storage file (if exists)
+  // Non-fatal if fails — orphaned file preferable to failed delete operation
+  if (storagePath) {
+    const { error: storageError } = await supabase.storage
+      .from("karya-images")
+      .remove([storagePath]);
+
+    if (storageError) {
+      console.error("Failed to delete Storage file:", storageError);
+    }
+  }
+
+  // Step 3: Delete poster row
+  const { error: deleteError } = await supabase
+    .from("posters")
+    .delete()
+    .eq("id", id);
+
+  if (deleteError) {
+    console.error("Failed to delete poster:", deleteError);
+    return {
+      success: false,
+      error: "Gagal menghapus poster. Silakan coba lagi.",
+    };
+  }
+
+  revalidatePath("/karya/infographic-design");
+  revalidatePath("/admin/posters");
+
+  redirect("/admin/posters");
+}
