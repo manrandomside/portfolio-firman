@@ -350,6 +350,22 @@ Required in `.env.local` (gitignored) and Vercel dashboard:
 
 Template available in `.env.example` (committed).
 
+## Operations
+
+### Supabase Keep-Alive
+
+A GitHub Actions workflow (`.github/workflows/keep-alive.yml`) runs daily at 02:00 UTC to ping the Supabase REST API. This prevents the Free Tier auto-pause that triggers after 7 days of database inactivity.
+
+The workflow can also be triggered manually from the GitHub Actions UI for testing.
+
+**Required GitHub repository secrets:**
+- `SUPABASE_URL` — Same value as `NEXT_PUBLIC_SUPABASE_URL` in `.env.local`
+- `SUPABASE_ANON_KEY` — Same value as `NEXT_PUBLIC_SUPABASE_ANON_KEY` in `.env.local`
+
+To add secrets: GitHub repo → Settings → Secrets and variables → Actions → New repository secret.
+
+**Why this matters:** Without keep-alive, the production site would silently break after a week of low traffic. The daily ping costs nothing (GitHub Actions free tier, Supabase Free tier) and runs in under 1 second.
+
 ## Git Workflow
 
 ### Branch Strategy

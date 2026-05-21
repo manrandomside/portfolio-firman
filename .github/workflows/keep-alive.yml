@@ -1,0 +1,52 @@
+name: Supabase Keep-Alive
+
+# Prevents Supabase Free Tier from auto-pausing after 7 days of inactivity.
+# Sends a simple SELECT query daily via REST API to register database activity.
+
+on:
+  schedule:
+    # Run daily at 02:00 UTC (09:00 WIB / 10:00 WITA)
+    # Off-peak hours to minimize collision with deployment traffic
+    - cron: '0 2 * * *'
+
+  # Allow manual trigger from GitHub Actions UI for testing
+  workflow_dispatch:
+
+jobs:
+  ping:
+    name: Ping Supabase REST API
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Send keep-alive query
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_ANON_KEY" ]; then
+            echo "Error: SUPABASE_URL or SUPABASE_ANON_KEY secret not set"
+            exit 1
+          fi
+
+          # Send a minimal SELECT query to register database activity
+          # Querying impact_areas with limit 1 keeps the query cost minimal
+          response=$(curl -s -o /tmp/response.txt -w "%{http_code}" \
+            -X GET \
+            "${SUPABASE_URL}/rest/v1/impact_areas?select=id&limit=1" \
+            -H "apikey: ${SUPABASE_ANON_KEY}" \
+            -H "Authorization: Bearer ${SUPABASE_ANON_KEY}")
+
+          echo "HTTP status: $response"
+          echo "Response body:"
+          cat /tmp/response.txt
+          echo ""
+
+          # Accept any 2xx status as success
+          if [[ "$response" =~ ^2[0-9][0-9]$ ]]; then
+            echo "Keep-alive ping successful"
+            exit 0
+          else
+            echo "Keep-alive ping failed with status: $response"
+            exit 1
+          fi

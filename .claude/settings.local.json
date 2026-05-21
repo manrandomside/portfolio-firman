@@ -27,7 +27,8 @@
       "Bash(grep -oE '\\\\.karya[^\\\\\\\\]*?\\\\}|\\\\.section-num[^\\\\\\\\]*?\\\\}|\\\\.lede[^\\\\\\\\]*?\\\\}' claude-design-reference.html)",
       "Bash(grep -iE \"^\\(instagram|linkedin|github|mail\\)\\\\.mjs$\")",
       "Bash(awk -F= '{print $1 \" present\"}')",
-      "Bash(git mv *)"
+      "Bash(git mv *)",
+      "Bash(python *)"
     ]
   }
 }
