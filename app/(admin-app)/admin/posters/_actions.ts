@@ -170,3 +170,123 @@ export async function createPoster(
 
   redirect("/admin/posters");
 }
+
+export async function updatePoster(
+  id: string,
+  formData: FormData
+): Promise<ActionResult> {
+  const validation = validatePosterInput(formData);
+
+  if ("error" in validation) {
+    return { success: false, error: validation.error };
+  }
+
+  const supabase = await createClient();
+
+  // Fetch existing poster (need storage_path for potential replacement)
+  const { data: existing, error: fetchError } = await supabase
+    .from("posters")
+    .select("id, storage_path")
+    .eq("id", id)
+    .single();
+
+  if (fetchError || !existing) {
+    return { success: false, error: "Poster tidak ditemukan." };
+  }
+
+  const existingStoragePath = (existing.storage_path as string | null) ?? null;
+
+  // Check if a new file was uploaded
+  const file = formData.get("image_file");
+  const hasNewFile = file instanceof File && file.size > 0;
+
+  let newStoragePath: string | null = existingStoragePath;
+
+  if (hasNewFile) {
+    if (file.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
+      return {
+        success: false,
+        error: `File terlalu besar (max ${MAX_FILE_SIZE_MB}MB).`,
+      };
+    }
+
+    if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+      return {
+        success: false,
+        error: "Tipe file tidak didukung. Gunakan JPG, PNG, WebP, atau GIF.",
+      };
+    }
+
+    const ext = file.name.split(".").pop() || "jpg";
+    const candidateStoragePath = `posters/${id}.${ext}`;
+
+    const arrayBuffer = await file.arrayBuffer();
+
+    // If same extension: upsert to overwrite in place
+    // If different extension: upload to new path, delete old after
+    const useUpsert = existingStoragePath === candidateStoragePath;
+
+    const { error: uploadError } = await supabase.storage
+      .from("karya-images")
+      .upload(candidateStoragePath, arrayBuffer, {
+        contentType: file.type,
+        upsert: useUpsert,
+      });
+
+    if (uploadError) {
+      console.error("Failed to upload new image:", uploadError);
+      return {
+        success: false,
+        error: "Gagal upload gambar baru. Perubahan dibatalkan.",
+      };
+    }
+
+    newStoragePath = candidateStoragePath;
+
+    // Delete old file only if path differs (different extension)
+    if (existingStoragePath && existingStoragePath !== candidateStoragePath) {
+      const { error: deleteError } = await supabase.storage
+        .from("karya-images")
+        .remove([existingStoragePath]);
+
+      if (deleteError) {
+        // Non-fatal: log but continue. Orphaned file can be cleaned up manually.
+        console.error("Failed to delete old image (orphan):", deleteError);
+      }
+    }
+  }
+
+  // Update poster row with new data + (possibly new) storage_path
+  const updatePayload = {
+    ...validation.data,
+    storage_path: newStoragePath,
+  };
+
+  const { error: updateError } = await supabase
+    .from("posters")
+    .update(updatePayload)
+    .eq("id", id);
+
+  if (updateError) {
+    console.error("Failed to update poster:", updateError);
+
+    // If we uploaded a new file but DB update failed, try to cleanup the new file
+    if (
+      hasNewFile &&
+      newStoragePath &&
+      newStoragePath !== existingStoragePath
+    ) {
+      await supabase.storage.from("karya-images").remove([newStoragePath]);
+    }
+
+    return {
+      success: false,
+      error: "Gagal menyimpan perubahan. Silakan coba lagi.",
+    };
+  }
+
+  revalidatePath("/karya/infographic-design");
+  revalidatePath("/admin/posters");
+
+  redirect("/admin/posters");
+}

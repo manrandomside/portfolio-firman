@@ -2,27 +2,44 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { createPoster } from "../_actions";
+import { createPoster, updatePoster } from "../_actions";
 import { ToolsArrayInput } from "./ToolsArrayInput";
 import { SingleImageInput } from "./SingleImageInput";
 
-type PosterFormProps = {
-  mode: "create";
+type PosterInitialData = {
+  id: string;
+  title: string;
+  topic: string;
+  year: number;
+  tools: string[];
+  image_label: string;
+  display_order: number;
+  storage_path: string | null;
+  imageUrl: string | null;
 };
+
+type PosterFormProps =
+  | { mode: "create"; initialData?: never }
+  | { mode: "edit"; initialData: PosterInitialData };
 
 const INPUT_CLASSES =
   "w-full px-4 py-2.5 bg-background border border-border rounded-md text-sm text-foreground placeholder:text-muted focus:outline-none focus:ring-1 focus:ring-foreground focus:border-foreground transition-colors disabled:opacity-60";
 
-export function PosterForm({ mode }: PosterFormProps) {
+export function PosterForm(props: PosterFormProps) {
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const isEdit = props.mode === "edit";
+  const initialData = isEdit ? props.initialData : null;
 
   async function handleSubmit(formData: FormData) {
     setError(null);
     setIsSubmitting(true);
 
     try {
-      const result = await createPoster(formData);
+      const result = isEdit
+        ? await updatePoster(initialData!.id, formData)
+        : await createPoster(formData);
 
       if (result && !result.success) {
         setError(result.error);
@@ -57,6 +74,7 @@ export function PosterForm({ mode }: PosterFormProps) {
             name="title"
             type="text"
             required
+            defaultValue={initialData?.title ?? ""}
             disabled={isSubmitting}
             placeholder="Cultural Identity Series"
             className={INPUT_CLASSES}
@@ -69,6 +87,7 @@ export function PosterForm({ mode }: PosterFormProps) {
             name="topic"
             type="text"
             required
+            defaultValue={initialData?.topic ?? ""}
             disabled={isSubmitting}
             placeholder="Cultural identity"
             className={INPUT_CLASSES}
@@ -83,7 +102,7 @@ export function PosterForm({ mode }: PosterFormProps) {
             min="1900"
             max="2100"
             required
-            defaultValue={currentYear}
+            defaultValue={initialData?.year ?? currentYear}
             disabled={isSubmitting}
             className={`${INPUT_CLASSES} max-w-[120px]`}
           />
@@ -100,7 +119,7 @@ export function PosterForm({ mode }: PosterFormProps) {
             type="number"
             min="0"
             required
-            defaultValue={0}
+            defaultValue={initialData?.display_order ?? 0}
             disabled={isSubmitting}
             className={`${INPUT_CLASSES} max-w-[120px]`}
           />
@@ -116,7 +135,15 @@ export function PosterForm({ mode }: PosterFormProps) {
           </p>
         </div>
 
-        <ToolsArrayInput disabled={isSubmitting} />
+        <ToolsArrayInput
+          initialItems={
+            initialData?.tools.map((label) => ({
+              id: crypto.randomUUID(),
+              label,
+            })) ?? []
+          }
+          disabled={isSubmitting}
+        />
       </section>
 
       {/* SECTION: Image */}
@@ -130,7 +157,9 @@ export function PosterForm({ mode }: PosterFormProps) {
 
         <SingleImageInput
           disabled={isSubmitting}
-          required={mode === "create"}
+          required={!isEdit}
+          existingImageUrl={initialData?.imageUrl ?? null}
+          existingImageLabel={initialData?.image_label ?? ""}
         />
 
         <FormField
@@ -143,6 +172,7 @@ export function PosterForm({ mode }: PosterFormProps) {
             name="image_label"
             type="text"
             required
+            defaultValue={initialData?.image_label ?? ""}
             disabled={isSubmitting}
             placeholder="Hero composition with traditional motifs"
             className={INPUT_CLASSES}
@@ -167,7 +197,11 @@ export function PosterForm({ mode }: PosterFormProps) {
           disabled={isSubmitting}
           className="px-5 py-2.5 bg-foreground text-background font-mono text-xs uppercase tracking-widest rounded-md hover:opacity-90 transition-opacity disabled:opacity-60 disabled:cursor-not-allowed"
         >
-          {isSubmitting ? "Menyimpan..." : "Tambah Poster"}
+          {isSubmitting
+            ? "Menyimpan..."
+            : isEdit
+              ? "Simpan Perubahan"
+              : "Tambah Poster"}
         </button>
 
         <Link
