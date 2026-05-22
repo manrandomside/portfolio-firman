@@ -1,5 +1,6 @@
 import { Fragment } from "react";
 import { aboutContent } from "@/content/about";
+import { Reveal } from "@/components/animations/Reveal";
 
 const MONO_TERMS = [
   "PT Gapura Angkasa",
@@ -40,27 +41,30 @@ export function AboutSection() {
       <div className="mx-auto w-full max-w-[960px] px-6">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-[3fr_2fr] md:gap-20">
           <div className="flex flex-col">
-            <p className="text-muted mb-4 font-mono text-xs tracking-widest uppercase">
-              {eyebrow}
-            </p>
+            <Reveal>
+              <p className="text-muted mb-4 font-mono text-xs tracking-widest uppercase">
+                {eyebrow}
+              </p>
 
-            <h2
-              id="tentang-heading"
-              className="text-foreground mb-10 text-[clamp(40px,5vw,64px)] leading-tight font-medium tracking-tight"
-            >
-              {heading}
-            </h2>
+              <h2
+                id="tentang-heading"
+                className="text-foreground mb-10 text-[clamp(40px,5vw,64px)] leading-tight font-medium tracking-tight"
+              >
+                {heading}
+              </h2>
+            </Reveal>
 
             <div className="space-y-6">
               {paragraphs.map((paragraph, index) => (
-                <p
-                  key={index}
-                  className={`max-w-[560px] text-[18px] leading-relaxed ${
-                    index === lastIndex ? "text-muted" : "text-foreground"
-                  }`}
-                >
-                  {renderWithMono(paragraph)}
-                </p>
+                <Reveal key={index} delay={index * 100}>
+                  <p
+                    className={`max-w-[560px] text-[18px] leading-relaxed ${
+                      index === lastIndex ? "text-muted" : "text-foreground"
+                    }`}
+                  >
+                    {renderWithMono(paragraph)}
+                  </p>
+                </Reveal>
               ))}
             </div>
           </div>

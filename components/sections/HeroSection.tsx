@@ -1,3 +1,5 @@
+import { Reveal } from "@/components/animations/Reveal";
+
 const ROLES = [
   "Software Engineer",
   "AI Explorer",
@@ -12,31 +14,42 @@ export function HeroSection() {
     >
       <div className="grid min-h-[80vh] grid-cols-1 items-center gap-12 lg:grid-cols-[3fr_2fr] lg:gap-16">
         <div className="flex flex-col">
-          <p className="text-muted mb-6 font-mono text-xs tracking-widest uppercase md:mb-8">
-            Bertransformasi melalui perubahan
-          </p>
+          <Reveal delay={200}>
+            <p className="text-muted mb-6 font-mono text-xs tracking-widest uppercase md:mb-8">
+              Bertransformasi melalui perubahan
+            </p>
+          </Reveal>
 
-          <h1 className="text-foreground mb-12 text-[clamp(80px,12vw,180px)] leading-[0.9] font-medium tracking-tight md:mb-16">
-            Firman
-          </h1>
+          <Reveal delay={350}>
+            <h1 className="text-foreground mb-12 text-[clamp(80px,12vw,180px)] leading-[0.9] font-medium tracking-tight md:mb-16">
+              Firman
+            </h1>
+          </Reveal>
 
-          <p className="text-foreground mb-10 max-w-lg text-lg leading-relaxed md:mb-12">
-            Membangun produk bersama AI sebagai pasangan ngoding.
-            Mendokumentasikan setiap pelajaran sepanjang jalan — dari logika
-            pertama di SMK sampai ship-an indie hari ini.
-          </p>
+          <Reveal delay={500}>
+            <p className="text-foreground mb-10 max-w-lg text-lg leading-relaxed md:mb-12">
+              Membangun produk bersama AI sebagai pasangan ngoding.
+              Mendokumentasikan setiap pelajaran sepanjang jalan — dari logika
+              pertama di SMK sampai ship-an indie hari ini.
+            </p>
+          </Reveal>
 
-          <div className="text-muted flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
-            {ROLES.map((role, index) => (
-              <span key={role} className="flex items-center gap-x-4">
-                {index > 0 && <span aria-hidden="true">·</span>}
-                <span>{role}</span>
-              </span>
-            ))}
-          </div>
+          <Reveal delay={650}>
+            <div className="text-muted flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
+              {ROLES.map((role, index) => (
+                <span key={role} className="flex items-center gap-x-4">
+                  {index > 0 && <span aria-hidden="true">·</span>}
+                  <span>{role}</span>
+                </span>
+              ))}
+            </div>
+          </Reveal>
         </div>
 
-        <div className="w-full max-w-md justify-self-start lg:max-w-none lg:justify-self-end">
+        <Reveal
+          delay={400}
+          className="w-full max-w-md justify-self-start lg:max-w-none lg:justify-self-end"
+        >
           <div
             aria-label="Hero animation placeholder"
             className="border-border bg-soft relative aspect-square w-full overflow-hidden rounded-lg border"
@@ -81,7 +94,7 @@ export function HeroSection() {
               </div>
             </div>
           </div>
-        </div>
+        </Reveal>
       </div>
     </section>
   );

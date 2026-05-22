@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Code2, LayoutGrid, Target, type LucideIcon } from "lucide-react";
 import { getImpactAreas } from "@/lib/supabase/queries";
+import { Reveal } from "@/components/animations/Reveal";
 
 const iconMap: Record<string, LucideIcon> = {
   Code2,
@@ -17,36 +18,43 @@ export async function KaryaSection() {
       className="container-narrow section-padding scroll-mt-24"
       aria-labelledby="karya-heading"
     >
-      <header className="relative mb-16">
-        <span
-          aria-hidden="true"
-          className="text-muted absolute top-0 right-0 font-mono text-xs tracking-widest uppercase"
-        >
-          § 03 — Work
-        </span>
+      <Reveal>
+        <header className="relative mb-16">
+          <span
+            aria-hidden="true"
+            className="text-muted absolute top-0 right-0 font-mono text-xs tracking-widest uppercase"
+          >
+            § 03 — Work
+          </span>
 
-        <p className="text-muted mb-3 font-mono text-xs tracking-widest uppercase">
-          Karya
-        </p>
+          <p className="text-muted mb-3 font-mono text-xs tracking-widest uppercase">
+            Karya
+          </p>
 
-        <h2
-          id="karya-heading"
-          className="text-foreground mb-4 text-[clamp(40px,5vw,64px)] leading-tight font-medium tracking-tight"
-        >
-          Area Dampak
-        </h2>
+          <h2
+            id="karya-heading"
+            className="text-foreground mb-4 text-[clamp(40px,5vw,64px)] leading-tight font-medium tracking-tight"
+          >
+            Area Dampak
+          </h2>
 
-        <p className="text-muted max-w-2xl text-lg leading-relaxed">
-          Tiga arah kerja yang saling menguatkan — kode jadi produk, produk jadi
-          pelajaran, pelajaran jadi visual yang mudah dipahami.
-        </p>
-      </header>
+          <p className="text-muted max-w-2xl text-lg leading-relaxed">
+            Tiga arah kerja yang saling menguatkan — kode jadi produk, produk jadi
+            pelajaran, pelajaran jadi visual yang mudah dipahami.
+          </p>
+        </header>
+      </Reveal>
 
       <ul className="grid grid-cols-1 gap-6 md:grid-cols-3">
-        {impactAreas.map((area) => {
+        {impactAreas.map((area, index) => {
           const Icon = iconMap[area.iconName] ?? Code2;
           return (
-            <li key={area.slug} className="flex">
+            <Reveal
+              as="li"
+              key={area.slug}
+              delay={index * 80}
+              className="flex"
+            >
               <Link
                 href={`/karya/${area.slug}`}
                 aria-label={`Explore ${area.title}`}
@@ -85,7 +93,7 @@ export async function KaryaSection() {
                   </span>
                 </article>
               </Link>
-            </li>
+            </Reveal>
           );
         })}
       </ul>

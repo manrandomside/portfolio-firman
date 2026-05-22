@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Reveal } from "@/components/animations/Reveal";
 import type {
   Project,
   ProjectImageAspect,
@@ -28,7 +29,7 @@ export function ProjectRow({ project }: ProjectRowProps) {
   const galleryClass = getGalleryGridClass(project.images.length);
 
   return (
-    <article className="mx-auto w-full max-w-[960px]">
+    <Reveal as="article" className="mx-auto w-full max-w-[960px]">
       <p className="text-foreground mb-6 font-mono text-7xl leading-none font-light md:text-8xl">
         {project.number}
       </p>
@@ -108,6 +109,6 @@ export function ProjectRow({ project }: ProjectRowProps) {
           );
         })}
       </ul>
-    </article>
+    </Reveal>
   );
 }

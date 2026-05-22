@@ -1,5 +1,6 @@
 import type { Poster } from "@/content/projects/infographic-design";
 import Image from "next/image";
+import { Reveal } from "@/components/animations/Reveal";
 
 type PosterGridProps = {
   posters: Poster[];
@@ -9,9 +10,11 @@ export function PosterGrid({ posters }: PosterGridProps) {
   return (
     <div className="container-narrow w-full">
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
-        {posters.map((poster) => (
-          <article
+        {posters.map((poster, index) => (
+          <Reveal
+            as="article"
             key={poster.id}
+            delay={index * 60}
             className="group flex cursor-pointer flex-col gap-4"
           >
             {/* Image Area */}
@@ -37,7 +40,7 @@ export function PosterGrid({ posters }: PosterGridProps) {
               <h3 className="text-foreground text-base font-medium">
                 {poster.title}
               </h3>
-              
+
               <p className="text-muted font-mono text-xs tracking-widest uppercase">
                 {poster.topic} · {poster.year}
               </p>
@@ -54,7 +57,7 @@ export function PosterGrid({ posters }: PosterGridProps) {
                 ))}
               </div>
             </div>
-          </article>
+          </Reveal>
         ))}
       </div>
     </div>

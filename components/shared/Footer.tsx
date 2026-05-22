@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Reveal } from "@/components/animations/Reveal";
 
 const internalLinks = [
   { label: "Tentang", href: "/#tentang" },
@@ -22,7 +23,11 @@ const externalLinks = [
 
 export function Footer() {
   return (
-    <footer className="border-border bg-background border-t">
+    <Reveal
+      as="footer"
+      duration={400}
+      className="border-border bg-background border-t"
+    >
       <div className="container-narrow py-16 md:py-20">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-[1fr_auto_auto] md:gap-16">
           <div>
@@ -87,6 +92,6 @@ export function Footer() {
           </p>
         </div>
       </div>
-    </footer>
+    </Reveal>
   );
 }
