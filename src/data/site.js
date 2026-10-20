@@ -85,7 +85,7 @@ export const PROJECTS = [
     live: null,
     repo: "https://github.com/manrandomside/layanan-pengaduan-kebutuhan-akademisi-ticketing",
     award: null,
-    image: null
+    image: "shots/cast"
   },
   {
     slug: "miaw",
@@ -94,15 +94,15 @@ export const PROJECTS = [
     year: "2026",
     line: { id: "Hewan peliharaan digital yang terhubung ke perangkat rumah.", en: "A digital pet wired to real hardware at home." },
     story: {
-      id: "Asisten rumah berwujud hewan peliharaan digital. Miaw terhubung ke ESP32 lewat MQTT untuk membaca kondisi ruangan, bisa diajak mengobrol lewat model bahasa (Groq dan OpenRouter), memutar radio internet, dan berganti ekspresi wajah secara real-time.",
-      en: "A home assistant shaped like a digital pet. Miaw talks to an ESP32 over MQTT to read the room, chats through language models (Groq and OpenRouter), plays internet radio and changes its face in real time."
+      id: "Asisten rumah berwujud hewan peliharaan digital. Miaw terhubung ke ESP32 lewat MQTT untuk membaca kondisi ruangan, bisa diajak mengobrol lewat model bahasa (Groq dan OpenRouter), memutar radio, dan berganti ekspresi wajah secara real-time.",
+      en: "A home assistant shaped like a digital pet. Miaw talks to an ESP32 over MQTT to read the room, chats through language models (Groq and OpenRouter), plays the radio and changes its face in real time."
     },
     role: { id: "Proyek pribadi", en: "Personal project" },
     stack: ["Next.js", "Supabase Realtime", "MQTT", "ESP32", "LLM"],
-    live: null,
+    live: "https://miaw-ai.vercel.app",
     repo: "https://github.com/manrandomside/miaw",
     award: null,
-    image: null
+    image: "shots/miaw"
   },
   {
     slug: "tangkis",
@@ -119,7 +119,8 @@ export const PROJECTS = [
     live: null,
     repo: "https://github.com/manrandomside/tangkis",
     award: null,
-    image: null
+    image: "shots/tangkis",
+    phone: true // an Android app: shown as a phone screen, not a desktop crop
   },
   {
     slug: "teen-digital-toxicity",

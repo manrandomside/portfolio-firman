@@ -16,7 +16,7 @@ const data = await Promise.all(PROJECTS.map(async p => ({
   live: p.live,
   repo: p.repo,
   award: p.award && { title: t(p.award.title, lang), by: p.award.by, proof: p.award.proof },
-  poster: p.cat === "desain",
+  poster: p.cat === "desain" || !!p.phone, // shown whole (contained), not cropped
   image: p.image ? (await getImage({ src: img(p.image), width: 1400, format: "webp" })).src : null,
   alt: `${p.name}: ${t(p.line, lang)}`
 })));
