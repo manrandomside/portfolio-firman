@@ -1,0 +1,32 @@
+---
+import { STEPS, UI } from "../data/site.js";
+import { t } from "../lib/i18n.js";
+
+const { lang } = Astro.props;
+---
+<section class="s process">
+  <div class="in">
+    <div class="s-head">
+      <p class="eyebrow">{t(UI.process.eyebrow, lang)}</p>
+      <h2>{t(UI.process.title, lang)}</h2>
+    </div>
+    <ol class="steps">
+      {STEPS.map((s, i) => (
+        <li class="rv">
+          <span class="step-n mono">{String(i + 1).padStart(2, "0")}</span>
+          <h3>{t(s.title, lang)}</h3>
+          <p>{t(s.text, lang)}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style is:global>
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 32px 24px; }
+  .steps li { display: grid; gap: 10px; align-content: start; padding-top: 18px; border-top: 2px solid var(--ink); }
+  .step-n { font-size: 13px; color: var(--accent-ink); }
+  .steps p { color: var(--muted); font-size: 16px; }
+  @media (min-width: 640px) { .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 1000px) { .steps { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+</style>

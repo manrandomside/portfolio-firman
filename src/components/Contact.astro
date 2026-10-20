@@ -1,0 +1,49 @@
+---
+import { ME, UI } from "../data/site.js";
+import { t, waLink } from "../lib/i18n.js";
+
+const { lang } = Astro.props;
+const links = [["GitHub", ME.github], ["LinkedIn", ME.linkedin], ["Instagram", ME.instagram]];
+---
+<footer class="contact dark" id="kontak">
+  <div class="in contact-in">
+    <h2 class="contact-title">{t(UI.contact.title, lang)}</h2>
+    <p class="lead">{t(UI.contact.lead, lang)}</p>
+    <div class="ctas">
+      <a class="btn wa" href={waLink(lang)} target="_blank" rel="noopener">{t(UI.hero.wa, lang)}</a>
+      {ME.cv && <a class="btn" href={ME.cv} download>{t(UI.contact.cv, lang)}</a>}
+    </div>
+    <dl class="contact-rows">
+      <div><dt class="mono">WhatsApp</dt><dd><a href={waLink(lang)} target="_blank" rel="noopener">{ME.waDisplay}</a></dd></div>
+      <div><dt class="mono">Email</dt><dd><a href={`mailto:${ME.email}`}>{ME.email}</a> <button type="button" class="copy mono" data-copy={ME.email} data-done={t(UI.contact.copied, lang)}>{t(UI.contact.copy, lang)}</button></dd></div>
+      <div><dt class="mono">{lang === "id" ? "Sosial" : "Social"}</dt><dd class="socials">{links.map(([n, h]) => <a href={h} target="_blank" rel="noopener">{n} ↗</a>)}</dd></div>
+    </dl>
+    <div class="watermark" aria-hidden="true"></div>
+    <p class="fine mono">© {new Date().getFullYear()} {ME.name} · Bali</p>
+  </div>
+</footer>
+
+<style is:global>
+  .contact { padding-block: clamp(80px, 12vw, 140px) 28px; overflow: hidden; }
+  .contact-in { display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; position: relative; }
+  .contact-title { font-size: clamp(32px, 6vw, 64px); line-height: 1.04; max-width: 16ch; }
+  .contact .lead { color: var(--on-dark-muted); }
+  .contact .btn:not(.wa) { color: var(--on-dark); }
+  .contact-rows { margin: 32px 0 0; display: grid; max-width: 720px; }
+  .contact-rows div { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 16px; padding: 14px 0; border-top: 1px solid var(--line); }
+  .contact-rows dt { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--on-dark-muted); padding-top: 4px; }
+  .contact-rows dd { margin: 0; display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: center; overflow-wrap: anywhere; }
+  .contact-rows a { text-decoration: none; }
+  .contact-rows a:hover { color: var(--accent); }
+  .copy { border: 1px solid var(--line); background: none; border-radius: 99px; padding: 4px 10px; font-size: 11px; color: var(--on-dark-muted); }
+  /* decorative outline of the name, drawn from CSS so it is not read or contrast-checked as text */
+  .watermark::after { content: "Firman Fadilah"; display: block; margin-top: 48px; font: 700 7.4vw/.9 var(--f-display); letter-spacing: -.04em; color: transparent; -webkit-text-stroke: 1px #2b3746; white-space: nowrap; user-select: none; }
+  .fine { font-size: 12px; color: var(--on-dark-muted); }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>(".copy").forEach(b => b.addEventListener("click", async () => {
+    const label = b.textContent;
+    try { await navigator.clipboard.writeText(b.dataset.copy!); b.textContent = b.dataset.done!; setTimeout(() => (b.textContent = label), 1600); } catch { /* the address stays selectable */ }
+  }));
+</script>

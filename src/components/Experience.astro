@@ -1,0 +1,63 @@
+---
+import { EXPERIENCE, CERTS, PROJECTS, UI } from "../data/site.js";
+import { t } from "../lib/i18n.js";
+
+const { lang } = Astro.props;
+const awards = PROJECTS.filter(p => p.award);
+---
+<section class="s exp">
+  <div class="in">
+    <div class="s-head">
+      <p class="eyebrow">{t(UI.exp.eyebrow, lang)}</p>
+      <h2>{t(UI.exp.title, lang)}</h2>
+    </div>
+    <div class="exp-cols">
+      <div>
+        <h3 class="exp-h mono">{t(UI.exp.work, lang)}</h3>
+        <ol class="exp-list">
+          {EXPERIENCE.map(e => (
+            <li class="rv">
+              <p class="exp-when mono">{t(e.when, lang)}</p>
+              <h4>{e.org}</h4>
+              <p class="exp-what">{t(e.what, lang)}</p>
+              <p>{t(e.note, lang)} <button type="button" class="link exp-see" data-slug={e.project} aria-haspopup="dialog">{t(UI.exp.see, lang)} →</button></p>
+            </li>
+          ))}
+        </ol>
+      </div>
+      <div class="exp-side">
+        <div>
+          <h3 class="exp-h mono">{t(UI.exp.certs, lang)}</h3>
+          <ul class="exp-rows">
+            {CERTS.map(c => <li class="rv"><b>{t(c.name, lang)}</b><span>{c.by}</span><span class="mono">{t(c.when, lang)}</span></li>)}
+          </ul>
+        </div>
+        <div>
+          <h3 class="exp-h mono">{t(UI.exp.awards, lang)}</h3>
+          <ul class="exp-rows">
+            {awards.map(p => <li class="rv"><b>{t(p.award.title, lang)}</b><span>{p.award.by} · {p.name}</span><a class="link mono" href={p.award.proof} target="_blank" rel="noopener">{t(UI.work.proof, lang)} ↗</a></li>)}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style is:global>
+  .exp-cols { display: grid; gap: 56px; }
+  .exp-h { font-size: 12px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+  .exp-list { list-style: none; margin: 0; padding: 0; }
+  .exp-list li { display: grid; gap: 4px; padding: 22px 0; border-top: 1px solid var(--ink); }
+  .exp-list h4 { margin: 0; font: 600 22px/1.25 var(--f-body); }
+  .exp-when { font-size: 13px; color: var(--accent-ink); }
+  .exp-what { color: var(--muted); font-size: 15px; margin-bottom: 6px; }
+  .exp-see { all: unset; cursor: pointer; text-decoration: underline; text-underline-offset: 4px; white-space: nowrap; }
+  .exp-see:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .exp-side { display: grid; gap: 40px; align-content: start; }
+  .exp-rows { list-style: none; margin: 0; padding: 0; }
+  .exp-rows li { display: grid; gap: 2px; padding: 14px 0; border-top: 1px solid var(--line); }
+  .exp-rows span { color: var(--muted); font-size: 15px; }
+  .exp-rows .mono { font-size: 13px; }
+  .exp-rows a { justify-self: start; font-size: 13px; margin-top: 2px; }
+  @media (min-width: 900px) { .exp-cols { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 72px; } }
+</style>
