@@ -4,8 +4,9 @@ import { t } from "../lib/i18n.js";
 
 const { lang } = Astro.props;
 ---
+<!-- the numbers set like an infographic key: big figure, an ink tick, the plain fact -->
 <section class="proof" aria-label={lang === "id" ? "Bukti" : "Proof"}>
-  <ul class="in proof-row">
+  <ul class="in proof-row marks">
     {PROOF.map(p => (
       <li class="rv">
         <strong class="proof-num">{p.word ?? <span data-to={p.value}>{p.value}</span>}</strong>
@@ -16,11 +17,12 @@ const { lang } = Astro.props;
 </section>
 
 <style is:global>
-  .proof { box-shadow: inset 0 1px var(--ink); }
-  .proof-row { list-style: none; margin: 0 auto; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 20px; padding-block: 28px 56px; }
-  .proof-row li { display: grid; gap: 6px; align-content: start; }
-  .proof-num { font: 500 clamp(36px, 6vw, 56px)/1 var(--f-mono); letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
-  .proof-row li > span { color: var(--muted); font-size: 15px; line-height: 1.45; max-width: 24ch; }
+  .proof { padding-block: clamp(56px, 8vw, 96px); }
+  .proof-row { list-style: none; margin: 0 auto; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px 24px; padding-block: 8px; }
+  .proof-row li { display: grid; gap: 10px; align-content: start; }
+  .proof-num { font: 800 clamp(64px, 9vw, 120px)/.82 var(--f-display); letter-spacing: -.01em; font-variant-numeric: tabular-nums; }
+  .proof-row li::after { content: ""; order: 1; width: 28px; height: 3px; background: var(--accent); }
+  .proof-row li > span { order: 2; font: 600 17px/1.3 var(--f-label); max-width: 22ch; }
   @media (min-width: 900px) { .proof-row { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 </style>
 

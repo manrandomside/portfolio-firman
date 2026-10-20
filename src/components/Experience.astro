@@ -5,10 +5,9 @@ import { t } from "../lib/i18n.js";
 const { lang } = Astro.props;
 const awards = PROJECTS.filter(p => p.award);
 ---
-<section class="s exp">
+<section class="s exp dark">
   <div class="in">
     <div class="s-head">
-      <p class="eyebrow">{t(UI.exp.eyebrow, lang)}</p>
       <h2>{t(UI.exp.title, lang)}</h2>
     </div>
     <div class="exp-cols">
@@ -47,7 +46,7 @@ const awards = PROJECTS.filter(p => p.award);
   .exp-cols { display: grid; gap: 56px; }
   .exp-h { font-size: 12px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
   .exp-list { list-style: none; margin: 0; padding: 0; }
-  .exp-list li { display: grid; gap: 4px; padding: 22px 0; border-top: 1px solid var(--ink); }
+  .exp-list li { display: grid; gap: 4px; padding: 22px 0; border-top: 1px solid currentColor; }
   .exp-list h4 { margin: 0; font: 600 22px/1.25 var(--f-body); }
   .exp-when { font-size: 13px; color: var(--accent-ink); }
   .exp-what { color: var(--muted); font-size: 15px; margin-bottom: 6px; }
@@ -60,4 +59,5 @@ const awards = PROJECTS.filter(p => p.award);
   .exp-rows .mono { font-size: 13px; }
   .exp-rows a { justify-self: start; font-size: 13px; margin-top: 2px; }
   @media (min-width: 900px) { .exp-cols { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 72px; } }
+  .dark .exp-when { color: var(--accent); }
 </style>
