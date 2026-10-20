@@ -90,6 +90,9 @@ const side = (i: number) => (i % 2 === 0 ? "l" : "r");
   .annot.drawn .leaders path { animation: draw .7s var(--ease) calc(.85s + var(--i) * .22s) forwards; }
   @keyframes draw { to { stroke-dashoffset: 0; } }
 
+  /* the opening plays first; the hero's entrance waits behind it */
+  html.loading .hero *, html.loading .leaders path { animation-play-state: paused !important; }
+
   @media (prefers-reduced-motion: reduce) {
     .js .hero .hl, .js .hero .fade, .js .annot .pin, .js .annot .note { animation: none !important; opacity: 1 !important; }
     .leaders path { stroke-dasharray: none; stroke-dashoffset: 0; }
