@@ -257,19 +257,26 @@ export const UI = {
     }
   },
   hero: {
-    kicker: { id: "Firman Fadilah · Web developer di Bali", en: "Firman Fadilah · Web developer in Bali" },
-    // the second part is set in the accent colour
-    title: [{ id: "Website yang tetap bekerja", en: "A website that keeps working" }, { id: "saat kamu sibuk melayani.", en: "while you're busy serving." }],
-    lead: { id: "Website untuk usaha, sistem untuk perusahaan, dan produk AI. Untuk usahamu, saya buatkan contoh website-nya dulu. Kalau cocok, baru kita lanjut.", en: "Websites for businesses, systems for companies and AI products. For your business, I build a sample website first. If you like it, we carry on." },
+    // the second part is set in the annotation ink
+    title: [{ id: "Website yang menjawab pelanggan", en: "A website that answers customers" }, { id: "sebelum mereka bertanya.", en: "before they ask." }],
+    lead: { id: "Saya buatkan contoh website untuk usahamu dulu. Kalau cocok, baru kita lanjut.", en: "I build a sample website for your business first. If you like it, we carry on." },
     wa: { id: "Chat WhatsApp", en: "Message on WhatsApp" },
-    work: { id: "Lihat karya", en: "See my work" },
-    stack: { id: "Tiga dari sembilan karya. Ketuk untuk detail.", en: "Three of nine projects. Tap for details." },
+    example: { id: "Lihat contohnya", en: "See an example" },
+    sign: { id: "Firman Fadilah · web developer di Bali", en: "Firman Fadilah · web developer in Bali" },
+    phoneAlt: { id: "Halaman depan website Early Beauty Studio di HP", en: "The Early Beauty Studio website on a phone" },
+    // what the annotated phone points out: [x %, y %] on the screenshot, then the note
+    notes: [
+      { at: [22, 21], text: { id: "Foto hasil kerja asli, bukan foto stok", en: "Real photos of the work, not stock" } },
+      { at: [70, 4.4], text: { id: "Dua bahasa untuk tamu dari luar negeri", en: "Two languages for visitors from abroad" } },
+      { at: [50, 42], text: { id: "Pelanggan menghitung harganya sendiri", en: "Customers work out the price themselves" } },
+      { at: [86, 4.4], text: { id: "Lima halaman, satu menu yang selalu terlihat", en: "Five pages, one menu always in view" } }
+    ],
     igCaption: { id: "Sebelum: hanya Instagram", en: "Before: Instagram only" },
     siteCaption: { id: "Sesudah: earlybeauty.pages.dev", en: "After: earlybeauty.pages.dev" }
   },
   statement: {
-    id: "Banyak usaha di Bali sudah ramai di Instagram, tapi tidak muncul saat orang mencarinya di Google. Saya membuat website yang menjawab pertanyaan pelanggan sebelum mereka sempat bertanya.",
-    en: "Plenty of businesses in Bali are busy on Instagram but invisible when people search Google. I build websites that answer a customer's questions before they need to ask."
+    id: "Banyak usaha di Bali sudah ramai di Instagram, tapi tidak muncul saat orang mencarinya di Google. Karena itu saya buatkan contohnya dulu: kamu lihat, kamu klik, baru kamu putuskan.",
+    en: "Plenty of businesses in Bali are busy on Instagram but invisible when people search Google. So I build the sample first: you look, you click, then you decide."
   },
   flow: {
     eyebrow: { id: "Contoh nyata · Early Beauty Studio", en: "A real example · Early Beauty Studio" },
@@ -284,7 +291,8 @@ export const UI = {
   },
   work: {
     eyebrow: { id: "Karya pilihan", en: "Selected work" },
-    title: { id: "Dari website salon sampai sistem bandara.", en: "From a salon website to an airport system." },
+    // the second part is set in the annotation ink
+    title: [{ id: "Karya yang sudah", en: "Work people" }, { id: "dipakai orang.", en: "actually use." }],
     all: { id: "Lihat semua karya", en: "See all work" },
     pageTitle: { id: "Semua karya", en: "All work" },
     pageLead: { id: "Website klien, sistem perusahaan, produk AI, dan poster infografis.", en: "Client websites, company systems, AI products and infographic posters." },
