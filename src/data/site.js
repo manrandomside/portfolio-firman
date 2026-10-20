@@ -85,7 +85,8 @@ export const PROJECTS = [
     live: null,
     repo: "https://github.com/manrandomside/layanan-pengaduan-kebutuhan-akademisi-ticketing",
     award: null,
-    image: "shots/cast"
+    image: "shots/cast-mobile",
+    phone: true // the mobile view Firman supplied, shown as a phone screen
   },
   {
     slug: "miaw",
@@ -175,7 +176,7 @@ export const PROJECTS = [
   }
 ];
 
-export const FEATURED = ["early-beauty", "kioku", "kelola-sdm"];
+export const FEATURED = ["early-beauty", "kioku", "kelola-sdm", "cast", "tangkis"];
 
 export const FILTERS = [
   { key: "all", label: { id: "Semua", en: "All" } },
@@ -216,15 +217,13 @@ export const EXPERIENCE = [
 
 // no scans and no certificate numbers on the site, on purpose
 export const CERTS = [
-  { name: { id: "Junior Web Developer (Pengembang Web Pratama)", en: "Junior Web Developer" }, by: "BNSP · LSP Teknologi Digital", when: { id: "Jan 2026, berlaku sampai Jan 2029", en: "Jan 2026, valid until Jan 2029" } },
+  { name: { id: "Junior Web Developer (Pengembang Web Pratama)", en: "Junior Web Developer" }, by: "BNSP · LSP Teknologi Digital", when: { id: "Jan 2026, berlaku sampai Jan 2029", en: "Jan 2026, valid until Jan 2029" }, cert: "bnsp-jwd" },
   { name: { id: "Junior Coder (Pemrogram Junior)", en: "Junior Coder" }, by: "BNSP · LSP TIK Triatma Kompetensi", when: { id: "2023", en: "2023" } }
 ];
 
 export const PROOF = [
-  { value: 3, label: { id: "juara lomba poster, satu internasional", en: "poster competition wins, one international" } },
-  { value: 95, label: { id: "nilai akhir PPIDK di PT Citra Konsultama", en: "final score, industry placement" } },
-  { word: "BNSP", label: { id: "tersertifikasi Junior Web Developer", en: "certified Junior Web Developer" } },
-  { word: "HKI", label: { id: "Kioku terdaftar hak cipta", en: "Kioku is a registered copyright" } }
+  { value: 3, label: { id: "juara lomba poster infografis, satu di tingkat internasional", en: "infographic poster competition wins, one international" } },
+  { word: "BNSP", label: { id: "tersertifikasi Junior Web Developer, berlaku sampai 2029", en: "certified Junior Web Developer, valid until 2029" }, cert: "bnsp-jwd" }
 ];
 
 // order matters: this is how a website project goes
@@ -325,6 +324,13 @@ export const UI = {
       { k: { id: "Kuliah", en: "Studying" }, v: { id: "Informatika, Universitas Udayana", en: "Informatics, Universitas Udayana" } },
       { k: { id: "Fokus", en: "Focus" }, v: { id: "Website, sistem, AI, desain", en: "Websites, systems, AI, design" } }
     ]
+  },
+  cert: {
+    view: { id: "Lihat sertifikat", en: "View certificate" },
+    title: { id: "Sertifikat BNSP · Junior Web Developer", en: "BNSP certificate · Junior Web Developer" },
+    front: { id: "Sertifikat kompetensi Junior Web Developer atas nama Firman Fadilah", en: "Junior Web Developer certificate of competence for Firman Fadilah" },
+    units: { id: "Daftar unit kompetensi yang diujikan", en: "The list of units of competency assessed" },
+    close: { id: "Tutup", en: "Close" }
   },
   exp: {
     eyebrow: { id: "Pengalaman", en: "Experience" },

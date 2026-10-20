@@ -15,8 +15,8 @@ test("excluded works never appear", () => {
   const text = JSON.stringify(PROJECTS).toLowerCase();
   for (const word of ["alter ego", "alterego", "bday", "ulang tahun", "kobun", "laravel/gapura"]) assert.ok(!text.includes(word), word);
 });
-test("home shows the three agreed works, in order", () => {
-  assert.deepEqual(featured(PROJECTS, FEATURED).map(p => p.slug), ["early-beauty", "kioku", "kelola-sdm"]);
+test("home shows the agreed works, in order", () => {
+  assert.deepEqual(featured(PROJECTS, FEATURED).map(p => p.slug), ["early-beauty", "kioku", "kelola-sdm", "cast", "tangkis"]);
 });
 test("filters split the nine works 1 / 5 / 3", () => {
   assert.equal(byFilter(PROJECTS, "all").length, 9);
