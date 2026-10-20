@@ -1,0 +1,67 @@
+<!-- Mouse only: an annotation cursor. A dot sits on the pointer, a ring follows with a little lag, and over anything
+     clickable the ring opens up; elements with data-cursor also print a short label inside it. Buttons lean toward
+     the pointer. Touch screens and reduced motion keep the normal cursor. -->
+<div class="cur out" aria-hidden="true"><span class="cur-ring"><span class="cur-label"></span></span><span class="cur-dot"></span></div>
+
+<style is:global>
+  .cur { display: none; }
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .cur.on { display: block; position: fixed; inset: 0; z-index: 90; pointer-events: none; }
+    .cur-dot, .cur-ring { position: absolute; left: 0; top: 0; border-radius: 50%; will-change: transform; }
+    .cur-dot { width: 6px; height: 6px; margin: -3px 0 0 -3px; background: var(--accent); }
+    .cur-ring { display: grid; place-items: center; width: 34px; height: 34px; margin: -17px 0 0 -17px; border: 1.5px solid var(--accent);
+      transition: width .35s var(--ease), height .35s var(--ease), margin .35s var(--ease), background .3s, border-color .3s, opacity .3s; }
+    .cur.hot .cur-ring { width: 56px; height: 56px; margin: -28px 0 0 -28px; background: color-mix(in srgb, var(--accent) 14%, transparent); }
+    .cur.labelled .cur-ring { width: 92px; height: 92px; margin: -46px 0 0 -46px; background: var(--accent); }
+    .cur-label { font: 600 12px/1.15 var(--f-body); color: var(--ink-on-accent); text-align: center; padding: 0 10px; opacity: 0; transition: opacity .2s; }
+    .cur.labelled .cur-label { opacity: 1; }
+    .cur.labelled .cur-dot, .cur.down .cur-dot { opacity: 0; }
+    .cur.down .cur-ring { width: 26px; height: 26px; margin: -13px 0 0 -13px; }
+    .cur.out .cur-ring, .cur.out .cur-dot { opacity: 0; }
+  }
+</style>
+
+<script>
+  const fine = matchMedia("(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)").matches;
+  const cur = document.querySelector<HTMLElement>(".cur")!;
+  if (fine) {
+    const dot = cur.querySelector<HTMLElement>(".cur-dot")!, ring = cur.querySelector<HTMLElement>(".cur-ring")!;
+    const label = cur.querySelector<HTMLElement>(".cur-label")!;
+    const HOT = "a, button, summary, [data-cursor], input, select, textarea";
+    let x = -100, y = -100, rx = x, ry = y, raf = 0;
+    cur.classList.add("on");
+
+    const loop = () => {
+      rx += (x - rx) * .2; ry += (y - ry) * .2;
+      dot.style.transform = `translate(${x}px, ${y}px)`;
+      ring.style.transform = `translate(${rx}px, ${ry}px)`;
+      raf = Math.abs(x - rx) + Math.abs(y - ry) > .3 ? requestAnimationFrame(loop) : 0;
+    };
+    addEventListener("pointermove", e => {
+      if (e.pointerType !== "mouse") return;
+      x = e.clientX; y = e.clientY;
+      cur.classList.remove("out");
+      if (!raf) raf = requestAnimationFrame(loop);
+    }, { passive: true });
+    document.addEventListener("pointerleave", () => cur.classList.add("out"));
+    addEventListener("pointerdown", () => cur.classList.add("down"));
+    addEventListener("pointerup", () => cur.classList.remove("down"));
+
+    document.addEventListener("pointerover", e => {
+      const el = (e.target as HTMLElement).closest<HTMLElement>(HOT);
+      const text = el?.dataset.cursor ?? "";
+      cur.classList.toggle("hot", !!el);
+      cur.classList.toggle("labelled", !!text);
+      if (text) label.textContent = text;
+    });
+
+    // buttons lean a little toward the pointer and settle back when it leaves
+    document.querySelectorAll<HTMLElement>(".btn, .lang, .nav-menu").forEach(b => {
+      b.addEventListener("pointermove", e => {
+        const r = b.getBoundingClientRect();
+        b.style.translate = `${(e.clientX - r.left - r.width / 2) * .25}px ${(e.clientY - r.top - r.height / 2) * .35}px`;
+      });
+      b.addEventListener("pointerleave", () => (b.style.translate = ""));
+    });
+  }
+</script>

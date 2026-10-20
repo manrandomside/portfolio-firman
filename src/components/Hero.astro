@@ -25,7 +25,7 @@ const side = (i: number) => (i % 2 === 0 ? "l" : "r");
     </div>
 
     <figure class="annot" data-annotate>
-      <a class="annot-phone" href="https://earlybeauty.pages.dev" target="_blank" rel="noopener">
+      <a class="annot-phone" href="https://earlybeauty.pages.dev" target="_blank" rel="noopener" data-cursor={t(UI.flow.live, lang)}>
         <Image src={img("shots/early-beauty-phone")} alt={t(UI.hero.phoneAlt, lang)} widths={[300, 560]} sizes="(min-width: 900px) 260px, 56vw" loading="eager" fetchpriority="high" />
         {notes.map((n, i) => <span class="pin callout-n" style={`--x:${n.at[0]}%;--y:${n.at[1]}%;--i:${i}`} aria-hidden="true">{i + 1}</span>)}
       </a>
@@ -42,7 +42,7 @@ const side = (i: number) => (i % 2 === 0 ? "l" : "r");
 <style is:global>
   .hero { position: relative; overflow: clip; }
   .hero-grid { display: grid; gap: clamp(36px, 6vw, 56px); padding-block: clamp(40px, 7vw, 72px); margin-block: 18px; }
-  .hero h1 { font-size: clamp(38px, 4.4vw, 64px); line-height: 1.04; letter-spacing: -.04em; }
+  .hero h1 { font-size: clamp(42px, 5vw, 76px); line-height: .98; letter-spacing: -.045em; }
   .hero .hl { display: block; }
   .hero-lead { margin-top: 26px; font-size: clamp(18px, 2vw, 21px); color: var(--ink); max-width: 34ch; }
   .hero-ctas { margin-top: 30px; align-items: center; gap: 22px; }
