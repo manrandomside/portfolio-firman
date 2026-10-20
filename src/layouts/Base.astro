@@ -3,6 +3,7 @@ import { Font } from "astro:assets";
 import "../styles/global.css";
 import { ME } from "../data/site.js";
 import { altPath } from "../lib/i18n.js";
+import Cursor from "../components/Cursor.astro";
 
 const { lang, path, title, description } = Astro.props;
 const here = new URL(path, Astro.site);
@@ -46,14 +47,15 @@ const person = {
     <meta name="theme-color" content="#0e0e0e" />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <Font cssVariable="--font-poppins" preload={[{ weight: 700 }]} />
-    <Font cssVariable="--font-onest" preload={[{ weight: 400 }]} />
+    <Font cssVariable="--font-display" preload={[{ weight: 800 }]} />
+    <Font cssVariable="--font-poppins" preload={[{ weight: 400 }]} />
     <script type="application/ld+json" set:html={JSON.stringify(person)} />
     <!-- set before first paint so reveal-on-scroll never flashes visible content -->
     <script is:inline>document.documentElement.classList.add("js")</script>
   </head>
   <body>
     <slot />
+    <Cursor />
     <script>
       import { initReveal, initSmoothScroll } from "../scripts/motion.js";
       initReveal();
