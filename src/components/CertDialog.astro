@@ -1,0 +1,51 @@
+---
+import { Image } from "astro:assets";
+import { UI } from "../data/site.js";
+import { t } from "../lib/i18n.js";
+import front from "../assets/certs/bnsp-jwd.jpg";
+import units from "../assets/certs/bnsp-jwd-units.jpg";
+
+const { lang } = Astro.props;
+---
+<!-- the BNSP certificate, opened by any [data-cert="bnsp-jwd"] button: the certificate and its list of units -->
+<dialog class="cert" id="cert-bnsp-jwd" data-lenis-prevent aria-labelledby="cert-title">
+  <div class="cert-in">
+    <div class="cert-top">
+      <h2 id="cert-title">{t(UI.cert.title, lang)}</h2>
+      <button type="button" class="cert-close" data-close aria-label={t(UI.cert.close, lang)}>×</button>
+    </div>
+    <div class="cert-pages">
+      <Image src={front} alt={t(UI.cert.front, lang)} widths={[600, 1000]} sizes="(min-width: 900px) 420px, 90vw" />
+      <Image src={units} alt={t(UI.cert.units, lang)} widths={[600, 1000]} sizes="(min-width: 900px) 420px, 90vw" />
+    </div>
+  </div>
+</dialog>
+
+<style is:global>
+  .cert { width: min(940px, calc(100% - 24px)); max-height: calc(100dvh - 24px); margin: auto; padding: 0; border: 0; border-radius: 14px; background: var(--bg); color: var(--ink); overflow: auto; overscroll-behavior: contain; }
+  .cert::backdrop { background: rgba(14, 14, 14, .7); backdrop-filter: blur(4px); }
+  .cert[open] { animation: certIn .55s var(--ease); }
+  @keyframes certIn { from { opacity: 0; transform: translateY(24px) scale(.98); } }
+  .cert-in { display: grid; gap: 18px; padding: 20px clamp(16px, 3vw, 28px) 28px; }
+  .cert-top { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+  .cert-top h2 { font-size: clamp(22px, 3vw, 30px); line-height: 1.1; }
+  .cert-close { flex: none; width: 44px; height: 44px; border-radius: 50%; border: 0; background: var(--ink); color: var(--bg); font-size: 24px; line-height: 1; }
+  .cert-pages { display: grid; gap: 16px; }
+  .cert-pages img { width: 100%; height: auto; border: 1px solid var(--line); border-radius: 6px; background: #fff; }
+  @media (min-width: 760px) { .cert-pages { grid-template-columns: 1fr 1fr; } }
+</style>
+
+<script>
+  import { lockScroll } from "../scripts/motion.js";
+
+  document.addEventListener("click", e => {
+    const btn = (e.target as HTMLElement).closest<HTMLElement>("[data-cert]");
+    const d = btn ? (document.getElementById(`cert-${btn.dataset.cert}`) as HTMLDialogElement | null) : null;
+    if (!btn || !d) return;
+    d.showModal();
+    lockScroll(true);
+    d.addEventListener("close", () => { lockScroll(false); btn.focus(); }, { once: true });
+  });
+  document.querySelectorAll<HTMLDialogElement>("dialog.cert").forEach(d =>
+    d.addEventListener("click", e => { if (e.target === d || (e.target as HTMLElement).closest("[data-close]")) d.close(); }));
+</script>

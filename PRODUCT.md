@@ -31,7 +31,8 @@ Firman makes complicated things clear. He has won three infographic poster compe
 - Static Astro site on Cloudflare Pages (firmanfadilah.pages.dev). No backend, no admin, no CMS; content lives in `src/data/site.js`, and new work is added by editing that file.
 - Two languages for every piece of copy.
 - Not yet available, never to be invented: Firman's photo, a CV PDF, the Gapura Angkasa internship certificate. Their slots stay hidden or empty until supplied.
-- Excluded on purpose: Alter Ego, client-bday-surprise, Gapura Angkasa (Laravel version), Kobun. No certificate scans or certificate numbers.
+- Firman chose (2026-10-21) to show his BNSP Junior Web Developer certificate scan on click; other certificate scans stay off the site.
+- Excluded on purpose: Alter Ego, client-bday-surprise, Gapura Angkasa (Laravel version), Kobun.
 
 ## Brand Commitments
 
