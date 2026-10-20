@@ -1,63 +1,99 @@
 ---
+import { Image } from "astro:assets";
 import { EXPERIENCE, CERTS, PROJECTS, UI } from "../data/site.js";
 import { t } from "../lib/i18n.js";
+import { img } from "../data/images.js";
 
 const { lang } = Astro.props;
 const awards = PROJECTS.filter(p => p.award);
 ---
+<!-- Wide screens: the heading and work experience hold still on the left while certificates and awards scroll past on
+     the right; the page moves on once the right column has run out. Phones read it top to bottom. -->
 <section class="s exp dark">
-  <div class="in">
-    <div class="s-head">
-      <h2>{t(UI.exp.title, lang)}</h2>
+  <div class="in exp-cols">
+    <div class="exp-left">
+      <div class="s-head">
+        <h2>{t(UI.exp.title, lang)}</h2>
+      </div>
+      <h3 class="exp-h">{t(UI.exp.work, lang)}</h3>
+      <ol class="exp-list">
+        {EXPERIENCE.map(e => (
+          <li class="rv">
+            <p class="exp-when">{t(e.when, lang)}</p>
+            <h4>{e.org}</h4>
+            <p class="exp-what">{t(e.what, lang)}</p>
+            <p>{t(e.note, lang)} <button type="button" class="link exp-see" data-slug={e.project} aria-haspopup="dialog">{t(UI.exp.see, lang)} →</button></p>
+          </li>
+        ))}
+      </ol>
     </div>
-    <div class="exp-cols">
-      <div>
-        <h3 class="exp-h mono">{t(UI.exp.work, lang)}</h3>
-        <ol class="exp-list">
-          {EXPERIENCE.map(e => (
-            <li class="rv">
-              <p class="exp-when mono">{t(e.when, lang)}</p>
-              <h4>{e.org}</h4>
-              <p class="exp-what">{t(e.what, lang)}</p>
-              <p>{t(e.note, lang)} <button type="button" class="link exp-see" data-slug={e.project} aria-haspopup="dialog">{t(UI.exp.see, lang)} →</button></p>
-            </li>
-          ))}
-        </ol>
-      </div>
-      <div class="exp-side">
-        <div>
-          <h3 class="exp-h mono">{t(UI.exp.certs, lang)}</h3>
-          <ul class="exp-rows">
-            {CERTS.map(c => <li class="rv"><b>{t(c.name, lang)}</b><span>{c.by}</span><span class="mono">{t(c.when, lang)}</span></li>)}
-          </ul>
-        </div>
-        <div>
-          <h3 class="exp-h mono">{t(UI.exp.awards, lang)}</h3>
-          <ul class="exp-rows">
-            {awards.map(p => <li class="rv"><b>{t(p.award.title, lang)}</b><span>{p.award.by} · {p.name}</span><a class="link mono" href={p.award.proof} target="_blank" rel="noopener">{t(UI.work.proof, lang)} ↗</a></li>)}
-          </ul>
-        </div>
-      </div>
+
+    <div class="exp-side">
+      <h3 class="exp-h">{t(UI.exp.certs, lang)}</h3>
+      <ul class="exp-rows">
+        {CERTS.map(c => c.cert
+          ? <li class="rv"><button type="button" class="exp-cert" data-cert={c.cert} aria-haspopup="dialog" data-cursor={t(UI.cert.view, lang)}>
+              <b>{t(c.name, lang)}</b><span>{c.by}</span><span class="exp-date">{t(c.when, lang)}</span><span class="exp-open">{t(UI.cert.view, lang)} →</span>
+            </button></li>
+          : <li class="rv"><b>{t(c.name, lang)}</b><span>{c.by}</span><span class="exp-date">{t(c.when, lang)}</span></li>)}
+      </ul>
+
+      <h3 class="exp-h exp-h-gap">{t(UI.exp.awards, lang)}</h3>
+      <ul class="exp-awards">
+        {awards.map(p => (
+          <li class="rv">
+            <a class="award" href={p.award.proof} target="_blank" rel="noopener" data-cursor={t(UI.work.proof, lang)}>
+              <span class="award-img"><Image src={img(p.image)} alt={`${p.name}: ${t(p.line, lang)}`} widths={[360, 640]} sizes="(min-width: 900px) 200px, 40vw" class="print-grey" /></span>
+              <span class="award-text">
+                <b>{t(p.award.title, lang)}</b>
+                <span>{p.name}</span>
+                <span class="award-by">{p.award.by}</span>
+                <span class="exp-open">{t(UI.work.proof, lang)} ↗</span>
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
     </div>
   </div>
 </section>
 
 <style is:global>
   .exp-cols { display: grid; gap: 56px; }
-  .exp-h { font-size: 12px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+  .exp-left .s-head { margin-bottom: 40px; }
+  .exp-h { font: 500 13px/1.3 var(--f-body); color: var(--on-dark-muted); margin: 0 0 8px; }
+  .exp-h-gap { margin-top: 48px; }
   .exp-list { list-style: none; margin: 0; padding: 0; }
   .exp-list li { display: grid; gap: 4px; padding: 22px 0; border-top: 1px solid currentColor; }
   .exp-list h4 { margin: 0; font: 600 22px/1.25 var(--f-body); }
-  .exp-when { font-size: 13px; color: var(--accent-ink); }
+  .exp-when { font: 500 13px var(--f-body); color: var(--accent); }
   .exp-what { color: var(--muted); font-size: 15px; margin-bottom: 6px; }
   .exp-see { all: unset; cursor: pointer; text-decoration: underline; text-underline-offset: 4px; white-space: nowrap; }
   .exp-see:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-  .exp-side { display: grid; gap: 40px; align-content: start; }
-  .exp-rows { list-style: none; margin: 0; padding: 0; }
-  .exp-rows li { display: grid; gap: 2px; padding: 14px 0; border-top: 1px solid var(--line); }
-  .exp-rows span { color: var(--muted); font-size: 15px; }
-  .exp-rows .mono { font-size: 13px; }
-  .exp-rows a { justify-self: start; font-size: 13px; margin-top: 2px; }
-  @media (min-width: 900px) { .exp-cols { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 72px; } }
-  .dark .exp-when { color: var(--accent); }
+
+  .exp-rows, .exp-awards { list-style: none; margin: 0; padding: 0; }
+  .exp-rows li, .exp-cert { display: grid; gap: 2px; padding: 16px 0; border-top: 1px solid var(--line); }
+  .exp-cert { all: unset; box-sizing: border-box; display: grid; gap: 2px; width: 100%; padding: 16px 0; cursor: pointer; }
+  .exp-rows li:has(.exp-cert) { padding: 0; }
+  .exp-cert:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+  .exp-rows span, .award-text span { color: var(--muted); font-size: 15px; }
+  .exp-date { font-size: 13px !important; }
+  .exp-open { font: 500 13px var(--f-body); color: var(--on-dark) !important; text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 4px; margin-top: 4px; }
+  .exp-cert:hover b, .award:hover b { color: var(--accent); }
+
+  .exp-awards { display: grid; gap: 18px; }
+  .award { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 18px; align-items: start; padding-top: 18px; border-top: 1px solid var(--line); text-decoration: none; }
+  .award-img { display: block; aspect-ratio: 4 / 5; overflow: hidden; border-radius: 4px; background: var(--dark-2); }
+  .award-img img { width: 100%; height: 100%; object-fit: cover; object-position: top; transition: scale .8s var(--ease), filter .5s var(--ease); }
+  .award:hover .award-img img { scale: 1.06; }
+  .award-text { display: grid; gap: 2px; }
+  .award-text b { font-size: 18px; }
+
+  @media (min-width: 900px) {
+    .exp-cols { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 80px; align-items: start; }
+    /* the left column stays put under the nav until the right column has scrolled past */
+    .exp-left { position: sticky; top: 112px; }
+    .award { grid-template-columns: 200px minmax(0, 1fr); gap: 24px; }
+    .award-text b { font-size: 22px; }
+  }
 </style>

@@ -32,7 +32,7 @@ const photo = img(ME.photo);
   .facts div { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 16px; padding: 12px 0; border-top: 1px solid var(--line); }
   .facts dt { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); padding-top: 3px; }
   .facts dd { margin: 0; }
-  @media (min-width: 900px) { .about-grid { grid-template-columns: 380px minmax(0, 1fr); gap: 72px; align-items: start; } }
+  @media (min-width: 900px) { .about-grid { grid-template-columns: 380px minmax(0, 1fr); gap: 72px; align-items: start; } .about-grid.no-photo { grid-template-columns: minmax(0, 1fr); } }
   /* without a photo the facts take the second column, so the section doesn't end in an empty half */
   @media (min-width: 900px) {
     .no-photo .about-text { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); column-gap: 72px; align-items: start; }
