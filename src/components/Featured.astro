@@ -1,0 +1,23 @@
+---
+import WorkGrid from "./WorkGrid.astro";
+import { PROJECTS, FEATURED, UI } from "../data/site.js";
+import { featured } from "../lib/projects.js";
+import { t } from "../lib/i18n.js";
+
+const { lang } = Astro.props;
+const [l1, l2] = t(UI.work.title, lang).split(/ (?=sampai|to an)/);
+---
+<section class="s dark" id="karya">
+  <div class="in">
+    <div class="s-head">
+      <p class="eyebrow">{t(UI.work.eyebrow, lang)}</p>
+      <h2>{l1}<br />{l2}</h2>
+    </div>
+    <WorkGrid lang={lang} projects={featured(PROJECTS, FEATURED)} />
+    <p class="more"><a class="btn" href={lang === "id" ? "/karya/" : "/en/work/"}>{t(UI.work.all, lang)} →</a></p>
+  </div>
+</section>
+
+<style is:global>
+  .more { margin-top: 48px; }
+</style>

@@ -1,0 +1,92 @@
+---
+import { Image } from "astro:assets";
+import { FILTERS, CATS, ARCHIVE, UI } from "../data/site.js";
+import { t } from "../lib/i18n.js";
+import { img } from "../data/images.js";
+
+const { lang, projects, showFilters = false, showArchive = false } = Astro.props;
+const count = key => (key === "all" ? projects.length : projects.filter(p => p.cat === key).length);
+---
+<div class="work">
+  {showFilters && (
+    <div class="chips" role="group" aria-label={t(UI.work.pageTitle, lang)}>
+      {FILTERS.map((f, i) => <button type="button" data-filter={f.key} aria-pressed={i === 0 ? "true" : "false"}>{t(f.label, lang)} <small>{count(f.key)}</small></button>)}
+    </div>
+  )}
+  <ul class="cards">
+    {projects.map(p => (
+      <li class="rv" data-cat={p.cat}>
+        <button type="button" class="card" data-slug={p.slug} aria-haspopup="dialog">
+          <span class:list={["card-media", p.cat === "desain" && "poster", !p.image && "type-only"]}>
+            {p.image
+              ? <Image src={img(p.image)} alt={`${p.name}: ${t(p.line, lang)}`} widths={[480, 800, 1100]} sizes="(min-width: 900px) 360px, 92vw" />
+              : <><span class="type-stack mono">{p.stack.join(" · ")}</span><span class="type-name">{p.name}</span></>}
+          </span>
+          <span class="card-meta mono">{t(CATS[p.cat], lang)} · {p.year}</span>
+          <span class="card-name">{p.name}</span>
+          <span class="card-line">{t(p.line, lang)}</span>
+          {p.award && <span class="card-award mono">{t(p.award.title, lang)}</span>}
+        </button>
+      </li>
+    ))}
+  </ul>
+  {showArchive && (
+    <div class="archive">
+      <h2 class="eyebrow">{t(UI.work.archive, lang)}</h2>
+      <ul>
+        {ARCHIVE.map(a => <li><a href={a.repo} target="_blank" rel="noopener"><b>{a.name}</b><span>{t(a.line, lang)}</span><i class="mono">GitHub ↗</i></a></li>)}
+      </ul>
+    </div>
+  )}
+</div>
+
+<style is:global>
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 32px; }
+  .chips button { border: 1.5px solid var(--line); background: transparent; padding: 9px 16px; border-radius: 99px; font-size: 15px; min-height: 44px; }
+  .chips button small { font: 400 12px var(--f-mono); opacity: .6; margin-left: 4px; }
+  .chips button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+
+  .cards { list-style: none; margin: 0; padding: 0; display: grid; gap: 40px 24px; }
+  .card { all: unset; box-sizing: border-box; display: grid; gap: 10px; width: 100%; cursor: pointer; }
+  .card:focus-visible { outline: 2px solid var(--accent); outline-offset: 6px; border-radius: 6px; }
+  .card-media { display: block; aspect-ratio: 16 / 10; overflow: hidden; border-radius: 8px; background: var(--card); box-shadow: inset 0 0 0 1px var(--line); }
+  .card-media img { width: 100%; height: 100%; object-fit: cover; object-position: top; transition: transform .8s var(--ease); }
+  .card-media.poster { aspect-ratio: 4 / 5; }
+  .card-media.poster img { object-position: top; }
+  .card:hover .card-media img { transform: scale(1.03); }
+  .card-media.type-only { display: grid; grid-template-rows: auto 1fr; align-items: end; padding: 22px; background: var(--card); }
+  .type-stack { font-size: 12px; color: var(--muted); }
+  .type-name { font: 700 clamp(30px, 4vw, 44px)/1 var(--f-display); letter-spacing: -.03em; transition: transform .8s var(--ease); }
+  .card:hover .type-name { transform: translateY(-4px); }
+  .card-meta { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-top: 6px; }
+  .card-name { font: 600 22px/1.2 var(--f-body); }
+  .card-line { color: var(--muted); font-size: 16px; }
+  .card-award { justify-self: start; font-size: 12px; padding: 5px 10px; border-radius: 99px; background: var(--accent); color: var(--ink-on-accent); }
+  .js .cards li.out { display: none; }
+
+  .archive { margin-top: 72px; }
+  .archive h2 { font: 500 12px/1.4 var(--f-mono); letter-spacing: .14em; margin-bottom: 12px; }
+  .archive ul { list-style: none; margin: 0; padding: 0; }
+  .archive a { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 16px; padding: 16px 0; border-top: 1px solid var(--line); text-decoration: none; }
+  .archive a:hover b { color: var(--accent-ink); }
+  .archive span { grid-column: 1; color: var(--muted); font-size: 15px; }
+  .archive i { grid-column: 2; grid-row: 1 / span 2; align-self: center; font-style: normal; font-size: 12px; color: var(--muted); }
+
+  @media (min-width: 640px) { .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 1000px) { .cards { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+</style>
+
+<script>
+  // filter chips: hide cards outside the chosen category (without JS every card stays visible)
+  document.querySelectorAll<HTMLElement>(".work").forEach(work => {
+    const chips = [...work.querySelectorAll<HTMLButtonElement>("[data-filter]")];
+    chips.forEach(chip => chip.addEventListener("click", () => {
+      chips.forEach(c => c.setAttribute("aria-pressed", String(c === chip)));
+      const key = chip.dataset.filter;
+      work.querySelectorAll<HTMLElement>(".cards li").forEach(li => {
+        li.classList.toggle("out", key !== "all" && li.dataset.cat !== key);
+        li.classList.add("on");
+      });
+    }));
+  });
+</script>
