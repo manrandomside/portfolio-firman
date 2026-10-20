@@ -24,7 +24,15 @@ export function initReveal() {
     el.style.setProperty("--d", sib.indexOf(el) * .12 + "s");
     io.observe(el);
   });
-  document.querySelectorAll(".mlw").forEach(h => io.observe(h));
+  document.querySelectorAll(".mlw, .marks").forEach(h => io.observe(h));
+  // a thin ink line under the nav shows how far down the page the reader is
+  const bar = document.querySelector(".progress");
+  if (bar && !REDUCE) {
+    let raf = 0;
+    const set = () => { raf = 0; bar.style.transform = `scaleX(${scrollY / Math.max(1, document.documentElement.scrollHeight - innerHeight)})`; };
+    addEventListener("scroll", () => { if (!raf) raf = requestAnimationFrame(set); }, { passive: true });
+    set();
+  }
 }
 
 // Eased scrolling for mouse wheel and touch, with smooth anchor links.

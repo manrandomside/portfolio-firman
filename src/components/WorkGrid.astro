@@ -16,7 +16,7 @@ const count = key => (key === "all" ? projects.length : projects.filter(p => p.c
   <ul class="cards">
     {projects.map(p => (
       <li class="rv" data-cat={p.cat}>
-        <button type="button" class="card" data-slug={p.slug} aria-haspopup="dialog">
+        <button type="button" class="card" data-slug={p.slug} aria-haspopup="dialog" data-cursor={t(UI.work.open, lang)}>
           <span class:list={["card-media", p.cat === "desain" && "poster", p.phone && "phone-shot", !p.image && "type-only"]}>
             {p.image
               ? <Image src={img(p.image)} alt={`${p.name}: ${t(p.line, lang)}`} widths={[480, 800, 1100]} sizes="(min-width: 900px) 360px, 92vw" class="print-grey" />
@@ -56,7 +56,9 @@ const count = key => (key === "all" ? projects.length : projects.filter(p => p.c
   /* a phone app peeks up from the bottom of the card like a handset, instead of a stretched desktop crop */
   .card-media.phone-shot { display: grid; justify-items: center; align-items: end; padding-top: 18px; background: var(--bg-2); }
   .card-media.phone-shot img { width: 46%; height: 100%; object-fit: cover; object-position: top; border: 5px solid var(--ink); border-bottom: 0; border-radius: 16px 16px 0 0; }
-  .card:hover .card-media img { transform: scale(1.03); }
+  .card { transition: transform .5s var(--ease); }
+  .card:hover { transform: translateY(-6px); }
+  .card:hover .card-media img { transform: scale(1.04); }
   .card-media.type-only { display: grid; grid-template-rows: auto 1fr; align-items: end; padding: 22px; background: var(--card); }
   .type-stack { font-size: 12px; color: var(--muted); }
   .type-name { font: 700 clamp(30px, 4vw, 44px)/1 var(--f-display); letter-spacing: -.03em; transition: transform .8s var(--ease); }
