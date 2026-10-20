@@ -5,34 +5,49 @@ import { t } from "../lib/i18n.js";
 const { lang } = Astro.props;
 const words = t(UI.statement, lang).split(" ");
 ---
-<!-- One sentence about how Firman sees the work; its words light up one by one while it is read. -->
-<section class="s statement">
-  <p class="in statement-text" id="statement">{words.map((w, i) => <span style={`--w:${i}`}>{w} </span>)}</p>
+<!-- One sentence about how Firman works. The section holds the screen while its words darken one by one, and lets the
+     page move on only once the whole sentence is ink. Reduced motion shows it plainly. -->
+<section class="statement" id="statement-pin">
+  <div class="statement-stage">
+    <p class="in statement-text">{words.map(w => <span>{w} </span>)}</p>
+    <span class="statement-meter" aria-hidden="true"></span>
+  </div>
 </section>
 
 <style is:global>
-  .statement-text { margin: 0 auto; font: 800 clamp(30px, 4.2vw, 58px)/1.08 var(--f-display); letter-spacing: -.04em; text-wrap: balance; }
-  /* unlit words stay readable (about 3:1, fine for text this large) */
-  .js .statement-text span { color: color-mix(in srgb, var(--ink) 48%, var(--bg)); transition: color .35s; }
-  .js .statement-text span.lit { color: var(--ink); }
-  @media (prefers-reduced-motion: reduce) { .js .statement-text span { color: var(--ink); } }
+  .statement { position: relative; }
+  .statement-stage { display: grid; align-content: center; padding-block: clamp(80px, 12vw, 140px); }
+  .statement-text { margin: 0 auto; width: 100%; font: 800 clamp(30px, 4.6vw, 64px)/1.08 var(--f-display); letter-spacing: -.04em; text-wrap: balance; }
+  .statement-meter { display: none; }
+  @media (prefers-reduced-motion: no-preference) {
+    .js .statement { height: 260svh; }
+    .js .statement-stage { position: sticky; top: 0; height: 100svh; padding-block: 64px 0; }
+    /* unlit words stay readable at large size (3:1) and turn full ink as the section is scrolled */
+    .js .statement-text span { color: color-mix(in srgb, var(--ink) 52%, var(--bg)); transition: color .25s; }
+    .js .statement-text span.lit { color: var(--ink); }
+    /* a thin ink rule along the bottom fills as the sentence does */
+    .js .statement-meter { display: block; position: absolute; left: 0; bottom: 0; height: 3px; width: 100%; background: var(--accent); transform: scaleX(var(--p, 0)); transform-origin: left; }
+  }
 </style>
 
 <script>
   import { REDUCE } from "../scripts/motion.js";
 
-  const text = document.getElementById("statement")!;
-  const words = [...text.querySelectorAll("span")];
-  // lit share follows the paragraph from entering the lower screen to passing its middle
+  const sec = document.getElementById("statement-pin")!;
+  const stage = sec.querySelector<HTMLElement>(".statement-stage")!;
+  const words = [...sec.querySelectorAll(".statement-text span")];
+  // progress runs from the stage pinning to the moment it is released; the words finish a little before release
   const update = () => {
-    const r = text.getBoundingClientRect();
-    const p = Math.min(1, Math.max(0, (innerHeight * .85 - r.top) / (r.height + innerHeight * .35)));
-    const n = Math.round(p * words.length);
-    words.forEach((w, i) => w.classList.toggle("lit", i < n));
+    const r = sec.getBoundingClientRect();
+    const p = Math.min(1, Math.max(0, -r.top / Math.max(1, r.height - innerHeight)));
+    const lit = Math.round(Math.min(1, p / .85) * words.length);
+    words.forEach((w, i) => w.classList.toggle("lit", i < lit));
+    stage.style.setProperty("--p", String(p));
   };
   if (!REDUCE) {
     let raf = 0;
-    addEventListener("scroll", () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(update); }, { passive: true });
+    addEventListener("scroll", () => { if (!raf) raf = requestAnimationFrame(() => { raf = 0; update(); }); }, { passive: true });
+    addEventListener("resize", update);
     update();
   }
 </script>
