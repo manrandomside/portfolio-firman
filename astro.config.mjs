@@ -10,9 +10,8 @@ export default defineConfig({
   prefetch: { prefetchAll: true, defaultStrategy: "hover" },
   // fonts are downloaded at build time and served from the site itself
   fonts: [
-    // condensed poster headlines, semi-condensed callout labels, a plain text face
-    google("Barlow Condensed", "--font-cond", [600, 700, 800], ["Arial Narrow", "sans-serif"]),
-    google("Barlow Semi Condensed", "--font-label", [500, 600], ["Arial Narrow", "sans-serif"]),
+    // Poppins for headlines and labels (chosen by Firman), Onest for running text
+    google("Poppins", "--font-poppins", [500, 600, 700], ["sans-serif"]),
     google("Onest", "--font-onest", [400, 500, 600], ["sans-serif"])
   ]
 });
