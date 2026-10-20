@@ -1,0 +1,97 @@
+---
+import { Image } from "astro:assets";
+import { UI, PROJECTS, FEATURED, CATS } from "../data/site.js";
+import { t, waLink } from "../lib/i18n.js";
+import { featured } from "../lib/projects.js";
+import { img } from "../data/images.js";
+
+const { lang } = Astro.props;
+// the three featured works as printed proofs on a desk: where each one rests (x, y in %, tilt in degrees)
+const SPOT = [[-30, 10, -8], [0, -8, 2], [30, 12, 9]];
+const prints = featured(PROJECTS, FEATURED);
+---
+<section class="hero" aria-labelledby="hero-title">
+  <div class="in hero-grid">
+    <div class="hero-copy">
+      <p class="kicker mono fade"><span class="kicker-dot" aria-hidden="true"></span>{t(UI.hero.kicker, lang)}</p>
+      <h1 id="hero-title"><span class="hl">{t(UI.hero.title[0], lang)}</span> <span class="hl hl-2">{t(UI.hero.title[1], lang)}</span></h1>
+      <p class="lead hero-lead fade" style="--d:.5s">{t(UI.hero.lead, lang)}</p>
+      <div class="ctas hero-ctas fade" style="--d:.65s">
+        <a class="btn wa" href={waLink(lang)} target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.2c0-.1-.2-.2-.4-.3Z"/></svg>
+          {t(UI.hero.wa, lang)}
+        </a>
+        <a class="btn" href="#karya">{t(UI.hero.work, lang)}</a>
+      </div>
+    </div>
+
+    <div class="prints">
+      <div class="prints-desk">
+        {prints.map((p, i) => (
+          <button type="button" class="print" data-slug={p.slug} aria-haspopup="dialog" style={`--x:${SPOT[i][0]}%;--y:${SPOT[i][1]}%;--r:${SPOT[i][2]}deg;--i:${i}`}>
+            <span class="print-img"><Image src={img(p.image)} alt={`${p.name}: ${t(p.line, lang)}`} widths={[400, 700]} sizes="(min-width: 900px) 340px, 60vw" loading={i === 1 ? "eager" : "lazy"} fetchpriority={i === 1 ? "high" : "auto"} /></span>
+            <span class="print-cap mono"><b>0{i + 1}</b> {p.name}<i>{t(CATS[p.cat], lang)}</i></span>
+          </button>
+        ))}
+      </div>
+      <p class="prints-note mono fade" style="--d:1s">{t(UI.hero.stack, lang)}</p>
+    </div>
+  </div>
+</section>
+
+<style is:global>
+  .hero { --sp: 0; --spread: 1; position: relative; overflow: clip; }
+  .hero-grid { display: grid; gap: clamp(40px, 7vw, 56px); padding-block: clamp(36px, 7vw, 72px) clamp(48px, 7vw, 80px); }
+  .kicker { display: inline-flex; align-items: center; gap: 10px; margin: 0 0 22px; font-size: 12px; letter-spacing: .08em; color: var(--muted); }
+  .kicker-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 22%, transparent); }
+  .hero h1 { font-size: clamp(36px, 4.4vw, 62px); line-height: 1.02; letter-spacing: -.035em; }
+  .hero .hl { display: block; }
+  .hero .hl-2 { color: var(--accent-ink); }
+  .hero-lead { margin-top: 24px; }
+  .hero-ctas { margin-top: 30px; }
+
+  /* the headline rises line by line, the rest fades up after it */
+  .js .hero .hl { animation: heroLine .9s var(--ease) both; }
+  .js .hero .hl-2 { animation-delay: .12s; }
+  @keyframes heroLine { from { opacity: 0; transform: translateY(.4em); } }
+  .js .hero .fade { animation: heroFade .8s var(--ease) var(--d, .3s) both; }
+  @keyframes heroFade { from { opacity: 0; transform: translateY(14px); } }
+
+  /* printed proofs: dealt onto the desk, they fan further apart as the page scrolls */
+  .prints { display: grid; gap: 18px; justify-items: center; }
+  .prints-desk { position: relative; width: min(100%, 560px); aspect-ratio: 1.15; }
+  .print { all: unset; box-sizing: border-box; position: absolute; left: 50%; top: 50%; width: 62%; display: grid; gap: 8px; padding: 8px 8px 10px; background: #fff; border: 1px solid var(--line); border-radius: 6px; box-shadow: 0 28px 50px -30px rgba(15, 23, 32, .55); cursor: pointer;
+    transform: translate(calc(-50% + var(--x) * var(--spread) * (1 + var(--sp) * .5)), calc(-50% + var(--y) - var(--sp) * 40px * (var(--i) - 1))) rotate(calc(var(--r) * (1 + var(--sp) * .7)));
+    transition: transform .6s var(--ease), box-shadow .4s; z-index: calc(1 + var(--i)); }
+  .print:nth-child(2) { z-index: 5; }
+  .print:hover, .print:focus-visible { z-index: 9; transform: translate(calc(-50% + var(--x) * var(--spread)), calc(-50% + var(--y) - 14px)) rotate(0deg); box-shadow: 0 40px 70px -32px rgba(15, 23, 32, .6); }
+  .print:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+  .print-img { display: block; aspect-ratio: 16 / 10; overflow: hidden; border-radius: 3px; background: var(--card); }
+  .print-img img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+  .print-cap { display: flex; gap: 8px; align-items: baseline; font-size: 11px; color: var(--ink); padding-inline: 2px; white-space: nowrap; overflow: hidden; }
+  .print-cap b { color: var(--accent-ink); font-weight: 500; }
+  .print-cap i { margin-left: auto; font-style: normal; color: var(--muted); }
+  .js .print { animation: deal .9s var(--ease) calc(.35s + var(--i) * .14s) both; }
+  @keyframes deal { from { opacity: 0; transform: translate(-50%, calc(-50% + 60px)) rotate(0deg); } }
+  .prints-note { margin: 0; font-size: 12px; color: var(--muted); }
+
+  @media (min-width: 900px) {
+    .hero-grid { grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); align-items: center; min-height: calc(100svh - 64px); }
+  }
+  @media (max-width: 899px) { .prints-desk { width: min(100%, 420px); } .hero { --spread: .62; } .print { width: 58%; } }
+  @media (prefers-reduced-motion: reduce) { .js .hero .hl, .js .hero .fade, .js .print { animation: none; } }
+</style>
+
+<script>
+  import { REDUCE } from "../scripts/motion.js";
+
+  // the prints spread a little as the hero scrolls away; only the CSS variable changes, so it stays cheap
+  const hero = document.querySelector<HTMLElement>(".hero")!;
+  if (!REDUCE) {
+    let raf = 0;
+    const update = () => hero.style.setProperty("--sp", String(Math.min(1, Math.max(0, scrollY / (hero.offsetHeight * .8)))));
+    addEventListener("scroll", () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(update); }, { passive: true });
+    // the dealing animation holds the transform; drop it once done so hover and scroll can move the cards
+    hero.querySelectorAll<HTMLElement>(".print").forEach(p => p.addEventListener("animationend", () => (p.style.animation = "none"), { once: true }));
+  }
+</script>
