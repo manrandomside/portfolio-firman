@@ -1,0 +1,19 @@
+---
+import Base from "../layouts/Base.astro";
+import Nav from "../components/Nav.astro";
+---
+<!-- served by Cloudflare Pages for any address that does not exist, including old links to the previous portfolio -->
+<Base lang="id" path="/" title="Halaman tidak ditemukan · Firman Fadilah" description="Halaman yang kamu cari tidak ada.">
+  <Nav lang="id" path="/404/" />
+  <main class="in nf">
+    <p class="eyebrow">404</p>
+    <h1>Halaman ini tidak ada.</h1>
+    <p class="lead">Mungkin link-nya sudah berubah. Page not found, the link may have changed.</p>
+    <p class="ctas"><a class="btn wa" href="/">Ke beranda</a><a class="btn" href="/karya/">Lihat karya</a><a class="btn" href="/en/">English</a></p>
+  </main>
+</Base>
+
+<style>
+  .nf { display: grid; gap: 18px; align-content: center; justify-items: start; min-height: 70svh; padding-block: 64px; }
+  .nf h1 { font-size: clamp(40px, 7vw, 80px); line-height: 1; letter-spacing: -.03em; }
+</style>

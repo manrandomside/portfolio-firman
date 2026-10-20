@@ -1,0 +1,35 @@
+---
+import Base from "../layouts/Base.astro";
+import Nav from "../components/Nav.astro";
+import WorkGrid from "../components/WorkGrid.astro";
+import Contact from "../components/Contact.astro";
+import ProjectSheet from "../components/ProjectSheet.astro";
+import { PROJECTS, UI } from "../data/site.js";
+import { t } from "../lib/i18n.js";
+
+const { lang } = Astro.props;
+const path = lang === "id" ? "/karya/" : "/en/work/";
+---
+<Base lang={lang} path={path} title={t(UI.meta.work.title, lang)} description={t(UI.meta.work.description, lang)}>
+  <Nav lang={lang} path={path} />
+  <main>
+    <section class="s work-page">
+      <div class="in">
+        <div class="s-head">
+          <a class="eyebrow back" href={lang === "id" ? "/" : "/en/"}>← {t(UI.work.back, lang)}</a>
+          <h1>{t(UI.work.pageTitle, lang)}</h1>
+          <p class="lead">{t(UI.work.pageLead, lang)}</p>
+        </div>
+        <WorkGrid lang={lang} projects={PROJECTS} showFilters showArchive />
+      </div>
+    </section>
+  </main>
+  <Contact lang={lang} />
+  <ProjectSheet lang={lang} />
+</Base>
+
+<style>
+  .work-page h1 { font-size: clamp(36px, 6vw, 64px); line-height: 1.02; }
+  .back { text-decoration: none; }
+  .back:hover { color: var(--accent-ink); }
+</style>
