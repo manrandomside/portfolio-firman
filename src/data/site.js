@@ -26,8 +26,8 @@ export const PROJECTS = [
     year: "2026",
     line: { id: "Website salon di Negara: 5 halaman, 2 bahasa, admin pengumuman.", en: "A salon website in Negara, Bali: 5 pages, 2 languages, an announcement admin." },
     story: {
-      id: "Website pertama yang saya buat untuk usaha sungguhan. Pelanggan studio ini datang dari Instagram dan booking lewat WhatsApp, jadi website-nya menjawab pertanyaan yang paling sering masuk: buka atau tidak, berapa harganya, dan jam berapa bisa datang. Setelah versi pertama dikritik terlalu ramai dalam satu halaman, saya memecahnya menjadi lima halaman dengan menu yang selalu terlihat, menambah versi bahasa Inggris untuk turis, peta lokasi, galeri dari Instagram, dan halaman admin agar pemiliknya bisa memasang pengumuman libur sendiri. Hasilnya: performa 96, SEO, aksesibilitas, dan best practices 100 di Lighthouse.",
-      en: "The first website I built for a real business. The studio's customers find it on Instagram and book on WhatsApp, so the site answers what they always ask: are you open, how much, and when can I come. After the first version was critiqued as too crowded on one page, I split it into five pages with a menu that stays in view, added an English version for tourists, a location map, an Instagram gallery and an admin page so the owner can post holiday notices. The result: performance 96, and 100 for SEO, accessibility and best practices in Lighthouse."
+      id: "Website pertama yang saya buat untuk usaha sungguhan. Pelanggan studio ini datang dari Instagram dan booking lewat WhatsApp, jadi website-nya menjawab pertanyaan yang paling sering masuk: buka atau tidak, berapa harganya, dan jam berapa bisa datang. Setelah versi pertama dikritik terlalu ramai dalam satu halaman, saya memecahnya menjadi lima halaman dengan menu yang selalu terlihat, menambah versi bahasa Inggris untuk turis, peta lokasi, galeri dari Instagram, dan halaman admin agar pemiliknya bisa memasang pengumuman libur sendiri. Hasilnya: website-nya cepat dibuka di HP, mudah ditemukan di Google, dan nyaman dipakai siapa saja.",
+      en: "The first website I built for a real business. The studio's customers find it on Instagram and book on WhatsApp, so the site answers what they always ask: are you open, how much, and when can I come. After the first version was critiqued as too crowded on one page, I split it into five pages with a menu that stays in view, added an English version for tourists, a location map, an Instagram gallery and an admin page so the owner can post holiday notices. The result: it opens fast on a phone, is easy to find on Google and is comfortable for anyone to use."
     },
     role: { id: "Desain dan pengembangan, sendiri", en: "Design and build, solo" },
     stack: ["Astro", "Cloudflare Pages Functions", "KV", "Lenis", "i18n ID/EN"],
@@ -85,8 +85,7 @@ export const PROJECTS = [
     live: null,
     repo: "https://github.com/manrandomside/layanan-pengaduan-kebutuhan-akademisi-ticketing",
     award: null,
-    image: "shots/cast-mobile",
-    phone: true // the mobile view Firman supplied, shown as a phone screen
+    image: "shots/cast" // a responsive web app, so the card shows its desktop dashboard
   },
   {
     slug: "miaw",
@@ -120,8 +119,8 @@ export const PROJECTS = [
     live: null,
     repo: "https://github.com/manrandomside/tangkis",
     award: null,
-    image: "shots/tangkis",
-    phone: true // an Android app: shown as a phone screen, not a desktop crop
+    image: "shots/tangkis-mockup",
+    mockup: true // an Android app, shown as Firman's phone mockup (transparent PNG), contained not cropped
   },
   {
     slug: "teen-digital-toxicity",
@@ -178,11 +177,11 @@ export const PROJECTS = [
 
 export const FEATURED = ["early-beauty", "kioku", "kelola-sdm"];
 
-// the phone-first wall: mobile screens in three columns, each opening its project
+// the phone-first wall: mobile screens of websites (not apps) in three columns, each opening its project
 export const PHONES = [
   [{ image: "shots/early-beauty-phone", slug: "early-beauty" }, { image: "phones/kioku", slug: "kioku" }],
   [{ image: "phones/early-beauty-harga", slug: "early-beauty" }, { image: "shots/cast-mobile", slug: "cast" }],
-  [{ image: "phones/miaw", slug: "miaw" }, { image: "shots/tangkis", slug: "tangkis" }]
+  [{ image: "phones/miaw", slug: "miaw" }, { image: "phones/early-beauty-layanan", slug: "early-beauty" }]
 ];
 
 export const FILTERS = [
@@ -298,7 +297,7 @@ export const UI = {
       id: "Salon eyelash dan nails di Negara ini dulu hanya punya Instagram. Sekarang pelanggan bisa cek harga, menghitung harga nails sendiri, lalu booking lewat WhatsApp, dalam bahasa Indonesia atau Inggris. Pemiliknya mengatur pengumuman libur sendiri dari halaman admin.",
       en: "This lash and nail studio in Negara used to have only Instagram. Now customers check prices, price their own nails and book on WhatsApp, in Indonesian or English. The owner posts holiday notices from a simple admin page."
     },
-    facts: [{ id: "5 halaman", en: "5 pages" }, { id: "2 bahasa", en: "2 languages" }, { id: "Admin pengumuman", en: "Announcement admin" }, { id: "Lighthouse 96–100", en: "Lighthouse 96–100" }],
+    facts: [{ id: "5 halaman", en: "5 pages" }, { id: "2 bahasa", en: "2 languages" }, { id: "Admin pengumuman", en: "Announcement admin" }, { id: "Cepat dibuka di HP", en: "Opens fast on phones" }],
     live: { id: "Buka website-nya", en: "Open the website" },
     story: { id: "Baca ceritanya", en: "Read the story" }
   },
