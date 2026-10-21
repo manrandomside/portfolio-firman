@@ -1,10 +1,12 @@
 <!-- Mouse only: a printer's registration mark for a cursor. A crosshair ring turns slowly and trails a fading leader
      line in the annotation ink; over anything clickable the ticks pull in and the ring opens, elements with
-     data-cursor print a label inside it, a click sends out a ripple, and buttons lean toward the pointer.
+     data-cursor get a small tag beside the pointer (never over the thing being looked at), a click sends out a
+     ripple, and buttons lean toward the pointer.
      Touch screens and reduced motion keep the normal cursor. -->
 <div class="cur out" aria-hidden="true">
   <canvas class="cur-trail"></canvas>
-  <span class="cur-ring"><i></i><i></i><i></i><i></i><span class="cur-label"></span></span>
+  <span class="cur-ring"><i></i><i></i><i></i><i></i></span>
+  <span class="cur-label"></span>
   <span class="cur-dot"></span>
 </div>
 
@@ -13,7 +15,7 @@
   @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
     .cur.on { display: block; position: fixed; inset: 0; z-index: 90; pointer-events: none; }
     .cur-trail { position: absolute; inset: 0; width: 100%; height: 100%; }
-    .cur-dot, .cur-ring { position: absolute; left: 0; top: 0; will-change: transform; transition: opacity .3s; }
+    .cur-dot, .cur-ring, .cur-label { position: absolute; left: 0; top: 0; will-change: transform; transition: opacity .3s; }
     .cur-dot { width: 6px; height: 6px; margin: -3px 0 0 -3px; border-radius: 50%; background: var(--accent); }
     .cur-ring { --s: 40px; display: grid; place-items: center; width: var(--s); height: var(--s); margin: calc(var(--s) / -2) 0 0 calc(var(--s) / -2);
       border: 1.5px solid var(--accent); border-radius: 50%;
@@ -26,12 +28,14 @@
     .cur-ring i:nth-child(4) { translate: calc(-50% + var(--s) / 2 + 2px) -50%; rotate: 90deg; }
     .cur.hot .cur-ring { --s: 64px; background: color-mix(in srgb, var(--accent) 12%, transparent); }
     .cur.hot .cur-ring i, .cur.labelled .cur-ring i { opacity: 0; }
-    .cur.labelled .cur-ring { --s: 104px; background: var(--accent); }
-    .cur-label { font: 600 12px/1.15 var(--f-body); color: var(--ink-on-accent); text-align: center; padding: 0 12px; opacity: 0; scale: .7; transition: opacity .25s, scale .35s var(--ease); }
+    .cur.labelled .cur-ring { --s: 18px; background: var(--accent); }
+    /* the tag hangs below-right of the pointer so what is under it stays visible */
+    .cur-label { margin: 16px 0 0 16px; padding: 6px 11px; border-radius: 99px; background: var(--ink); color: var(--bg); font: 500 12px/1.2 var(--f-body); white-space: nowrap;
+      box-shadow: 0 0 0 1.5px var(--accent); opacity: 0; scale: .8; transform-origin: 0 0; transition: opacity .2s, scale .3s var(--ease); }
     .cur.labelled .cur-label { opacity: 1; scale: 1; }
     .cur.labelled .cur-dot, .cur.hot .cur-dot { opacity: 0; }
     .cur.down .cur-ring { --s: 28px; }
-    .cur.out .cur-ring, .cur.out .cur-dot { opacity: 0; }
+    .cur.out .cur-ring, .cur.out .cur-dot, .cur.out .cur-label { opacity: 0; }
   }
 </style>
 
@@ -62,7 +66,7 @@
       angle = (angle + .6) % 360;
       dot.style.transform = `translate(${x}px, ${y}px)`;
       ring.style.transform = `translate(${rx}px, ${ry}px) rotate(${angle}deg)`;
-      ring.querySelector<HTMLElement>(".cur-label")!.style.rotate = `${-angle}deg`;
+      label.style.transform = `translate(${rx}px, ${ry}px)`;
 
       // the leader line: the last positions joined, thinning and fading toward the tail
       trail.push({ x: rx, y: ry });
