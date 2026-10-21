@@ -8,20 +8,15 @@ const { lang } = Astro.props;
 const photo = img(ME.photo);
 ---
 <section class="s about" id="tentang">
-  <div class="in about-grid">
-    <div class="about-photo rv">
-      {photo
-        ? <Image src={photo} alt={ME.name} widths={[400, 800]} sizes="(min-width: 900px) 380px, 80vw" />
-        : <div class="photo-slot mono">{t(UI.about.photo, lang)}</div>}
-    </div>
+  <div class:list={["in about-grid", !photo && "no-photo"]}>
+    {photo && <div class="about-photo rv"><Image src={photo} alt={ME.name} widths={[400, 800]} sizes="(min-width: 900px) 380px, 80vw" class="print-grey" /></div>}
     <div class="about-text">
       <div class="s-head">
-        <p class="eyebrow">{t(UI.about.eyebrow, lang)}</p>
         <h2>{t(UI.about.title, lang)}</h2>
       </div>
       {t(UI.about.body, lang).map(p => <p class="about-p rv">{p}</p>)}
       <dl class="facts rv">
-        {UI.about.facts.map(f => <div><dt class="mono">{t(f.k, lang)}</dt><dd>{t(f.v, lang)}</dd></div>)}
+        {UI.about.facts.map(f => <div><dt class="label">{t(f.k, lang)}</dt><dd>{t(f.v, lang)}</dd></div>)}
       </dl>
     </div>
   </div>
@@ -29,7 +24,7 @@ const photo = img(ME.photo);
 
 <style is:global>
   .about-grid { display: grid; gap: 40px; }
-  .about-photo img, .photo-slot { width: 100%; max-width: 380px; aspect-ratio: 4 / 5; border-radius: 10px; object-fit: cover; }
+  .about-photo img, .photo-slot { width: 100%; max-width: min(380px, 82vw); aspect-ratio: 4 / 5; border-radius: 10px; object-fit: cover; }
   .photo-slot { display: grid; place-items: center; border: 1.5px dashed var(--muted); color: var(--muted); font-size: 13px; }
   .about-text .s-head { margin-bottom: 24px; }
   .about-p { max-width: 58ch; margin-bottom: 16px; }
@@ -37,5 +32,12 @@ const photo = img(ME.photo);
   .facts div { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 16px; padding: 12px 0; border-top: 1px solid var(--line); }
   .facts dt { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); padding-top: 3px; }
   .facts dd { margin: 0; }
-  @media (min-width: 900px) { .about-grid { grid-template-columns: 380px minmax(0, 1fr); gap: 72px; align-items: start; } }
+  @media (min-width: 900px) { .about-grid { grid-template-columns: 380px minmax(0, 1fr); gap: 72px; align-items: start; } .about-grid.no-photo { grid-template-columns: minmax(0, 1fr); } }
+  /* without a photo the facts take the second column, so the section doesn't end in an empty half */
+  @media (min-width: 900px) {
+    .no-photo .about-text { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); column-gap: 72px; align-items: start; }
+    .no-photo .s-head { grid-column: 1 / -1; }
+    .no-photo .about-p { grid-column: 1; }
+    .no-photo .facts { grid-column: 2; grid-row: 2 / span 2; margin: 0; }
+  }
 </style>

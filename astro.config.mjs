@@ -10,8 +10,8 @@ export default defineConfig({
   prefetch: { prefetchAll: true, defaultStrategy: "hover" },
   // fonts are downloaded at build time and served from the site itself
   fonts: [
-    google("Unbounded", "--font-unbounded", [500, 700], ["sans-serif"]),
-    google("Onest", "--font-onest", [400, 500, 600], ["sans-serif"]),
-    google("IBM Plex Mono", "--font-mono", [400, 500], ["monospace"])
+    // a characterful display face for headlines and taglines, Poppins (Firman's choice) for all smaller text
+    google("Bricolage Grotesque", "--font-display", [700, 800], ["sans-serif"]),
+    google("Poppins", "--font-poppins", [400, 500, 600, 700], ["sans-serif"])
   ]
 });

@@ -1,6 +1,6 @@
 ---
 import { ME, UI } from "../data/site.js";
-import { t, altPath } from "../lib/i18n.js";
+import { t, altPath, waLink } from "../lib/i18n.js";
 
 const { lang, path } = Astro.props;
 const home = lang === "id" ? "/" : "/en/";
@@ -18,44 +18,83 @@ const langLink = (cls: string) => ({ class: cls, href: altPath(path), hreflang: 
       <button type="button" class="nav-menu" aria-expanded="false" aria-controls="menu" data-open={t(UI.nav.close, lang)}>{t(UI.nav.menu, lang)}</button>
     </nav>
   </div>
+  <span class="progress" aria-hidden="true"></span>
 </header>
 
-<!-- phones: every link in a full-screen list -->
+<!-- phones: a press-black sheet drops from the bar. Numbered links ruled like an index, then the WhatsApp action,
+     the language switch and where else to find Firman. -->
 <div class="menu" id="menu" hidden>
-  {links.map(([href, label, on]) => <a href={href} aria-current={on ? "page" : undefined}>{t(label, lang)}</a>)}
-  <a {...langLink("menu-lang mono")}>{lang === "id" ? "English" : "Bahasa Indonesia"}</a>
+  <ol class="menu-links">
+    {links.map(([href, label, on], i) => (
+      <li style={`--i:${i}`}><a href={href} aria-current={on ? "page" : undefined}><span class="menu-n">0{i + 1}</span><span class="menu-t">{t(label, lang)}</span><span class="menu-arrow" aria-hidden="true">→</span></a></li>
+    ))}
+  </ol>
+  <div class="menu-foot">
+    <a class="btn wa menu-wa" href={waLink(lang)} target="_blank" rel="noopener">{t(UI.hero.wa, lang)} ↗</a>
+    <div class="menu-row">
+      <a {...langLink("lang menu-lang")}><b class:list={{ on: lang === "id" }}>ID</b><i>/</i><b class:list={{ on: lang === "en" }}>EN</b></a>
+      <span class="menu-sign">{t(UI.hero.sign, lang)}</span>
+    </div>
+    <ul class="menu-social">
+      <li><a href={ME.instagram} target="_blank" rel="noopener">Instagram</a></li>
+      <li><a href={ME.github} target="_blank" rel="noopener">GitHub</a></li>
+      <li><a href={ME.linkedin} target="_blank" rel="noopener">LinkedIn</a></li>
+      <li><a href={`mailto:${ME.email}`}>Email</a></li>
+    </ul>
+  </div>
 </div>
 
 <style is:global>
   .nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 30; background: color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); box-shadow: inset 0 -1px var(--line); }
+  .progress { position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--accent); transform: scaleX(0); transform-origin: left; }
   .nav-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 64px; }
-  .brand { font: 700 20px/1 var(--f-display); text-decoration: none; letter-spacing: -.02em; }
+  .brand { font: 800 24px/1 var(--f-display); text-decoration: none; letter-spacing: -.05em; }
   .brand span { color: var(--accent); }
   .nav nav { display: flex; align-items: center; gap: clamp(14px, 2.6vw, 28px); font-size: 15px; }
   .nav-link { text-decoration: none; padding-block: 4px; }
   .nav-link:hover { color: var(--accent-ink); }
   .nav-link[aria-current] { box-shadow: inset 0 -2px var(--accent); }
   .lang { display: inline-flex; gap: 4px; align-items: center; padding: 6px 12px; border: 1.5px solid var(--ink); border-radius: 99px; font: 500 12px/1 var(--f-mono); text-decoration: none; }
-  .lang b { font-weight: 500; opacity: .5; }
+  .lang b { font-weight: 500; opacity: .75; }
   .lang b.on { opacity: 1; }
   .lang i { font-style: normal; opacity: .35; }
   .nav-menu { display: none; border: 1.5px solid var(--ink); background: none; border-radius: 99px; padding: 7px 14px; font: 500 13px/1 var(--f-body); }
 
-  .menu { position: fixed; inset: 64px 0 0; z-index: 29; display: grid; align-content: start; gap: 4px; padding: 28px max(18px, env(safe-area-inset-left, 0px)); background: var(--bg); }
-  .menu[hidden] { display: none; }
-  .menu a { font: 700 clamp(32px, 9vw, 44px)/1.3 var(--f-display); letter-spacing: -.02em; text-decoration: none; animation: menuIn .45s var(--ease) both; }
-  .menu a:nth-child(2) { animation-delay: .04s; } .menu a:nth-child(3) { animation-delay: .08s; } .menu a:nth-child(4) { animation-delay: .12s; }
-  .menu a[aria-current] { color: var(--accent-ink); }
-  .menu .menu-lang { margin-top: 18px; font: 500 14px var(--f-mono); }
-  @keyframes menuIn { from { opacity: 0; transform: translateY(10px); } }
+  /* while the menu is open the bar turns press black too, so bar and sheet read as one piece */
   body.menu-open { overflow: hidden; }
+  body.menu-open .nav { background: var(--dark); color: var(--on-dark); box-shadow: inset 0 -1px #2e2e2c; }
+  body.menu-open .nav-menu { border-color: var(--on-dark); background: var(--on-dark); color: var(--ink); }
+
+  .menu { position: fixed; inset: 64px 0 0; z-index: 29; display: grid; grid-template-rows: 1fr auto; gap: 32px; overflow-y: auto; overscroll-behavior: contain;
+    padding: 12px max(18px, env(safe-area-inset-right, 0px)) max(24px, env(safe-area-inset-bottom, 0px)) max(18px, env(safe-area-inset-left, 0px));
+    background: var(--dark); color: var(--on-dark); animation: menuDrop .55s var(--ease); }
+  .menu[hidden] { display: none; }
+  @keyframes menuDrop { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0); } }
+  .menu-links { list-style: none; margin: 0; padding: 0; }
+  .menu-links li { border-bottom: 1px solid #2e2e2c; overflow: hidden; }
+  .menu-links a { display: grid; grid-template-columns: 32px minmax(0, 1fr) auto; align-items: baseline; gap: 8px; padding: 14px 0 12px; text-decoration: none;
+    animation: menuIn .6s var(--ease) calc(.12s + var(--i) * .06s) both; }
+  .menu-n { font: 500 12px/1 var(--f-label); color: var(--accent); }
+  .menu-t { font: 800 clamp(36px, 11vw, 52px)/1 var(--f-display); letter-spacing: -.04em; }
+  .menu-arrow { font-size: 22px; color: var(--on-dark-muted); transition: translate .3s var(--ease), color .3s; }
+  .menu-links a:active .menu-arrow, .menu-links a:hover .menu-arrow { translate: 6px 0; color: var(--accent); }
+  .menu-links a[aria-current] .menu-t { color: var(--accent); }
+  @keyframes menuIn { from { transform: translateY(105%); } }
+  .menu-foot { display: grid; gap: 18px; animation: menuFade .5s var(--ease) .35s both; }
+  @keyframes menuFade { from { opacity: 0; transform: translateY(12px); } }
+  .menu-wa { width: 100%; min-height: 54px; font-size: 16px; }
+  .menu-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .menu .lang { border-color: var(--on-dark); padding: 9px 14px; font-size: 13px; }
+  .menu-sign { font-size: 12px; color: var(--on-dark-muted); text-align: right; }
+  .menu-social { list-style: none; margin: 0; padding: 14px 0 0; border-top: 1px solid #2e2e2c; display: flex; flex-wrap: wrap; gap: 6px 20px; font-size: 14px; }
+  .menu-social a { text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 5px; }
 
   @media (max-width: 680px) { .nav-link, .nav .lang { display: none; } .nav-menu { display: inline-block; } }
 </style>
 
 <script>
   // keep the reader's section when switching language
-  document.querySelectorAll<HTMLAnchorElement>(".lang, .menu-lang").forEach(a => a.addEventListener("click", () => { if (location.hash) a.hash = location.hash; }));
+  document.querySelectorAll<HTMLAnchorElement>(".lang").forEach(a => a.addEventListener("click", () => { if (location.hash) a.hash = location.hash; }));
 
   const btn = document.querySelector<HTMLButtonElement>(".nav-menu")!, menu = document.getElementById("menu")!;
   const label = btn.textContent;

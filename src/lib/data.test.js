@@ -1,3 +1,4 @@
+import { existsSync } from "node:fs";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { PROJECTS, FEATURED, ME, FILTERS } from "../data/site.js";
@@ -15,7 +16,7 @@ test("excluded works never appear", () => {
   const text = JSON.stringify(PROJECTS).toLowerCase();
   for (const word of ["alter ego", "alterego", "bday", "ulang tahun", "kobun", "laravel/gapura"]) assert.ok(!text.includes(word), word);
 });
-test("home shows the three agreed works, in order", () => {
+test("home shows the agreed works, in order", () => {
   assert.deepEqual(featured(PROJECTS, FEATURED).map(p => p.slug), ["early-beauty", "kioku", "kelola-sdm"]);
 });
 test("filters split the nine works 1 / 5 / 3", () => {
@@ -29,7 +30,7 @@ test("the three posters carry their awards", () => {
   const by = Object.fromEntries(byFilter(PROJECTS, "desain").map(p => [p.slug, p.award?.by]));
   assert.deepEqual(by, { "teen-digital-toxicity": "Kreasi Publik FIA Universitas Brawijaya", "health-care-revolution": "UPCOFEST", "soilsense": "FNWMU Universitas Udayana" });
 });
-test("missing files stay null until Firman sends them", () => {
+test("the CV stays null until Firman sends it, and the photo points at a real file", () => {
   assert.equal(ME.cv, null);
-  assert.equal(ME.photo, null);
+  assert.ok(existsSync(new URL(`../assets/${ME.photo}.jpg`, import.meta.url)));
 });

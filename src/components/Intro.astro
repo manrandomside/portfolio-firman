@@ -1,16 +1,26 @@
-<!-- Short opening: the name mark rises letter by letter, then the panel lifts away. Once per visit, never with reduced motion. -->
+<!-- The opening, once per visit: a counter runs 0 to 100 while "firman." is set letter by letter, one letter per step of
+     progress, all in place by 90%. The page waits at 90 until it has loaded, then the sheet lifts at 100%.
+     Skipped on later pages of the same visit, with reduced motion, and without JavaScript. -->
 <div class="intro" aria-hidden="true">
-  <p class="intro-mark">{[..."firman"].map((c, i) => <span style={`--i:${i}`}>{c}</span>)}<span class="dot" style="--i:6">.</span></p>
+  <p class="intro-mark">{[..."firman"].map(c => <span>{c}</span>)}<span class="dot">.</span></p>
+  <p class="intro-count"><span class="intro-n">0</span>%</p>
+  <span class="intro-bar"></span>
 </div>
 
 <style is:global>
   .intro { display: none; }
-  .js .intro.play { display: grid; place-items: center; position: fixed; inset: 0; z-index: 100; background: var(--dark); color: var(--on-dark); animation: introLift .6s var(--ease) .55s forwards; }
-  .intro-mark { margin: 0; font: 700 clamp(44px, 11vw, 120px)/1 var(--f-display); letter-spacing: -.03em; overflow: hidden; padding-bottom: .1em; }
-  .intro-mark span { display: inline-block; transform: translateY(110%); animation: introRise .6s var(--ease) calc(var(--i) * .05s) forwards; }
+  .js .intro.play { display: grid; place-items: center; position: fixed; inset: 0; z-index: 100; background: var(--dark); color: var(--on-dark); }
+  .intro-mark { margin: 0; font: 800 clamp(64px, 16vw, 200px)/1 var(--f-display); letter-spacing: -.06em; white-space: nowrap; }
+  .intro-mark span { display: inline-block; margin-right: -.07em; }
+  .intro-mark span { opacity: 0; transform: translateY(.35em); transition: opacity .5s var(--ease), transform .6s var(--ease); }
+  .intro-mark span.in { opacity: 1; transform: none; }
   .intro-mark .dot { color: var(--accent); }
-  @keyframes introRise { to { transform: none; } }
-  @keyframes introLift { to { transform: translateY(-100%); visibility: hidden; } }
+  .intro-count { position: absolute; right: max(24px, 4vw); bottom: max(20px, 3vw); margin: 0; font: 800 clamp(40px, 8vw, 104px)/1 var(--f-display); letter-spacing: -.05em; font-variant-numeric: tabular-nums; color: var(--on-dark-muted); }
+  .intro-bar { position: absolute; left: 0; bottom: 0; height: 3px; width: 100%; background: var(--accent); transform: scaleX(0); transform-origin: left; will-change: transform; }
+  /* at 100% the sheet is pulled up off the page */
+  .intro.done { clip-path: inset(0 0 100% 0); transition: clip-path .9s cubic-bezier(.76, 0, .24, 1); }
+  .intro.done .intro-mark { transform: translateY(-14vh); transition: transform .9s cubic-bezier(.76, 0, .24, 1); }
+  html.loading { overflow: hidden; }
 </style>
 
 <script is:inline>
@@ -19,7 +29,41 @@
     let seen = false;
     try { seen = sessionStorage.getItem("intro") === "1"; sessionStorage.setItem("intro", "1"); } catch {}
     if (seen || matchMedia("(prefers-reduced-motion: reduce)").matches) return el.remove();
+
+    const root = document.documentElement, n = el.querySelector(".intro-n"), bar = el.querySelector(".intro-bar"), letters = [...el.querySelectorAll(".intro-mark span")];
+    root.classList.add("loading");
     el.classList.add("play");
-    setTimeout(() => el.remove(), 1200);
+    let loaded = document.readyState === "complete";
+    addEventListener("load", () => (loaded = true));
+    setTimeout(() => (loaded = true), 3500); // never hold the page longer than this on a slow connection
+
+    // touch the page only when the whole percent changes, so the counter costs almost nothing per frame
+    let last = -1;
+    const show = p => {
+      const v = Math.round(p);
+      if (v === last) return;
+      last = v;
+      n.textContent = v;
+      bar.style.transform = `scaleX(${v / 100})`;
+      letters.forEach((s, i) => { if (v >= ((i + 1) / letters.length) * 90) s.classList.add("in"); });
+    };
+    const t0 = performance.now(), RUN = 1600;
+    let hold = 0;
+    const tick = now => {
+      const k = Math.min(1, (now - t0) / RUN);
+      if (k < 1 || !loaded) {
+        show(90 * (1 - Math.pow(1 - k, 2)));
+        return requestAnimationFrame(tick);
+      }
+      // loaded: run the last ten percent quickly, then open the page
+      hold = hold || now;
+      const q = Math.min(1, (now - hold) / 350);
+      show(90 + 10 * q);
+      if (q < 1) return requestAnimationFrame(tick);
+      el.classList.add("done");
+      root.classList.remove("loading");
+      setTimeout(() => el.remove(), 950);
+    };
+    requestAnimationFrame(tick);
   })();
 </script>

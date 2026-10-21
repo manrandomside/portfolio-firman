@@ -1,0 +1,124 @@
+<!-- Mouse only: a printer's registration mark for a cursor. A crosshair ring turns slowly and trails a fading leader
+     line in the annotation ink; over anything clickable the ticks pull in and the ring opens, elements with
+     data-cursor get a small tag beside the pointer (never over the thing being looked at), a click sends out a
+     ripple, and buttons lean toward the pointer.
+     Touch screens and reduced motion keep the normal cursor. -->
+<div class="cur out" aria-hidden="true">
+  <canvas class="cur-trail"></canvas>
+  <span class="cur-ring"><i></i><i></i><i></i><i></i></span>
+  <span class="cur-label"></span>
+  <span class="cur-dot"></span>
+</div>
+
+<style is:global>
+  .cur { display: none; }
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .cur.on { display: block; position: fixed; inset: 0; z-index: 90; pointer-events: none; }
+    .cur-trail { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .cur-dot, .cur-ring, .cur-label { position: absolute; left: 0; top: 0; will-change: transform; transition: opacity .3s; }
+    .cur-dot { width: 6px; height: 6px; margin: -3px 0 0 -3px; border-radius: 50%; background: var(--accent); }
+    .cur-ring { --s: 40px; display: grid; place-items: center; width: var(--s); height: var(--s); margin: calc(var(--s) / -2) 0 0 calc(var(--s) / -2);
+      border: 1.5px solid var(--accent); border-radius: 50%;
+      transition: width .45s var(--ease), height .45s var(--ease), margin .45s var(--ease), background .3s, opacity .3s; }
+    /* the four registration ticks, turning slowly */
+    .cur-ring i { position: absolute; left: 50%; top: 50%; width: 1.5px; height: 12px; background: var(--accent); transition: translate .45s var(--ease), opacity .3s; }
+    .cur-ring i:nth-child(1) { translate: -50% calc(-50% - var(--s) / 2 - 2px); }
+    .cur-ring i:nth-child(2) { translate: -50% calc(-50% + var(--s) / 2 + 2px); }
+    .cur-ring i:nth-child(3) { translate: calc(-50% - var(--s) / 2 - 2px) -50%; rotate: 90deg; }
+    .cur-ring i:nth-child(4) { translate: calc(-50% + var(--s) / 2 + 2px) -50%; rotate: 90deg; }
+    .cur.hot .cur-ring { --s: 64px; background: color-mix(in srgb, var(--accent) 12%, transparent); }
+    .cur.hot .cur-ring i, .cur.labelled .cur-ring i { opacity: 0; }
+    .cur.labelled .cur-ring { --s: 18px; background: var(--accent); }
+    /* the tag hangs below-right of the pointer so what is under it stays visible */
+    .cur-label { margin: 16px 0 0 16px; padding: 6px 11px; border-radius: 99px; background: var(--ink); color: var(--bg); font: 500 12px/1.2 var(--f-body); white-space: nowrap;
+      box-shadow: 0 0 0 1.5px var(--accent); opacity: 0; scale: .8; transform-origin: 0 0; transition: opacity .2s, scale .3s var(--ease); }
+    .cur.labelled .cur-label { opacity: 1; scale: 1; }
+    .cur.labelled .cur-dot, .cur.hot .cur-dot { opacity: 0; }
+    .cur.down .cur-ring { --s: 28px; }
+    .cur.out .cur-ring, .cur.out .cur-dot, .cur.out .cur-label { opacity: 0; }
+  }
+</style>
+
+<script>
+  const fine = matchMedia("(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)").matches;
+  const cur = document.querySelector<HTMLElement>(".cur")!;
+  if (fine) {
+    const dot = cur.querySelector<HTMLElement>(".cur-dot")!, ring = cur.querySelector<HTMLElement>(".cur-ring")!;
+    const label = cur.querySelector<HTMLElement>(".cur-label")!;
+    const canvas = cur.querySelector<HTMLCanvasElement>(".cur-trail")!, ctx = canvas.getContext("2d")!;
+    const ink = getComputedStyle(document.documentElement).getPropertyValue("--accent").trim() || "#ff5a1f";
+    const HOT = "a, button, summary, label, [data-cursor], input, select, textarea";
+    const trail: { x: number; y: number }[] = [];
+    const ripples: { x: number; y: number; t: number }[] = [];
+    let x = -100, y = -100, rx = x, ry = y, angle = 0, raf = 0, idle = 0;
+    cur.classList.add("on");
+
+    const size = () => {
+      const dpr = Math.min(devicePixelRatio || 1, 2);
+      canvas.width = innerWidth * dpr; canvas.height = innerHeight * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+    size();
+    addEventListener("resize", size);
+
+    const frame = (now: number) => {
+      rx += (x - rx) * .18; ry += (y - ry) * .18;
+      angle = (angle + .6) % 360;
+      dot.style.transform = `translate(${x}px, ${y}px)`;
+      ring.style.transform = `translate(${rx}px, ${ry}px) rotate(${angle}deg)`;
+      label.style.transform = `translate(${rx}px, ${ry}px)`;
+
+      // the leader line: the last positions joined, thinning and fading toward the tail
+      trail.push({ x: rx, y: ry });
+      if (trail.length > 22) trail.shift();
+      ctx.clearRect(0, 0, innerWidth, innerHeight);
+      ctx.strokeStyle = ink; ctx.lineCap = "round";
+      for (let i = 1; i < trail.length; i++) {
+        const k = i / trail.length;
+        ctx.globalAlpha = k * .55; ctx.lineWidth = k * 2;
+        ctx.beginPath(); ctx.moveTo(trail[i - 1].x, trail[i - 1].y); ctx.lineTo(trail[i].x, trail[i].y); ctx.stroke();
+      }
+      // click ripples
+      for (let i = ripples.length - 1; i >= 0; i--) {
+        const p = (now - ripples[i].t) / 600;
+        if (p >= 1) { ripples.splice(i, 1); continue; }
+        ctx.globalAlpha = 1 - p; ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.arc(ripples[i].x, ripples[i].y, 8 + p * 46, 0, Math.PI * 2); ctx.stroke();
+      }
+      ctx.globalAlpha = 1;
+      // keep running while anything still moves; rest once the ring has caught up and nothing is drawn
+      const moving = Math.abs(x - rx) + Math.abs(y - ry) > .3 || ripples.length > 0;
+      idle = moving ? 0 : idle + 1;
+      raf = idle < 30 ? requestAnimationFrame(frame) : 0;
+      if (!raf) { trail.length = 0; ctx.clearRect(0, 0, innerWidth, innerHeight); }
+    };
+    const wake = () => { idle = 0; if (!raf) raf = requestAnimationFrame(frame); };
+
+    addEventListener("pointermove", e => {
+      if (e.pointerType !== "mouse") return;
+      x = e.clientX; y = e.clientY;
+      cur.classList.remove("out");
+      wake();
+    }, { passive: true });
+    document.addEventListener("pointerleave", () => cur.classList.add("out"));
+    addEventListener("pointerdown", e => { cur.classList.add("down"); ripples.push({ x: e.clientX, y: e.clientY, t: performance.now() }); wake(); });
+    addEventListener("pointerup", () => cur.classList.remove("down"));
+
+    document.addEventListener("pointerover", e => {
+      const el = (e.target as HTMLElement).closest<HTMLElement>(HOT);
+      const text = el?.dataset.cursor ?? "";
+      cur.classList.toggle("hot", !!el && !text);
+      cur.classList.toggle("labelled", !!text);
+      if (text) label.textContent = text;
+    });
+
+    // buttons lean a little toward the pointer and settle back when it leaves
+    document.querySelectorAll<HTMLElement>(".btn, .lang, .nav-menu, .text-link").forEach(b => {
+      b.addEventListener("pointermove", e => {
+        const r = b.getBoundingClientRect();
+        b.style.translate = `${(e.clientX - r.left - r.width / 2) * .25}px ${(e.clientY - r.top - r.height / 2) * .35}px`;
+      });
+      b.addEventListener("pointerleave", () => (b.style.translate = ""));
+    });
+  }
+</script>

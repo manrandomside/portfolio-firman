@@ -13,7 +13,7 @@ export const ME = {
   linkedin: "https://www.linkedin.com/in/firmanfadilah",
   instagram: "https://www.instagram.com/manfdlh/",
   cv: null, // path under public/ once Firman has a CV PDF; the download button shows only when set
-  photo: null // image key under src/assets (e.g. "me/firman") once the photo arrives; until then a placeholder slot shows
+  photo: "me/firman" // a stand-in photo for now; swap the file at src/assets/me/firman.jpg for a better one later
 };
 
 // cat: "klien" client website · "sistem" company system or product · "desain" design work
@@ -26,8 +26,8 @@ export const PROJECTS = [
     year: "2026",
     line: { id: "Website salon di Negara: 5 halaman, 2 bahasa, admin pengumuman.", en: "A salon website in Negara, Bali: 5 pages, 2 languages, an announcement admin." },
     story: {
-      id: "Website pertama yang saya buat untuk usaha sungguhan. Pelanggan studio ini datang dari Instagram dan booking lewat WhatsApp, jadi website-nya menjawab pertanyaan yang paling sering masuk: buka atau tidak, berapa harganya, dan jam berapa bisa datang. Setelah versi pertama dikritik terlalu ramai dalam satu halaman, saya memecahnya menjadi lima halaman dengan menu yang selalu terlihat, menambah versi bahasa Inggris untuk turis, peta lokasi, galeri dari Instagram, dan halaman admin agar pemiliknya bisa memasang pengumuman libur sendiri. Hasilnya: performa 96, SEO, aksesibilitas, dan best practices 100 di Lighthouse.",
-      en: "The first website I built for a real business. The studio's customers find it on Instagram and book on WhatsApp, so the site answers what they always ask: are you open, how much, and when can I come. After the first version was critiqued as too crowded on one page, I split it into five pages with a menu that stays in view, added an English version for tourists, a location map, an Instagram gallery and an admin page so the owner can post holiday notices. The result: performance 96, and 100 for SEO, accessibility and best practices in Lighthouse."
+      id: "Website pertama yang saya buat untuk usaha sungguhan. Pelanggan studio ini datang dari Instagram dan booking lewat WhatsApp, jadi website-nya menjawab pertanyaan yang paling sering masuk: buka atau tidak, berapa harganya, dan jam berapa bisa datang. Setelah versi pertama dikritik terlalu ramai dalam satu halaman, saya memecahnya menjadi lima halaman dengan menu yang selalu terlihat, menambah versi bahasa Inggris untuk turis, peta lokasi, galeri dari Instagram, dan halaman admin agar pemiliknya bisa memasang pengumuman libur sendiri. Hasilnya: website-nya cepat dibuka di HP, mudah ditemukan di Google, dan nyaman dipakai siapa saja.",
+      en: "The first website I built for a real business. The studio's customers find it on Instagram and book on WhatsApp, so the site answers what they always ask: are you open, how much, and when can I come. After the first version was critiqued as too crowded on one page, I split it into five pages with a menu that stays in view, added an English version for tourists, a location map, an Instagram gallery and an admin page so the owner can post holiday notices. The result: it opens fast on a phone, is easy to find on Google and is comfortable for anyone to use."
     },
     role: { id: "Desain dan pengembangan, sendiri", en: "Design and build, solo" },
     stack: ["Astro", "Cloudflare Pages Functions", "KV", "Lenis", "i18n ID/EN"],
@@ -85,7 +85,7 @@ export const PROJECTS = [
     live: null,
     repo: "https://github.com/manrandomside/layanan-pengaduan-kebutuhan-akademisi-ticketing",
     award: null,
-    image: "shots/cast"
+    image: "shots/cast" // a responsive web app, so the card shows its desktop dashboard
   },
   {
     slug: "miaw",
@@ -119,8 +119,8 @@ export const PROJECTS = [
     live: null,
     repo: "https://github.com/manrandomside/tangkis",
     award: null,
-    image: "shots/tangkis",
-    phone: true // an Android app: shown as a phone screen, not a desktop crop
+    image: "shots/tangkis-mockup",
+    mockup: true // an Android app, shown as Firman's phone mockup (transparent PNG), contained not cropped
   },
   {
     slug: "teen-digital-toxicity",
@@ -177,6 +177,13 @@ export const PROJECTS = [
 
 export const FEATURED = ["early-beauty", "kioku", "kelola-sdm"];
 
+// the phone-first wall: mobile screens of websites (not apps) in three columns, each opening its project
+export const PHONES = [
+  [{ image: "shots/early-beauty-phone", slug: "early-beauty" }, { image: "phones/kioku", slug: "kioku" }],
+  [{ image: "phones/early-beauty-harga", slug: "early-beauty" }, { image: "shots/cast-mobile", slug: "cast" }],
+  [{ image: "phones/miaw", slug: "miaw" }, { image: "phones/early-beauty-layanan", slug: "early-beauty" }]
+];
+
 export const FILTERS = [
   { key: "all", label: { id: "Semua", en: "All" } },
   { key: "klien", label: { id: "Website klien", en: "Client websites" } },
@@ -216,15 +223,8 @@ export const EXPERIENCE = [
 
 // no scans and no certificate numbers on the site, on purpose
 export const CERTS = [
-  { name: { id: "Junior Web Developer (Pengembang Web Pratama)", en: "Junior Web Developer" }, by: "BNSP · LSP Teknologi Digital", when: { id: "Jan 2026, berlaku sampai Jan 2029", en: "Jan 2026, valid until Jan 2029" } },
+  { name: { id: "Junior Web Developer (Pengembang Web Pratama)", en: "Junior Web Developer" }, by: "BNSP · LSP Teknologi Digital", when: { id: "Jan 2026, berlaku sampai Jan 2029", en: "Jan 2026, valid until Jan 2029" }, cert: "bnsp-jwd" },
   { name: { id: "Junior Coder (Pemrogram Junior)", en: "Junior Coder" }, by: "BNSP · LSP TIK Triatma Kompetensi", when: { id: "2023", en: "2023" } }
-];
-
-export const PROOF = [
-  { value: 3, label: { id: "juara lomba poster, satu internasional", en: "poster competition wins, one international" } },
-  { value: 95, label: { id: "nilai akhir PPIDK di PT Citra Konsultama", en: "final score, industry placement" } },
-  { word: "BNSP", label: { id: "tersertifikasi Junior Web Developer", en: "certified Junior Web Developer" } },
-  { word: "HKI", label: { id: "Kioku terdaftar hak cipta", en: "Kioku is a registered copyright" } }
 ];
 
 // order matters: this is how a website project goes
@@ -257,19 +257,38 @@ export const UI = {
     }
   },
   hero: {
-    kicker: { id: "Firman Fadilah · Web developer di Bali", en: "Firman Fadilah · Web developer in Bali" },
-    // the second part is set in the accent colour
-    title: [{ id: "Website yang tetap bekerja", en: "A website that keeps working" }, { id: "saat kamu sibuk melayani.", en: "while you're busy serving." }],
-    lead: { id: "Website untuk usaha, sistem untuk perusahaan, dan produk AI. Untuk usahamu, saya buatkan contoh website-nya dulu. Kalau cocok, baru kita lanjut.", en: "Websites for businesses, systems for companies and AI products. For your business, I build a sample website first. If you like it, we carry on." },
+    // the second part is set in the annotation ink
+    title: [{ id: "Website yang menjawab pelanggan", en: "A website that answers customers" }, { id: "sebelum mereka bertanya.", en: "before they ask." }],
+    lead: { id: "Saya buatkan contoh website untuk usahamu dulu. Kalau cocok, baru kita lanjut.", en: "I build a sample website for your business first. If you like it, we carry on." },
     wa: { id: "Chat WhatsApp", en: "Message on WhatsApp" },
-    work: { id: "Lihat karya", en: "See my work" },
-    stack: { id: "Tiga dari sembilan karya. Ketuk untuk detail.", en: "Three of nine projects. Tap for details." },
+    example: { id: "Lihat contohnya", en: "See an example" },
+    sign: { id: "Firman Fadilah · web developer di Bali", en: "Firman Fadilah · web developer in Bali" },
+    phoneAlt: { id: "Halaman depan website Early Beauty Studio di HP", en: "The Early Beauty Studio website on a phone" },
+    // what the annotated phone points out: [x %, y %] on the screenshot, then the note
+    notes: [
+      // pins sit beside what they point at, never on its text
+      { at: [9, 17], text: { id: "Foto hasil kerja asli, bukan foto stok", en: "Real photos of the work, not stock" } },
+      { at: [62, 4.3], text: { id: "Dua bahasa untuk tamu dari luar negeri", en: "Two languages for visitors from abroad" } },
+      { at: [21, 41.9], text: { id: "Pelanggan menghitung harganya sendiri", en: "Customers work out the price themselves" } },
+      { at: [97.6, 4.3], text: { id: "Lima halaman, satu menu yang selalu terlihat", en: "Five pages, one menu always in view" } }
+    ],
     igCaption: { id: "Sebelum: hanya Instagram", en: "Before: Instagram only" },
     siteCaption: { id: "Sesudah: earlybeauty.pages.dev", en: "After: earlybeauty.pages.dev" }
   },
+  phones: {
+    eyebrow: { id: "Di HP pelangganmu", en: "On your customer's phone" },
+    // the second part is set in the annotation ink
+    title: [{ id: "HP dulu,", en: "Phone first," }, { id: "baru laptop.", en: "laptop second." }],
+    lead: {
+      id: "Pelangganmu membuka website dari HP, sering sambil antre atau di jalan, dan memutuskan dalam beberapa detik. Jadi layar HP saya kerjakan lebih dulu, versi laptop menyusul.",
+      en: "Your customers open your site on a phone, often in a queue or on the road, and decide within seconds. So I build the phone screen first and the laptop version follows."
+    },
+    points: [{ id: "Tombol pas untuk jempol", en: "Buttons sized for thumbs" }, { id: "Terbaca tanpa zoom", en: "Readable without zooming" }, { id: "WhatsApp satu ketukan", en: "WhatsApp one tap away" }, { id: "Ringan di sinyal 4G", en: "Light on a 4G signal" }],
+    alt: { id: "Tampilan HP", en: "Phone view of" }
+  },
   statement: {
-    id: "Banyak usaha di Bali sudah ramai di Instagram, tapi tidak muncul saat orang mencarinya di Google. Saya membuat website yang menjawab pertanyaan pelanggan sebelum mereka sempat bertanya.",
-    en: "Plenty of businesses in Bali are busy on Instagram but invisible when people search Google. I build websites that answer a customer's questions before they need to ask."
+    id: "Banyak usaha di Bali sudah ramai di Instagram, tapi tidak muncul saat orang mencarinya di Google. Karena itu saya buatkan contohnya dulu: kamu lihat, kamu klik, baru kamu putuskan.",
+    en: "Plenty of businesses in Bali are busy on Instagram but invisible when people search Google. So I build the sample first: you look, you click, then you decide."
   },
   flow: {
     eyebrow: { id: "Contoh nyata · Early Beauty Studio", en: "A real example · Early Beauty Studio" },
@@ -278,14 +297,18 @@ export const UI = {
       id: "Salon eyelash dan nails di Negara ini dulu hanya punya Instagram. Sekarang pelanggan bisa cek harga, menghitung harga nails sendiri, lalu booking lewat WhatsApp, dalam bahasa Indonesia atau Inggris. Pemiliknya mengatur pengumuman libur sendiri dari halaman admin.",
       en: "This lash and nail studio in Negara used to have only Instagram. Now customers check prices, price their own nails and book on WhatsApp, in Indonesian or English. The owner posts holiday notices from a simple admin page."
     },
-    facts: [{ id: "5 halaman", en: "5 pages" }, { id: "2 bahasa", en: "2 languages" }, { id: "Admin pengumuman", en: "Announcement admin" }, { id: "Lighthouse 96–100", en: "Lighthouse 96–100" }],
+    facts: [{ id: "5 halaman", en: "5 pages" }, { id: "2 bahasa", en: "2 languages" }, { id: "Admin pengumuman", en: "Announcement admin" }, { id: "Cepat dibuka di HP", en: "Opens fast on phones" }],
     live: { id: "Buka website-nya", en: "Open the website" },
     story: { id: "Baca ceritanya", en: "Read the story" }
   },
   work: {
     eyebrow: { id: "Karya pilihan", en: "Selected work" },
-    title: { id: "Dari website salon sampai sistem bandara.", en: "From a salon website to an airport system." },
+    // the second part is set in the annotation ink
+    title: [{ id: "Karya yang sudah", en: "Work people" }, { id: "dipakai orang.", en: "actually use." }],
     all: { id: "Lihat semua karya", en: "See all work" },
+    // {n} is the number of projects
+    allN: { id: "Lihat semua {n} karya", en: "See all {n} projects" },
+    sub: { id: "Tiga dari {n} karya: website klien, sistem perusahaan, dan produk belajar.", en: "Three of {n}: a client website, a company system and a learning product." },
     pageTitle: { id: "Semua karya", en: "All work" },
     pageLead: { id: "Website klien, sistem perusahaan, produk AI, dan poster infografis.", en: "Client websites, company systems, AI products and infographic posters." },
     archive: { id: "Arsip latihan dan tugas", en: "Practice and coursework" },
@@ -317,6 +340,13 @@ export const UI = {
       { k: { id: "Kuliah", en: "Studying" }, v: { id: "Informatika, Universitas Udayana", en: "Informatics, Universitas Udayana" } },
       { k: { id: "Fokus", en: "Focus" }, v: { id: "Website, sistem, AI, desain", en: "Websites, systems, AI, design" } }
     ]
+  },
+  cert: {
+    view: { id: "Lihat sertifikat", en: "View certificate" },
+    title: { id: "Sertifikat BNSP · Junior Web Developer", en: "BNSP certificate · Junior Web Developer" },
+    front: { id: "Sertifikat kompetensi Junior Web Developer atas nama Firman Fadilah", en: "Junior Web Developer certificate of competence for Firman Fadilah" },
+    units: { id: "Daftar unit kompetensi yang diujikan", en: "The list of units of competency assessed" },
+    close: { id: "Tutup", en: "Close" }
   },
   exp: {
     eyebrow: { id: "Pengalaman", en: "Experience" },

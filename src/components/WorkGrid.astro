@@ -16,10 +16,10 @@ const count = key => (key === "all" ? projects.length : projects.filter(p => p.c
   <ul class="cards">
     {projects.map(p => (
       <li class="rv" data-cat={p.cat}>
-        <button type="button" class="card" data-slug={p.slug} aria-haspopup="dialog">
-          <span class:list={["card-media", p.cat === "desain" && "poster", p.phone && "phone-shot", !p.image && "type-only"]}>
+        <button type="button" class="card" data-slug={p.slug} aria-haspopup="dialog" data-cursor={t(UI.work.open, lang)}>
+          <span class:list={["card-media", p.cat === "desain" && "poster", p.phone && "phone-shot", p.mockup && "mockup", !p.image && "type-only"]}>
             {p.image
-              ? <Image src={img(p.image)} alt={`${p.name}: ${t(p.line, lang)}`} widths={[480, 800, 1100]} sizes="(min-width: 900px) 360px, 92vw" />
+              ? <Image src={img(p.image)} alt={`${p.name}: ${t(p.line, lang)}`} widths={[480, 800, 1100]} sizes="(min-width: 900px) 360px, 92vw" class="print-grey" />
               : <><span class="type-stack mono">{p.stack.join(" · ")}</span><span class="type-name">{p.name}</span></>}
           </span>
           <span class="card-meta mono">{t(CATS[p.cat], lang)} · {p.year}</span>
@@ -32,7 +32,7 @@ const count = key => (key === "all" ? projects.length : projects.filter(p => p.c
   </ul>
   {showArchive && (
     <div class="archive">
-      <h2 class="eyebrow">{t(UI.work.archive, lang)}</h2>
+      <h2 class="archive-h">{t(UI.work.archive, lang)}</h2>
       <ul>
         {ARCHIVE.map(a => <li><a href={a.repo} target="_blank" rel="noopener"><b>{a.name}</b><span>{t(a.line, lang)}</span><i class="mono">GitHub ↗</i></a></li>)}
       </ul>
@@ -56,7 +56,11 @@ const count = key => (key === "all" ? projects.length : projects.filter(p => p.c
   /* a phone app peeks up from the bottom of the card like a handset, instead of a stretched desktop crop */
   .card-media.phone-shot { display: grid; justify-items: center; align-items: end; padding-top: 18px; background: var(--bg-2); }
   .card-media.phone-shot img { width: 46%; height: 100%; object-fit: cover; object-position: top; border: 5px solid var(--ink); border-bottom: 0; border-radius: 16px 16px 0 0; }
-  .card:hover .card-media img { transform: scale(1.03); }
+  /* an app mockup on a transparent ground: shown whole and centred */
+  .card-media.mockup img { object-fit: contain; object-position: center; padding: 2% 0; }
+  .card { transition: transform .5s var(--ease); }
+  .card:hover { transform: translateY(-6px); }
+  .card:hover .card-media img { transform: scale(1.04); }
   .card-media.type-only { display: grid; grid-template-rows: auto 1fr; align-items: end; padding: 22px; background: var(--card); }
   .type-stack { font-size: 12px; color: var(--muted); }
   .type-name { font: 700 clamp(30px, 4vw, 44px)/1 var(--f-display); letter-spacing: -.03em; transition: transform .8s var(--ease); }
@@ -68,7 +72,7 @@ const count = key => (key === "all" ? projects.length : projects.filter(p => p.c
   .js .cards li.out { display: none; }
 
   .archive { margin-top: 72px; }
-  .archive h2 { font: 500 12px/1.4 var(--f-mono); letter-spacing: .14em; margin-bottom: 12px; }
+  .archive h2 { font-size: 22px; letter-spacing: .02em; margin-bottom: 12px; }
   .archive ul { list-style: none; margin: 0; padding: 0; }
   .archive a { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 16px; padding: 16px 0; border-top: 1px solid var(--line); text-decoration: none; }
   .archive a:hover b { color: var(--accent-ink); }
