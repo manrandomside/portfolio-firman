@@ -40,6 +40,7 @@ const langLink = (cls: string) => ({ class: cls, href: altPath(path), hreflang: 
       <li><a href={ME.github} target="_blank" rel="noopener">GitHub</a></li>
       <li><a href={ME.linkedin} target="_blank" rel="noopener">LinkedIn</a></li>
       <li><a href={`mailto:${ME.email}`}>Email</a></li>
+      {ME.cv && <li><a href={ME.cv} download>CV (PDF)</a></li>}
     </ul>
   </div>
 </div>

@@ -18,6 +18,7 @@ const photo = img(ME.photo);
       <dl class="facts rv">
         {UI.about.facts.map(f => <div><dt class="label">{t(f.k, lang)}</dt><dd>{t(f.v, lang)}</dd></div>)}
       </dl>
+      {ME.cv && <a class="btn about-cv" href={ME.cv} download>{t(UI.contact.cv, lang)} (PDF) ↓</a>}
     </div>
   </div>
 </section>
@@ -32,6 +33,8 @@ const photo = img(ME.photo);
   .facts div { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 16px; padding: 12px 0; border-top: 1px solid var(--line); }
   .facts dt { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); padding-top: 3px; }
   .facts dd { margin: 0; }
+  /* recruiters read this section, so the CV sits right under the facts */
+  .about-cv { margin-top: 24px; }
   @media (min-width: 900px) { .about-grid { grid-template-columns: 380px minmax(0, 1fr); gap: 72px; align-items: start; } .about-grid.no-photo { grid-template-columns: minmax(0, 1fr); } }
   /* without a photo the facts take the second column, so the section doesn't end in an empty half */
   @media (min-width: 900px) {
