@@ -41,14 +41,14 @@ const side = (i: number) => (i % 2 === 0 ? "l" : "r");
 
 <style is:global>
   .hero { position: relative; overflow: clip; }
-  .hero-grid { display: grid; gap: clamp(36px, 6vw, 56px); padding-block: clamp(40px, 7vw, 72px); margin-block: 18px; }
-  .hero h1 { font-size: clamp(42px, 5vw, 76px); line-height: .98; letter-spacing: -.045em; }
+  .hero-grid { display: grid; gap: clamp(36px, 6vw, 56px); padding-block: clamp(32px, 6vw, 56px); margin-block: 18px; }
+  .hero h1 { font-size: clamp(40px, min(4.8vw, 8svh), 72px); line-height: .98; letter-spacing: -.045em; }
   .hero .hl { display: block; }
-  .hero-lead { margin-top: 26px; font-size: clamp(18px, 2vw, 21px); color: var(--ink); max-width: 34ch; }
-  .hero-ctas { margin-top: 30px; align-items: center; gap: 22px; }
+  .hero-lead { margin-top: clamp(16px, 3svh, 26px); font-size: clamp(17px, 1.5vw, 19px); color: var(--ink); max-width: 40ch; }
+  .hero-ctas { margin-top: clamp(18px, 3.5svh, 30px); align-items: center; gap: 22px; }
   .text-link { font: 500 16px var(--f-label); text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 2px; text-underline-offset: 6px; }
   .text-link:hover { color: var(--accent-ink); }
-  .hero-sign { margin-top: 34px; }
+  .hero-sign { margin-top: clamp(18px, 3.5svh, 34px); }
 
   /* the headline is set line by line, the rest follows it */
   .js .hero .hl { animation: heroLine .9s var(--ease) both; }
@@ -67,9 +67,10 @@ const side = (i: number) => (i % 2 === 0 ? "l" : "r");
   .leaders { display: none; }
 
   @media (min-width: 900px) {
-    .hero-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); align-items: center; min-height: calc(100svh - 100px); }
-    .annot { display: block; height: 640px; }
-    .annot-phone { position: absolute; left: 50%; top: 50%; translate: -50% -50%; width: 236px; }
+    /* the whole hero sits in one screen under the nav; the phone scales with the screen's height */
+    .hero-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); align-items: center; height: calc(100svh - 110px); min-height: 520px; max-height: 860px; padding-block: 0; }
+    .annot { display: block; height: min(620px, calc(100svh - 150px)); min-height: 470px; }
+    .annot-phone { position: absolute; left: 50%; top: 50%; translate: -50% -50%; width: clamp(200px, calc((100svh - 170px) * .43), 236px); }
     .notes { display: contents; }
     .note { position: absolute; width: 128px; flex-direction: column; gap: 8px; font-size: 13px; }
     .note-l { left: 0; }
