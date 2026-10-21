@@ -12,7 +12,7 @@ export const ME = {
   github: "https://github.com/manrandomside",
   linkedin: "https://www.linkedin.com/in/firmanfadilah",
   instagram: "https://www.instagram.com/manfdlh/",
-  cv: null, // path under public/ once Firman has a CV PDF; the download button shows only when set
+  cv: "/cv/Firman-Fadilah-CV.pdf", // built from cv/cv-id.html; the download button shows only when set
   photo: "me/firman" // a stand-in photo for now; swap the file at src/assets/me/firman.jpg for a better one later
 };
 

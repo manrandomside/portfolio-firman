@@ -30,7 +30,7 @@ test("the three posters carry their awards", () => {
   const by = Object.fromEntries(byFilter(PROJECTS, "desain").map(p => [p.slug, p.award?.by]));
   assert.deepEqual(by, { "teen-digital-toxicity": "Kreasi Publik FIA Universitas Brawijaya", "health-care-revolution": "UPCOFEST", "soilsense": "FNWMU Universitas Udayana" });
 });
-test("the CV stays null until Firman sends it, and the photo points at a real file", () => {
-  assert.equal(ME.cv, null);
+test("the CV and the photo point at real files", () => {
+  assert.ok(existsSync(new URL(`../../public${ME.cv}`, import.meta.url)));
   assert.ok(existsSync(new URL(`../assets/${ME.photo}.jpg`, import.meta.url)));
 });
