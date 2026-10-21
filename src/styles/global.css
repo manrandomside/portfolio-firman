@@ -28,7 +28,8 @@ main > section.s + section.s:not(.dark) { box-shadow: inset 0 1px var(--line); }
 
 /* crop marks at the four corners of a section's content, like a sheet waiting for the trimmer */
 .marks { position: relative; }
-.marks::before, .marks::after { content: ""; position: absolute; inset: -18px; pointer-events: none;
+/* marks hang 18px above and below the content but stay inside the side gutter, so they never widen a phone screen */
+.marks::before, .marks::after { content: ""; position: absolute; inset: -18px 0; pointer-events: none;
   background:
     linear-gradient(var(--mark), var(--mark)) left 0 top 18px / 12px 1px, linear-gradient(var(--mark), var(--mark)) left 18px top 0 / 1px 12px,
     linear-gradient(var(--mark), var(--mark)) right 0 top 18px / 12px 1px, linear-gradient(var(--mark), var(--mark)) right 18px top 0 / 1px 12px;
