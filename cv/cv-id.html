@@ -1,0 +1,139 @@
+<!doctype html>
+<!-- Firman's CV, one A4 page in Indonesian, aimed at mobile developer internships. Facts come from src/data/site.js,
+     the Udayana transcript (Oct 2026) and his old CV (organisations). Rebuild the PDF after any edit:
+     msedge --headless=new --no-pdf-header-footer --virtual-time-budget=6000 --print-to-pdf=public/cv/Firman-Fadilah-CV.pdf cv/cv-id.html -->
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>CV Firman Fadilah</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Poppins:wght@400;500;600&display=block" rel="stylesheet">
+<style>
+  @page { size: A4; margin: 10mm 13mm 9mm; }
+  :root { --ink: #0e0e0e; --muted: #56565a; --line: #d6d6d0; --accent: #d9480f; }
+  * { box-sizing: border-box; }
+  body { margin: 0; color: var(--ink); font: 400 8.6pt/1.36 "Poppins", sans-serif; }
+  a { color: inherit; text-decoration: none; }
+  p { margin: 0; }
+  h1 { margin: 0; font: 800 25pt/1 "Bricolage Grotesque", sans-serif; letter-spacing: -.035em; }
+  h1 span { color: var(--accent); }
+  .role { margin: 4px 0 6px; font-weight: 600; font-size: 10.5pt; }
+  .contact { display: flex; flex-wrap: wrap; gap: 2px 14px; color: var(--muted); font-size: 8.4pt; }
+  .summary { margin: 8px 0 0; }
+  h2 { margin: 9px 0 4px; padding-bottom: 3px; border-bottom: 1.5px solid var(--ink); font: 600 9.2pt/1.2 "Poppins", sans-serif; letter-spacing: .08em; text-transform: uppercase; }
+  h2::before { content: ""; display: inline-block; width: 7px; height: 7px; margin-right: 7px; background: var(--accent); vertical-align: 1px; }
+  .item { margin-bottom: 5px; break-inside: avoid; }
+  .head { display: flex; justify-content: space-between; gap: 12px; }
+  .head b { font-weight: 600; }
+  .when { flex: none; color: var(--muted); }
+  .sub { color: var(--muted); }
+  ul { margin: 2px 0 0; padding-left: 14px; }
+  li { margin: 1px 0; }
+  .stack { color: var(--muted); font-size: 8.2pt; margin-top: 1px; }
+  .skills { display: grid; grid-template-columns: 82px 1fr; gap: 1px 10px; margin: 0; }
+  .skills dt { font-weight: 600; }
+  .skills dd { margin: 0; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 0 22px; }
+</style>
+</head>
+<body>
+  <header>
+    <h1>Firman Fadilah<span>.</span></h1>
+    <p class="role">Mobile &amp; Web Developer · Mahasiswa Informatika tingkat akhir</p>
+    <p class="contact">
+      <span>Bali, Indonesia</span>
+      <a href="https://wa.me/6282144715831">0821-4471-5831 (WhatsApp)</a>
+      <a href="mailto:firmanfdlh1@gmail.com">firmanfdlh1@gmail.com</a>
+      <a href="https://firmanfadilah.pages.dev">firmanfadilah.pages.dev</a>
+      <a href="https://github.com/manrandomside">github.com/manrandomside</a>
+      <a href="https://www.linkedin.com/in/firmanfadilah">linkedin.com/in/firmanfadilah</a>
+    </p>
+    <p class="summary">Mahasiswa tingkat akhir Informatika Universitas Udayana (IPK 3,78) yang dijadwalkan sidang skripsi pada Desember 2026. Saya membangun aplikasi Android offline dengan Kotlin dan aplikasi web yang bisa dipasang di HP (PWA), dua di antaranya dipakai di lingkungan kerja nyata. Terbiasa dengan REST API, Git dalam tim, dan menerjemahkan desain menjadi tampilan yang nyaman di layar HP.</p>
+  </header>
+
+  <h2>Pengalaman Kerja</h2>
+  <div class="item">
+    <div class="head"><span><b>PT Citra Konsultama Indonesia</b> · Fullstack Developer (PPIDK lewat NF Academy)</span><span class="when">Nov 2025 – Jan 2026</span></div>
+    <ul>
+      <li>Membangun <b>CAST</b>, sistem pengaduan dan layanan akademik untuk mahasiswa, dosen, asisten dosen, dan staf, dengan pesan dan status tiket yang berubah secara real-time tanpa memuat ulang halaman.</li>
+      <li>Menyusun REST API di Laravel yang dipakai antarmuka React, serta kuota tiket agar layanan tidak disalahgunakan.</li>
+      <li>Nilai akhir 95 (A) untuk tanggung jawab, kerja sama tim, komunikasi, hasil proyek, dan presentasi.</li>
+    </ul>
+    <p class="stack">Laravel · React · MySQL · Pusher · Git</p>
+  </div>
+  <div class="item">
+    <div class="head"><span><b>PT Gapura Angkasa</b>, Bandara I Gusti Ngurah Rai · Fullstack Developer (On-the-job training)</span><span class="when">Jul – Des 2025</span></div>
+    <ul>
+      <li>Membangun <b>Kelola SDM</b> untuk mengelola data 1.273+ karyawan dari 10 penyedia tenaga kerja, dengan dasbor analitik real-time dan laporan PDF.</li>
+      <li>Menambahkan asisten AI dan pemantauan kontrak otomatis; dibuat sebagai PWA agar bisa dipasang di HP maupun laptop.</li>
+    </ul>
+    <p class="stack">Next.js · TypeScript · Supabase · PWA</p>
+  </div>
+
+  <h2>Proyek</h2>
+  <div class="item">
+    <div class="head"><span><b>Tangkis</b> · Aplikasi Android pendeteksi pesan penipuan <span class="stack">· Kotlin, Python, Machine Learning</span></span><span class="when">2026</span></div>
+    <ul>
+      <li>Mendeteksi pesan penipuan langsung di HP tanpa internet memakai neural network Multilayer Perceptron yang dilatih dengan Python; riwayat pesan dienkripsi dan aplikasi bisa dikunci dengan kata sandi. <span class="sub">github.com/manrandomside/tangkis</span></li>
+    </ul>
+  </div>
+  <div class="item">
+    <div class="head"><span><b>Kioku</b> · Platform belajar bahasa Jepang, terdaftar HKI <span class="stack">· Next.js, TypeScript, Supabase, AI</span></span><span class="when">2026</span></div>
+    <ul>
+      <li>Jadwal hafalan dengan algoritma FSRS, tutor AI, 2.909 kosakata, dan 3.123 audio; bisa dipasang di HP sebagai aplikasi. <span class="sub">kioku-learn.vercel.app</span></li>
+    </ul>
+  </div>
+  <div class="item">
+    <div class="head"><span><b>Early Beauty Studio</b> · Website klien salon di Negara, Bali <span class="stack">· Astro, Cloudflare Pages</span></span><span class="when">2026</span></div>
+    <ul>
+      <li>Website yang dirancang untuk layar HP lebih dulu: 5 halaman, 2 bahasa, kalkulator harga, dan halaman admin pengumuman untuk pemilik usaha. <span class="sub">earlybeauty.pages.dev</span></li>
+    </ul>
+  </div>
+
+  <h2>Pendidikan</h2>
+  <div class="item">
+    <div class="head"><span><b>Universitas Udayana</b> · S1 Informatika</span><span class="when">2023 – sekarang</span></div>
+    <ul>
+      <li>IPK 3,78 / 4,00 · semester 7 · sidang skripsi Desember 2026</li>
+      <li>Skripsi: Implementasi Jaringan Sensor Nirkabel Berbasis ESP-NOW pada Sistem Estimasi Tingkat Stres Menggunakan Metode Certainty Factor</li>
+      <li>Nilai A: Pemrograman Sistem Interaktif, Interaksi Manusia dan Komputer, Desain dan Pengujian Berpusat pada Pengguna, Rekayasa Perangkat Lunak</li>
+    </ul>
+  </div>
+  <div class="item">
+    <div class="head"><span><b>SMK Negeri 1 Negara</b> · Rekayasa Perangkat Lunak</span><span class="when">2020 – 2023</span></div>
+  </div>
+
+  <div class="two">
+    <section>
+      <h2>Organisasi</h2>
+      <div class="item">
+        <div class="head"><span><b>Student Innovation Center</b> · Frontend Developer</span><span class="when">Feb – Mei 2024</span></div>
+        <p class="sub">Membangun antarmuka website SIC yang responsif dengan Next.js, React, dan Tailwind CSS.</p>
+      </div>
+      <div class="item">
+        <div class="head"><span><b>LKMM-TL</b> · Desain &amp; Dokumentasi</span><span class="when">Nov – Des 2024</span></div>
+        <p class="sub">Mengatur desain visual dan dokumentasi acara, serta membimbing anggota baru panitia.</p>
+      </div>
+    </section>
+    <section>
+      <h2>Sertifikasi &amp; Prestasi</h2>
+      <ul>
+        <li>BNSP Junior Web Developer (2026–2029)</li>
+        <li>BNSP Junior Coder (2023)</li>
+        <li>Juara 1 Internasional poster infografis, Kreasi Publik FIA Universitas Brawijaya</li>
+        <li>Juara 1 Nasional poster infografis, UPCOFEST</li>
+        <li>Juara 3 Nasional poster infografis, FNWMU Universitas Udayana</li>
+      </ul>
+    </section>
+  </div>
+
+  <h2>Keahlian</h2>
+  <dl class="skills">
+    <dt>Mobile</dt><dd>Kotlin (Android), Progressive Web App, desain UI untuk layar HP</dd>
+    <dt>Web</dt><dd>JavaScript, TypeScript, React, Next.js, Laravel (PHP), Astro, Tailwind CSS</dd>
+    <dt>Data &amp; API</dt><dd>REST API, MySQL, PostgreSQL, Supabase, layanan real-time (Pusher)</dd>
+    <dt>Lainnya</dt><dd>Git &amp; GitHub, Figma, Python, Machine Learning, IoT (ESP32)</dd>
+  </dl>
+</body>
+</html>
