@@ -13,7 +13,7 @@ export const ME = {
   linkedin: "https://www.linkedin.com/in/firmanfadilah",
   instagram: "https://www.instagram.com/manfdlh/",
   cv: null, // path under public/ once Firman has a CV PDF; the download button shows only when set
-  photo: null // image key under src/assets (e.g. "me/firman") once the photo arrives; until then a placeholder slot shows
+  photo: "me/firman" // a stand-in photo for now; swap the file at src/assets/me/firman.jpg for a better one later
 };
 
 // cat: "klien" client website · "sistem" company system or product · "desain" design work

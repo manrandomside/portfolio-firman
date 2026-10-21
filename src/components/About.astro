@@ -24,7 +24,7 @@ const photo = img(ME.photo);
 
 <style is:global>
   .about-grid { display: grid; gap: 40px; }
-  .about-photo img, .photo-slot { width: 100%; max-width: 380px; aspect-ratio: 4 / 5; border-radius: 10px; object-fit: cover; }
+  .about-photo img, .photo-slot { width: 100%; max-width: min(380px, 82vw); aspect-ratio: 4 / 5; border-radius: 10px; object-fit: cover; }
   .photo-slot { display: grid; place-items: center; border: 1.5px dashed var(--muted); color: var(--muted); font-size: 13px; }
   .about-text .s-head { margin-bottom: 24px; }
   .about-p { max-width: 58ch; margin-bottom: 16px; }
