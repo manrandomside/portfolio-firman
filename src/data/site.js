@@ -176,7 +176,14 @@ export const PROJECTS = [
   }
 ];
 
-export const FEATURED = ["early-beauty", "kioku", "kelola-sdm", "cast", "tangkis"];
+export const FEATURED = ["early-beauty", "kioku", "kelola-sdm"];
+
+// the phone-first wall: mobile screens in three columns, each opening its project
+export const PHONES = [
+  [{ image: "shots/early-beauty-phone", slug: "early-beauty" }, { image: "phones/kioku", slug: "kioku" }],
+  [{ image: "phones/early-beauty-harga", slug: "early-beauty" }, { image: "shots/cast-mobile", slug: "cast" }],
+  [{ image: "phones/miaw", slug: "miaw" }, { image: "shots/tangkis", slug: "tangkis" }]
+];
 
 export const FILTERS = [
   { key: "all", label: { id: "Semua", en: "All" } },
@@ -219,11 +226,6 @@ export const EXPERIENCE = [
 export const CERTS = [
   { name: { id: "Junior Web Developer (Pengembang Web Pratama)", en: "Junior Web Developer" }, by: "BNSP · LSP Teknologi Digital", when: { id: "Jan 2026, berlaku sampai Jan 2029", en: "Jan 2026, valid until Jan 2029" }, cert: "bnsp-jwd" },
   { name: { id: "Junior Coder (Pemrogram Junior)", en: "Junior Coder" }, by: "BNSP · LSP TIK Triatma Kompetensi", when: { id: "2023", en: "2023" } }
-];
-
-export const PROOF = [
-  { value: 3, label: { id: "juara lomba poster infografis, satu di tingkat internasional", en: "infographic poster competition wins, one international" } },
-  { word: "BNSP", label: { id: "tersertifikasi Junior Web Developer, berlaku sampai 2029", en: "certified Junior Web Developer, valid until 2029" }, cert: "bnsp-jwd" }
 ];
 
 // order matters: this is how a website project goes
@@ -273,6 +275,17 @@ export const UI = {
     igCaption: { id: "Sebelum: hanya Instagram", en: "Before: Instagram only" },
     siteCaption: { id: "Sesudah: earlybeauty.pages.dev", en: "After: earlybeauty.pages.dev" }
   },
+  phones: {
+    eyebrow: { id: "Di HP pelangganmu", en: "On your customer's phone" },
+    // the second part is set in the annotation ink
+    title: [{ id: "HP dulu,", en: "Phone first," }, { id: "baru laptop.", en: "laptop second." }],
+    lead: {
+      id: "Pelangganmu membuka website dari HP, sering sambil antre atau di jalan, dan memutuskan dalam beberapa detik. Jadi layar HP saya kerjakan lebih dulu, versi laptop menyusul.",
+      en: "Your customers open your site on a phone, often in a queue or on the road, and decide within seconds. So I build the phone screen first and the laptop version follows."
+    },
+    points: [{ id: "Tombol pas untuk jempol", en: "Buttons sized for thumbs" }, { id: "Terbaca tanpa zoom", en: "Readable without zooming" }, { id: "WhatsApp satu ketukan", en: "WhatsApp one tap away" }, { id: "Ringan di sinyal 4G", en: "Light on a 4G signal" }],
+    alt: { id: "Tampilan HP", en: "Phone view of" }
+  },
   statement: {
     id: "Banyak usaha di Bali sudah ramai di Instagram, tapi tidak muncul saat orang mencarinya di Google. Karena itu saya buatkan contohnya dulu: kamu lihat, kamu klik, baru kamu putuskan.",
     en: "Plenty of businesses in Bali are busy on Instagram but invisible when people search Google. So I build the sample first: you look, you click, then you decide."
@@ -293,6 +306,9 @@ export const UI = {
     // the second part is set in the annotation ink
     title: [{ id: "Karya yang sudah", en: "Work people" }, { id: "dipakai orang.", en: "actually use." }],
     all: { id: "Lihat semua karya", en: "See all work" },
+    // {n} is the number of projects
+    allN: { id: "Lihat semua {n} karya", en: "See all {n} projects" },
+    sub: { id: "Tiga dari {n} karya: website klien, sistem perusahaan, dan produk belajar.", en: "Three of {n}: a client website, a company system and a learning product." },
     pageTitle: { id: "Semua karya", en: "All work" },
     pageLead: { id: "Website klien, sistem perusahaan, produk AI, dan poster infografis.", en: "Client websites, company systems, AI products and infographic posters." },
     archive: { id: "Arsip latihan dan tugas", en: "Practice and coursework" },

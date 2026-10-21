@@ -5,26 +5,38 @@ import { featured } from "../lib/projects.js";
 import { t } from "../lib/i18n.js";
 
 const { lang } = Astro.props;
+const n = (s: string) => s.replace("{n}", String(PROJECTS.length));
 ---
 <section class="s dark" id="karya">
   <div class="in marks">
-    <div class="s-head">
-      <h2>{t(UI.work.title[0], lang)} <em>{t(UI.work.title[1], lang)}</em></h2>
+    <div class="work-head">
+      <div class="s-head">
+        <p class="label">{t(UI.work.eyebrow, lang)}</p>
+        <h2>{t(UI.work.title[0], lang)} <em>{t(UI.work.title[1], lang)}</em></h2>
+        <p class="lead">{n(t(UI.work.sub, lang))}</p>
+      </div>
+      <a class="btn all-btn" href={lang === "id" ? "/karya/" : "/en/work/"}>{n(t(UI.work.allN, lang))} <span aria-hidden="true">↗</span></a>
     </div>
     <WorkGrid lang={lang} projects={featured(PROJECTS, FEATURED)} />
-    <p class="more"><a class="btn" href={lang === "id" ? "/karya/" : "/en/work/"}>{t(UI.work.all, lang)} →</a></p>
   </div>
 </section>
 
 <style is:global>
-  .more { margin-top: 48px; }
-  /* five works as a bento: the client site runs wide on the first row, four more below */
+  .work-head { display: grid; gap: 4px 32px; margin-bottom: clamp(28px, min(4vw, 6svh), 48px); }
+  /* title and its line run full width so the head stays short and the three cards fit the same screen */
+  .work-head .s-head { margin-bottom: 0; max-width: none; }
+  .work-head .lead { max-width: 64ch; }
+  /* the way to the rest of the work, set as a solid paper pill so it reads as the next step */
+  .all-btn { justify-self: start; margin-top: 16px; background: var(--on-dark); border-color: var(--on-dark); color: var(--ink); }
+  .all-btn:hover { background: var(--accent); border-color: var(--accent); color: var(--ink-on-accent); }
+  @media (min-width: 900px) {
+    .work-head { grid-template-columns: minmax(0, 1fr) auto; align-items: end; }
+    .all-btn { margin-top: 0; }
+  }
   @media (min-width: 1000px) {
-    #karya .cards { grid-template-columns: repeat(6, minmax(0, 1fr)); }
-    #karya .cards li { grid-column: span 2; }
-    #karya .cards li:nth-child(1) { grid-column: span 4; }
-    #karya .cards li:nth-child(4), #karya .cards li:nth-child(5) { grid-column: span 3; }
-    #karya .cards li:nth-child(1) .card-media { aspect-ratio: auto; height: clamp(220px, 22vw, 300px); }
-    #karya .cards li:nth-child(2) .card-media, #karya .cards li:nth-child(3) .card-media { height: clamp(220px, 22vw, 300px); aspect-ratio: auto; }
+    /* the line reveal splits the title into blocks; on wide screens both halves share one line */
+    #karya h2 .ml { display: inline-block; vertical-align: top; }
+    #karya h2 .ml + .ml { margin-left: .26em; }
+    #karya .card-media { aspect-ratio: 16 / 9.5; }
   }
 </style>
