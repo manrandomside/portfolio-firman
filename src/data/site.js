@@ -267,10 +267,11 @@ export const UI = {
     phoneAlt: { id: "Halaman depan website Early Beauty Studio di HP", en: "The Early Beauty Studio website on a phone" },
     // what the annotated phone points out: [x %, y %] on the screenshot, then the note
     notes: [
-      { at: [22, 21], text: { id: "Foto hasil kerja asli, bukan foto stok", en: "Real photos of the work, not stock" } },
-      { at: [70, 4.4], text: { id: "Dua bahasa untuk tamu dari luar negeri", en: "Two languages for visitors from abroad" } },
-      { at: [50, 42], text: { id: "Pelanggan menghitung harganya sendiri", en: "Customers work out the price themselves" } },
-      { at: [86, 4.4], text: { id: "Lima halaman, satu menu yang selalu terlihat", en: "Five pages, one menu always in view" } }
+      // pins sit beside what they point at, never on its text
+      { at: [9, 17], text: { id: "Foto hasil kerja asli, bukan foto stok", en: "Real photos of the work, not stock" } },
+      { at: [62, 4.3], text: { id: "Dua bahasa untuk tamu dari luar negeri", en: "Two languages for visitors from abroad" } },
+      { at: [21, 41.9], text: { id: "Pelanggan menghitung harganya sendiri", en: "Customers work out the price themselves" } },
+      { at: [97.6, 4.3], text: { id: "Lima halaman, satu menu yang selalu terlihat", en: "Five pages, one menu always in view" } }
     ],
     igCaption: { id: "Sebelum: hanya Instagram", en: "Before: Instagram only" },
     siteCaption: { id: "Sesudah: earlybeauty.pages.dev", en: "After: earlybeauty.pages.dev" }

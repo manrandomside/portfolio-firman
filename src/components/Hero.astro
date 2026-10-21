@@ -61,7 +61,8 @@ const side = (i: number) => (i % 2 === 0 ? "l" : "r");
   .annot { position: relative; margin: 0; display: grid; justify-items: center; gap: 24px; }
   .annot-phone { position: relative; display: block; width: min(56vw, 250px); border: 8px solid var(--ink); border-radius: 30px; background: var(--ink); box-shadow: 0 30px 60px -32px rgba(14, 14, 14, .55); }
   .annot-phone img { width: 100%; height: auto; border-radius: 22px; }
-  .pin { position: absolute; left: var(--x); top: var(--y); translate: -50% -50%; box-shadow: 0 0 0 3px var(--bg); z-index: 2; }
+  /* pins stay small so the screen under them stays readable: a numbered 16px dot on phones, a plain dot where leader lines join them */
+  .pin { position: absolute; left: var(--x); top: var(--y); translate: -50% -50%; width: 16px; height: 16px; font-size: 9px; box-shadow: 0 0 0 2px var(--bg); z-index: 2; }
   .notes { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; width: 100%; max-width: 420px; }
   .note { display: flex; gap: 12px; align-items: flex-start; font: 500 15px/1.35 var(--f-label); }
   .leaders { display: none; }
@@ -73,6 +74,7 @@ const side = (i: number) => (i % 2 === 0 ? "l" : "r");
     .annot-phone { position: absolute; left: 50%; top: 50%; translate: -50% -50%; width: clamp(200px, calc((100svh - 170px) * .43), 236px); }
     .notes { display: contents; }
     .note { position: absolute; width: 128px; flex-direction: column; gap: 8px; font-size: 13px; }
+    .pin { width: 10px; height: 10px; font-size: 0; }
     .note-l { left: 0; }
     .note-r { right: 0; }
     .note:nth-child(1) { top: 22%; } .note:nth-child(2) { top: 6%; } .note:nth-child(3) { top: 50%; } .note:nth-child(4) { top: 30%; }
