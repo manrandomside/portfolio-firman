@@ -204,27 +204,37 @@ export const ARCHIVE = [
 
 export const EXPERIENCE = [
   {
+    org: "Infinite Learning (PT Kinema Systrans Multimedia)",
+    what: { id: "Magang Mandiri · AI Development, Scrum Master", en: "Independent internship · AI Development, Scrum Master" },
+    when: { id: "Feb – Jun 2026", en: "Feb – Jun 2026" },
+    note: { id: "Scrum Master tim AI di proyek Pangan Pintar, platform prediksi harga pangan: mengolah data 10 komoditas, membangun API model dengan FastAPI, dan deploy ke HuggingFace Spaces. 900 jam, semua nilai A.", en: "Scrum Master of the AI team on Pangan Pintar, a food price forecasting platform: prepared data for 10 commodities, built the model API with FastAPI and deployed it to HuggingFace Spaces. 900 hours, all grades A." },
+    project: null, // Pangan Pintar is in the archive list, not a featured work
+    cert: null
+  },
+  {
+    org: "NF Academy × PT Citra Konsultama Indonesia",
+    what: { id: "Studi Independen Bersertifikat · Fullstack web developer, ketua tim", en: "Certified independent study · Full-stack web developer, team lead" },
+    when: { id: "Sep 2025 – Jan 2026", en: "Sep 2025 – Jan 2026" },
+    note: { id: "Kelas 900 jam dengan nilai akhir 92, lalu memimpin tim 6 orang membangun CAST bersama mitra. Nilai proyek 95 (A).", en: "A 900-hour course with a final score of 92, then led a team of six building CAST with the partner company. Project score 95 (A)." },
+    project: "cast",
+    cert: null
+  },
+  {
     org: "PT Gapura Angkasa",
     what: { id: "On-the-job training · Fullstack developer", en: "On-the-job training · Full-stack developer" },
     when: { id: "Jul – Des 2025", en: "Jul – Dec 2025" },
     note: { id: "Membangun sistem Kelola SDM untuk 1.273+ karyawan.", en: "Built the staff records system for 1,273+ employees." },
     project: "kelola-sdm",
     cert: null // image key once Firman sends the certificate
-  },
-  {
-    org: "PT Citra Konsultama Indonesia",
-    what: { id: "PPIDK lewat NF Academy · Fullstack developer", en: "Industry placement via NF Academy · Full-stack developer" },
-    when: { id: "6 Nov 2025 – 7 Jan 2026", en: "6 Nov 2025 – 7 Jan 2026" },
-    note: { id: "Membangun CAST. Nilai akhir 95 (A) untuk tanggung jawab, kerja sama tim, komunikasi, hasil proyek, dan presentasi.", en: "Built CAST. Final score 95 (A) for responsibility, teamwork, communication, project result and presentation." },
-    project: "cast",
-    cert: null
   }
 ];
 
 // no scans and no certificate numbers on the site, on purpose
 export const CERTS = [
   { name: { id: "Junior Web Developer (Pengembang Web Pratama)", en: "Junior Web Developer" }, by: "BNSP · LSP Teknologi Digital", when: { id: "Jan 2026, berlaku sampai Jan 2029", en: "Jan 2026, valid until Jan 2029" }, cert: "bnsp-jwd" },
-  { name: { id: "Junior Coder (Pemrogram Junior)", en: "Junior Coder" }, by: "BNSP · LSP TIK Triatma Kompetensi", when: { id: "2023", en: "2023" } }
+  { name: { id: "Junior Coder (Pemrogram Junior)", en: "Junior Coder" }, by: "BNSP · LSP TIK Triatma Kompetensi", when: { id: "2023", en: "2023" } },
+  { name: { id: "Artificial Intelligence Development (Program Mandiri Batch 10)", en: "Artificial Intelligence Development (Program Mandiri Batch 10)" }, by: "Infinite Learning", when: { id: "Jun 2026", en: "Jun 2026" } },
+  { name: { id: "Fullstack Web Developer (Studi Independen Bersertifikat)", en: "Full-Stack Web Developer (certified independent study)" }, by: "NF Academy", when: { id: "Des 2025", en: "Dec 2025" } }
 ];
 
 // order matters: this is how a website project goes
@@ -327,11 +337,11 @@ export const UI = {
     body: {
       id: [
         "Mahasiswa Informatika di Universitas Udayana, Bali. Saya mulai menulis kode di SMK jurusan Rekayasa Perangkat Lunak.",
-        "Sekarang saya membuat website untuk usaha, sistem untuk perusahaan, dan produk berbasis AI. Di luar kode, saya mendesain poster infografis yang menerjemahkan topik rumit menjadi visual yang mudah dipahami. Tiga di antaranya juara lomba."
+        "Sekarang saya membuat website untuk usaha, sistem untuk perusahaan, dan produk berbasis AI, dan pernah menjadi ketua tim serta Scrum Master di program magang. Di luar kode, saya mendesain poster infografis yang menerjemahkan topik rumit menjadi visual yang mudah dipahami. Tiga di antaranya juara lomba."
       ],
       en: [
         "Informatics student at Universitas Udayana, Bali. I started writing code at a vocational high school, majoring in software engineering.",
-        "Now I build websites for businesses, systems for companies and AI-powered products. Away from code, I design infographic posters that turn complicated topics into visuals people get at a glance. Three of them have won competitions."
+        "Now I build websites for businesses, systems for companies and AI-powered products, and I have led teams as team lead and Scrum Master during internships. Away from code, I design infographic posters that turn complicated topics into visuals people get at a glance. Three of them have won competitions."
       ]
     },
     photo: { id: "Foto menyusul", en: "Photo coming soon" },

@@ -22,7 +22,7 @@ const awards = PROJECTS.filter(p => p.award);
             <p class="exp-when">{t(e.when, lang)}</p>
             <h4>{e.org}</h4>
             <p class="exp-what">{t(e.what, lang)}</p>
-            <p>{t(e.note, lang)} <button type="button" class="link exp-see" data-slug={e.project} aria-haspopup="dialog">{t(UI.exp.see, lang)} →</button></p>
+            <p>{t(e.note, lang)} {e.project && <button type="button" class="link exp-see" data-slug={e.project} aria-haspopup="dialog">{t(UI.exp.see, lang)} →</button>}</p>
           </li>
         ))}
       </ol>
