@@ -6,25 +6,32 @@ import jwd from "../assets/certs/bnsp-jwd.jpg";
 import jwdUnits from "../assets/certs/bnsp-jwd-units.jpg";
 import jc from "../assets/certs/bnsp-jc.jpg";
 import jcUnits from "../assets/certs/bnsp-jc-units.jpg";
+import nf from "../assets/certs/nf-sib.jpg";
+import nfTranscript from "../assets/certs/nf-sib-transcript.jpg";
+import ilIntern from "../assets/certs/il-intern.jpg";
+import ilMandiri from "../assets/certs/il-mandiri.jpg";
+import ilTranscript from "../assets/certs/il-transcript.jpg";
 
 const { lang } = Astro.props;
-// key matches CERTS[].cert in site.js and the #cert-<key> link
+const C = UI.cert;
+// key matches CERTS[].cert in site.js and the #cert-<key> link; landscape certificates stack in one column
 const certs = [
-  { key: "bnsp-jwd", front: jwd, units: jwdUnits, text: UI.cert.jwd },
-  { key: "bnsp-jc", front: jc, units: jcUnits, text: UI.cert.jc }
+  { key: "bnsp-jwd", title: C.jwd.title, pages: [[jwd, C.jwd.front], [jwdUnits, C.units]] },
+  { key: "bnsp-jc", title: C.jc.title, pages: [[jc, C.jc.front], [jcUnits, C.units]] },
+  { key: "nf-sib", title: C.nf.title, wide: true, pages: [[nf, C.nf.front], [nfTranscript, C.transcript]] },
+  { key: "il-ai", title: C.il.title, wide: true, pages: [[ilIntern, C.il.front], [ilMandiri, C.il.mandiri], [ilTranscript, C.transcript]] }
 ];
 ---
-<!-- the BNSP certificates, each opened by a [data-cert="<key>"] button or a #cert-<key> link: the certificate and its list of units -->
+<!-- certificates, each opened by a [data-cert="<key>"] button or a #cert-<key> link -->
 {certs.map(c => (
   <dialog class="cert" id={`cert-${c.key}`} data-lenis-prevent aria-labelledby={`cert-title-${c.key}`}>
     <div class="cert-in">
       <div class="cert-top">
-        <h2 id={`cert-title-${c.key}`}>{t(c.text.title, lang)}</h2>
+        <h2 id={`cert-title-${c.key}`}>{t(c.title, lang)}</h2>
         <button type="button" class="cert-close" data-close aria-label={t(UI.cert.close, lang)}>×</button>
       </div>
-      <div class="cert-pages">
-        <Image src={c.front} alt={t(c.text.front, lang)} widths={[600, 1000]} sizes="(min-width: 900px) 420px, 90vw" />
-        <Image src={c.units} alt={t(UI.cert.units, lang)} widths={[600, 1000]} sizes="(min-width: 900px) 420px, 90vw" />
+      <div class:list={["cert-pages", c.wide && "wide"]}>
+        {c.pages.map(([src, alt]) => <Image src={src} alt={t(alt, lang)} widths={[600, 1000]} sizes={c.wide ? "(min-width: 900px) 880px, 94vw" : "(min-width: 900px) 420px, 90vw"} />)}
       </div>
     </div>
   </dialog>
@@ -41,7 +48,7 @@ const certs = [
   .cert-close { flex: none; width: 44px; height: 44px; border-radius: 50%; border: 0; background: var(--ink); color: var(--bg); font-size: 24px; line-height: 1; }
   .cert-pages { display: grid; gap: 16px; }
   .cert-pages img { width: 100%; height: auto; border: 1px solid var(--line); border-radius: 6px; background: #fff; }
-  @media (min-width: 760px) { .cert-pages { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 760px) { .cert-pages:not(.wide) { grid-template-columns: 1fr 1fr; } }
 </style>
 
 <script>

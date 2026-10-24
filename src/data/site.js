@@ -233,8 +233,8 @@ export const EXPERIENCE = [
 export const CERTS = [
   { name: { id: "Junior Web Developer (Pengembang Web Pratama)", en: "Junior Web Developer" }, by: "BNSP · LSP Teknologi Digital", when: { id: "Jan 2026, berlaku sampai Jan 2029", en: "Jan 2026, valid until Jan 2029" }, cert: "bnsp-jwd" },
   { name: { id: "Junior Coder (Pemrogram Junior)", en: "Junior Coder" }, by: "BNSP · LSP TIK Triatma Kompetensi", when: { id: "Mei 2023, berlaku 3 tahun", en: "May 2023, valid for 3 years" }, cert: "bnsp-jc" },
-  { name: { id: "Artificial Intelligence Development (Program Mandiri Batch 10)", en: "Artificial Intelligence Development (Program Mandiri Batch 10)" }, by: "Infinite Learning", when: { id: "Jun 2026", en: "Jun 2026" } },
-  { name: { id: "Fullstack Web Developer (Studi Independen Bersertifikat)", en: "Full-Stack Web Developer (certified independent study)" }, by: "NF Academy", when: { id: "Des 2025", en: "Dec 2025" } }
+  { name: { id: "Artificial Intelligence Development (Internship & Program Mandiri Batch 10)", en: "Artificial Intelligence Development (Internship & Program Mandiri Batch 10)" }, by: "Infinite Learning", when: { id: "Jun 2026, semua nilai A", en: "Jun 2026, all grades A" }, cert: "il-ai" },
+  { name: { id: "Fullstack Web Developer (Studi Independen Bersertifikat)", en: "Full-Stack Web Developer (certified independent study)" }, by: "NF Academy (PT Nurul Fikri Cipta Inovasi)", when: { id: "Des 2025, nilai akhir 92", en: "Dec 2025, final score 92" }, cert: "nf-sib" }
 ];
 
 // order matters: this is how a website project goes
@@ -361,6 +361,16 @@ export const UI = {
       title: { id: "Sertifikat BNSP · Junior Coder", en: "BNSP certificate · Junior Coder" },
       front: { id: "Sertifikat kompetensi Junior Coder (Pemrogram Junior) atas nama Firman Fadilah", en: "Junior Coder certificate of competence for Firman Fadilah" }
     },
+    nf: {
+      title: { id: "NF Academy · Studi Independen Bersertifikat", en: "NF Academy · Certified independent study" },
+      front: { id: "Sertifikat Studi Independen Bersertifikat Fullstack Web Developer dari NF Academy atas nama Firman Fadilah", en: "NF Academy certificate for the Fullstack Web Developer certified independent study, Firman Fadilah" }
+    },
+    il: {
+      title: { id: "Infinite Learning · AI Development", en: "Infinite Learning · AI Development" },
+      front: { id: "Sertifikat magang Artificial Intelligence Development dari Infinite Learning atas nama Firman Fadilah", en: "Infinite Learning internship certificate in Artificial Intelligence Development, Firman Fadilah" },
+      mandiri: { id: "Sertifikat Program Mandiri Batch 10 dari Infinite Learning", en: "Infinite Learning Program Mandiri Batch 10 certificate" }
+    },
+    transcript: { id: "Transkrip nilai", en: "Grade transcript" },
     units: { id: "Daftar unit kompetensi yang diujikan", en: "The list of units of competency assessed" },
     close: { id: "Tutup", en: "Close" }
   },
