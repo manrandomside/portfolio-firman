@@ -2,24 +2,33 @@
 import { Image } from "astro:assets";
 import { UI } from "../data/site.js";
 import { t } from "../lib/i18n.js";
-import front from "../assets/certs/bnsp-jwd.jpg";
-import units from "../assets/certs/bnsp-jwd-units.jpg";
+import jwd from "../assets/certs/bnsp-jwd.jpg";
+import jwdUnits from "../assets/certs/bnsp-jwd-units.jpg";
+import jc from "../assets/certs/bnsp-jc.jpg";
+import jcUnits from "../assets/certs/bnsp-jc-units.jpg";
 
 const { lang } = Astro.props;
+// key matches CERTS[].cert in site.js and the #cert-<key> link
+const certs = [
+  { key: "bnsp-jwd", front: jwd, units: jwdUnits, text: UI.cert.jwd },
+  { key: "bnsp-jc", front: jc, units: jcUnits, text: UI.cert.jc }
+];
 ---
-<!-- the BNSP certificate, opened by any [data-cert="bnsp-jwd"] button: the certificate and its list of units -->
-<dialog class="cert" id="cert-bnsp-jwd" data-lenis-prevent aria-labelledby="cert-title">
-  <div class="cert-in">
-    <div class="cert-top">
-      <h2 id="cert-title">{t(UI.cert.title, lang)}</h2>
-      <button type="button" class="cert-close" data-close aria-label={t(UI.cert.close, lang)}>×</button>
+<!-- the BNSP certificates, each opened by a [data-cert="<key>"] button or a #cert-<key> link: the certificate and its list of units -->
+{certs.map(c => (
+  <dialog class="cert" id={`cert-${c.key}`} data-lenis-prevent aria-labelledby={`cert-title-${c.key}`}>
+    <div class="cert-in">
+      <div class="cert-top">
+        <h2 id={`cert-title-${c.key}`}>{t(c.text.title, lang)}</h2>
+        <button type="button" class="cert-close" data-close aria-label={t(UI.cert.close, lang)}>×</button>
+      </div>
+      <div class="cert-pages">
+        <Image src={c.front} alt={t(c.text.front, lang)} widths={[600, 1000]} sizes="(min-width: 900px) 420px, 90vw" />
+        <Image src={c.units} alt={t(UI.cert.units, lang)} widths={[600, 1000]} sizes="(min-width: 900px) 420px, 90vw" />
+      </div>
     </div>
-    <div class="cert-pages">
-      <Image src={front} alt={t(UI.cert.front, lang)} widths={[600, 1000]} sizes="(min-width: 900px) 420px, 90vw" />
-      <Image src={units} alt={t(UI.cert.units, lang)} widths={[600, 1000]} sizes="(min-width: 900px) 420px, 90vw" />
-    </div>
-  </div>
-</dialog>
+  </dialog>
+))}
 
 <style is:global>
   .cert { width: min(940px, calc(100% - 24px)); max-height: calc(100dvh - 24px); margin: auto; padding: 0; border: 0; border-radius: 14px; background: var(--bg); color: var(--ink); overflow: auto; overscroll-behavior: contain; }

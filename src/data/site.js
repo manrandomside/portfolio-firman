@@ -232,7 +232,7 @@ export const EXPERIENCE = [
 // no scans and no certificate numbers on the site, on purpose
 export const CERTS = [
   { name: { id: "Junior Web Developer (Pengembang Web Pratama)", en: "Junior Web Developer" }, by: "BNSP · LSP Teknologi Digital", when: { id: "Jan 2026, berlaku sampai Jan 2029", en: "Jan 2026, valid until Jan 2029" }, cert: "bnsp-jwd" },
-  { name: { id: "Junior Coder (Pemrogram Junior)", en: "Junior Coder" }, by: "BNSP · LSP TIK Triatma Kompetensi", when: { id: "2023", en: "2023" } },
+  { name: { id: "Junior Coder (Pemrogram Junior)", en: "Junior Coder" }, by: "BNSP · LSP TIK Triatma Kompetensi", when: { id: "Mei 2023, berlaku 3 tahun", en: "May 2023, valid for 3 years" }, cert: "bnsp-jc" },
   { name: { id: "Artificial Intelligence Development (Program Mandiri Batch 10)", en: "Artificial Intelligence Development (Program Mandiri Batch 10)" }, by: "Infinite Learning", when: { id: "Jun 2026", en: "Jun 2026" } },
   { name: { id: "Fullstack Web Developer (Studi Independen Bersertifikat)", en: "Full-Stack Web Developer (certified independent study)" }, by: "NF Academy", when: { id: "Des 2025", en: "Dec 2025" } }
 ];
@@ -353,8 +353,14 @@ export const UI = {
   },
   cert: {
     view: { id: "Lihat sertifikat", en: "View certificate" },
-    title: { id: "Sertifikat BNSP · Junior Web Developer", en: "BNSP certificate · Junior Web Developer" },
-    front: { id: "Sertifikat kompetensi Junior Web Developer atas nama Firman Fadilah", en: "Junior Web Developer certificate of competence for Firman Fadilah" },
+    jwd: {
+      title: { id: "Sertifikat BNSP · Junior Web Developer", en: "BNSP certificate · Junior Web Developer" },
+      front: { id: "Sertifikat kompetensi Junior Web Developer atas nama Firman Fadilah", en: "Junior Web Developer certificate of competence for Firman Fadilah" }
+    },
+    jc: {
+      title: { id: "Sertifikat BNSP · Junior Coder", en: "BNSP certificate · Junior Coder" },
+      front: { id: "Sertifikat kompetensi Junior Coder (Pemrogram Junior) atas nama Firman Fadilah", en: "Junior Coder certificate of competence for Firman Fadilah" }
+    },
     units: { id: "Daftar unit kompetensi yang diujikan", en: "The list of units of competency assessed" },
     close: { id: "Tutup", en: "Close" }
   },
