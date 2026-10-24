@@ -234,7 +234,8 @@ export const CERTS = [
   { name: { id: "Junior Web Developer (Pengembang Web Pratama)", en: "Junior Web Developer" }, by: "BNSP · LSP Teknologi Digital", when: { id: "Jan 2026, berlaku sampai Jan 2029", en: "Jan 2026, valid until Jan 2029" }, cert: "bnsp-jwd" },
   { name: { id: "Junior Coder (Pemrogram Junior)", en: "Junior Coder" }, by: "BNSP · LSP TIK Triatma Kompetensi", when: { id: "Mei 2023, berlaku 3 tahun", en: "May 2023, valid for 3 years" }, cert: "bnsp-jc" },
   { name: { id: "Artificial Intelligence Development (Internship & Program Mandiri Batch 10)", en: "Artificial Intelligence Development (Internship & Program Mandiri Batch 10)" }, by: "Infinite Learning", when: { id: "Jun 2026, semua nilai A", en: "Jun 2026, all grades A" }, cert: "il-ai" },
-  { name: { id: "Fullstack Web Developer (Studi Independen Bersertifikat)", en: "Full-Stack Web Developer (certified independent study)" }, by: "NF Academy (PT Nurul Fikri Cipta Inovasi)", when: { id: "Des 2025, nilai akhir 92", en: "Dec 2025, final score 92" }, cert: "nf-sib" }
+  { name: { id: "Fullstack Web Developer (Studi Independen Bersertifikat)", en: "Full-Stack Web Developer (certified independent study)" }, by: "NF Academy (PT Nurul Fikri Cipta Inovasi)", when: { id: "Des 2025, nilai akhir 92", en: "Dec 2025, final score 92" }, cert: "nf-sib" },
+  { name: { id: "Praktik Proyek Industri & Dunia Kerja (PPIDK), proyek CAST", en: "Industry & Workplace Project (PPIDK), the CAST project" }, by: "PT Citra Konsultama Indonesia × NF Academy", when: { id: "Jan 2026, nilai 95 (A)", en: "Jan 2026, score 95 (A)" }, cert: "ppidk-cast" }
 ];
 
 // order matters: this is how a website project goes
@@ -364,6 +365,11 @@ export const UI = {
     nf: {
       title: { id: "NF Academy · Studi Independen Bersertifikat", en: "NF Academy · Certified independent study" },
       front: { id: "Sertifikat Studi Independen Bersertifikat Fullstack Web Developer dari NF Academy atas nama Firman Fadilah", en: "NF Academy certificate for the Fullstack Web Developer certified independent study, Firman Fadilah" }
+    },
+    ppidk: {
+      title: { id: "PPIDK · PT Citra Konsultama Indonesia", en: "Industry project · PT Citra Konsultama Indonesia" },
+      front: { id: "Sertifikat Praktik Proyek Industri & Dunia Kerja di PT Citra Konsultama Indonesia atas nama Firman Fadilah", en: "Industry project certificate from PT Citra Konsultama Indonesia and NF Academy, Firman Fadilah" },
+      grades: { id: "Daftar nilai PPIDK, rata-rata 95 (A)", en: "Industry project grades, average 95 (A)" }
     },
     il: {
       title: { id: "Infinite Learning · AI Development", en: "Infinite Learning · AI Development" },

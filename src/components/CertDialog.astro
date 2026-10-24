@@ -8,6 +8,8 @@ import jc from "../assets/certs/bnsp-jc.jpg";
 import jcUnits from "../assets/certs/bnsp-jc-units.jpg";
 import nf from "../assets/certs/nf-sib.jpg";
 import nfTranscript from "../assets/certs/nf-sib-transcript.jpg";
+import ppidk from "../assets/certs/ppidk-cast.jpg";
+import ppidkNilai from "../assets/certs/ppidk-cast-nilai.jpg";
 import ilIntern from "../assets/certs/il-intern.jpg";
 import ilMandiri from "../assets/certs/il-mandiri.jpg";
 import ilTranscript from "../assets/certs/il-transcript.jpg";
@@ -19,6 +21,7 @@ const certs = [
   { key: "bnsp-jwd", title: C.jwd.title, pages: [[jwd, C.jwd.front], [jwdUnits, C.units]] },
   { key: "bnsp-jc", title: C.jc.title, pages: [[jc, C.jc.front], [jcUnits, C.units]] },
   { key: "nf-sib", title: C.nf.title, wide: true, pages: [[nf, C.nf.front], [nfTranscript, C.transcript]] },
+  { key: "ppidk-cast", title: C.ppidk.title, wide: true, pages: [[ppidk, C.ppidk.front], [ppidkNilai, C.ppidk.grades]] },
   { key: "il-ai", title: C.il.title, wide: true, pages: [[ilIntern, C.il.front], [ilMandiri, C.il.mandiri], [ilTranscript, C.transcript]] }
 ];
 ---
