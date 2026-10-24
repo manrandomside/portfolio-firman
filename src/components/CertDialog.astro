@@ -48,4 +48,8 @@ const { lang } = Astro.props;
   });
   document.querySelectorAll<HTMLDialogElement>("dialog.cert").forEach(d =>
     d.addEventListener("click", e => { if (e.target === d || (e.target as HTMLElement).closest("[data-close]")) d.close(); }));
+
+  // a link like firmanfadilah.pages.dev/#cert-bnsp-jwd (used as the credential URL on job sites) opens that certificate
+  const linked = location.hash && document.querySelector<HTMLDialogElement>(`dialog.cert#${CSS.escape(location.hash.slice(1))}`);
+  if (linked) { linked.showModal(); lockScroll(true); linked.addEventListener("close", () => lockScroll(false), { once: true }); }
 </script>
